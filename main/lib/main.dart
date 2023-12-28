@@ -1,15 +1,14 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bug_logger/console_overlay.dart';
 import 'package:flutter_bug_logger/flutter_logger.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:tensorflow_plugin/export.dart';
-import 'package:yolo_flutter/http/httpUtils.dart';
-import 'package:yolo_flutter/util/fontStyleConstant.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
+
+import 'overlay_window.dart';
 
 void main() {
   initWidgetError();
@@ -28,42 +27,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: Colors.blue,
-          ),
-          home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
-      }
-      // child: MaterialApp(
-      //   title: 'Flutter Demo',
-      //   theme: ThemeData(
-      //     // This is the theme of your application.
-      //     //
-      //     // Try running your application with "flutter run". You'll see the
-      //     // application has a blue toolbar. Then, without quitting the app, try
-      //     // changing the primarySwatch below to Colors.green and then invoke
-      //     // "hot reload" (press "r" in the console where you ran "flutter run",
-      //     // or simply save your changes to "hot reload" in a Flutter IDE).
-      //     // Notice that the counter didn't reset back to zero; the application
-      //     // is not restarted.
-      //     primarySwatch: Colors.blue,
-      //   ),
-      //   home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      // ),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: '智能记牌器'),
     );
   }
 }
@@ -81,29 +50,18 @@ class _MyHomePageState extends State<MyHomePage> {
   late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
   int num = 0;
+  int notice = 0;
+  int screenWidth = 0;
+  int screenHeight = 0;
 
   @override
   void initState() {
     tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
-    Logger.init(
-      true,// isEnable ，if production ，please false
-      isShowFile: true, // In the IDE, whether the file name is displayed
-      isShowTime: true, // In the IDE, whether the time is displayed
-      isShowNavigation: true, // In the IDE, When clicked, it jumps to the printed file details page
-      levelVerbose: 247, // In the IDE, Set the color
-      levelDebug: 26,
-      levelInfo: 28,
-      levelWarn: 3,
-      levelError: 9,
-      phoneVerbose: Colors.white54, // In your phone or web，, Set the color
-      phoneDebug: Colors.blue,
-      phoneInfo: Colors.green,
-      phoneWarn: Colors.yellow,
-      phoneError: Colors.redAccent,
-    );
-
     super.initState();
+    Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      _updateNotice();
+    });
   }
 
   void _showLog() async {
@@ -129,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // var res = await HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
     // // var res = await HttpUtils.get('http://172.16.3.225:7070/');
     // print(res);
-
   }
 
   void _onDetectImage() async {
@@ -146,39 +103,105 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         num = result?.length ?? 0;
       });
-
     }
+  }
+
+  void _startGame() async {
+    final bool status = await FlutterOverlayWindow.isPermissionGranted();
+    if (!status) {
+      bool? result = await FlutterOverlayWindow.requestPermission();
+      if (result == false) {
+        return;
+      }
+    }
+    await FlutterOverlayWindow.showOverlay(
+      width: 450,
+      height: 330,
+      alignment: OverlayAlignment.topLeft,
+      flag: OverlayFlag.defaultFlag,
+      enableDrag: true,
+    );
+  }
+
+  void _endGame() async {
+    await FlutterOverlayWindow.closeOverlay();
+  }
+
+  void _updateNotice() async {
+    notice++;
+    await FlutterOverlayWindow.shareData(notice);
   }
 
   @override
   Widget build(BuildContext context) {
-
+    // screenWidth = MediaQuery.of(context).size.width.toInt();
+    // screenHeight = MediaQuery.of(context).size.height.toInt();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Center(child: Text(widget.title)),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$num张纸牌', style: FontStyleConstant.fontStylew500_16.apply(color: AppColorConstant.colorGrey1),
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '$num张纸牌',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorConstant.colorGrey1),
+                ),
+                GestureDetector(
+                  onTap: _onDetectImage,
+                  child: Text(
+                    '检测图片',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _updateNotice,
+                  child: Text(
+                    '更新悬浮窗出牌提示',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+              ],
             ),
-            GestureDetector(
-              onTap: _onDetectImage,
-              child: Text(
-                '检测图片',
-                style: Theme.of(context).textTheme.headline4,
-              ),
+          ),
+          Positioned(
+            bottom: 50,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: _startGame,
+                  child: Text(
+                    '开始牌局',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                GestureDetector(
+                  onTap: _endGame,
+                  child: Text(
+                    '结束牌局',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showLog,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          )
+        ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+// overlay entry point
+@pragma("vm:entry-point")
+void overlayMain() {
+  runApp(const OverlayWindow());
 }

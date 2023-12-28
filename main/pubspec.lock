@@ -118,6 +118,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.2"
+  flutter_overlay_window:
+    dependency: "direct main"
+    description:
+      name: flutter_overlay_window
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.4.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

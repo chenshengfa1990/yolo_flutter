@@ -47,6 +47,8 @@ dependencies:
 
   flutter_bug_logger: 1.0.0
 
+  flutter_overlay_window: ^0.4.3
+
   tensorflow_plugin:
     path: ../plugin/tensorflow_plugin
 

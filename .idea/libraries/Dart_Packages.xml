@@ -121,6 +121,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_overlay_window">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_overlay_window-0.4.3/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_plugin_android_lifecycle">
           <value>
             <list>
@@ -343,6 +350,7 @@
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/ffi-2.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_bug_logger-1.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_lints-2.0.2/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_overlay_window-0.4.3/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_plugin_android_lifecycle-2.0.15/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_screenutil-5.7.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/http-0.13.5/lib" />

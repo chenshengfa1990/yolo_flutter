@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
@@ -160,7 +161,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
             initScreenShot();
         }
 
-        //从容器中获取image
+        //从容器中获取image，页面静止时，获取到的image有可能为null
         Image image = imageReader.acquireLatestImage();
         if (image != null) {
             Image.Plane[] planes = image.getPlanes();
@@ -182,7 +183,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     }
 
     private String getScreenshotName() {
-        java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+        java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
         String sDate = sf.format(new Date());
 
         return "yolo_screenshot-" + sDate + ".png";
@@ -200,7 +201,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
             File imageFile = new File(path);
             FileOutputStream oStream = new FileOutputStream(imageFile);
 
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, oStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, oStream);
             oStream.flush();
             oStream.close();
 

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bug_logger/flutter_logger.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,13 +30,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: '智能记牌器'),
-    );
+    return ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: const MyHomePage(title: '智能记牌器'),
+          );
+        });
   }
 }
 
@@ -157,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _startScreenshotPeriodic() {
-    screenshotTimer = Timer.periodic(const Duration(milliseconds: 3000), (timer) async {
+    screenshotTimer = Timer.periodic(const Duration(milliseconds: 300), (timer) async {
       String? path = await screenshotPlugin.takeScreenshot();
       print('yolo screenshot: $path');
     });

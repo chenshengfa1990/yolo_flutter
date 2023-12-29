@@ -15,6 +15,8 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -53,8 +55,9 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     private VirtualDisplay mVirtualDisplay = null;
     ImageReader imageReader = null;
     static public int screenshotPermissionResultCode = Activity.RESULT_CANCELED;
-
     static public int REQUEST_CODE_CAPTURE_SCREEN = 1001;
+    private HandlerThread handlerThread;
+    private Handler handler;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -68,8 +71,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
         if (call.method.equals("getPlatformVersion")) {
             result.success("Android " + android.os.Build.VERSION.RELEASE);
         } else if (call.method.equals("takeScreenshot")) {
-            String path = takeScreenshot();
-            result.success(path);
+            takeScreenshot(result);
         } else if (call.method.equals("stopScreenshot")) {
             stopScreenshot();
             result.success(null);
@@ -90,6 +92,9 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         mActivity = binding.getActivity();
+        handlerThread = new HandlerThread("screenshot");
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
     }
 
     @Override
@@ -106,7 +111,6 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     public void onDetachedFromActivity() {
         mActivity = null;
     }
-
 
     private void requestPermission() {
         mediaProjectionManager = (MediaProjectionManager) mContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -152,34 +156,37 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
 
     }
 
-    private String takeScreenshot() {
-        if (screenShotIntent == null || mediaProjectionManager == null) {
-            return null;
-        }
+    private void takeScreenshot(Result result) {
+        runInBackground((Runnable) () -> {
+            if (screenShotIntent == null || mediaProjectionManager == null) {
+                result.success(null);
+                return;
+            }
 
-        if (imageReader == null || mVirtualDisplay == null) {
-            initScreenShot();
-        }
+            if (imageReader == null || mVirtualDisplay == null) {
+                initScreenShot();
+            }
 
-        //从容器中获取image，页面静止时，获取到的image有可能为null
-        Image image = imageReader.acquireLatestImage();
-        if (image != null) {
-            Image.Plane[] planes = image.getPlanes();
-            ByteBuffer buffer = planes[0].getBuffer();
-            int pixelStride = planes[0].getPixelStride();
-            int rowStride = planes[0].getRowStride();
-            int rowPadding = rowStride - pixelStride * image.getWidth();
-            Bitmap bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride,
+            //从容器中获取image，页面静止时，获取到的image有可能为null
+            Image image = imageReader.acquireLatestImage();
+            if (image != null) {
+                Image.Plane[] planes = image.getPlanes();
+                ByteBuffer buffer = planes[0].getBuffer();
+                int pixelStride = planes[0].getPixelStride();
+                int rowStride = planes[0].getRowStride();
+                int rowPadding = rowStride - pixelStride * image.getWidth();
+                Bitmap bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride,
                         image.getHeight(), Bitmap.Config.ARGB_8888);
-            bitmap.copyPixelsFromBuffer(buffer);
-//            Matrix matrix = new Matrix();
-//            matrix.postRotate(90.0f);
-            String filePath = writeBitmap(bitmap);
-            bitmap.recycle();
-            image.close();
-            return filePath;
-        }
-        return null;
+                bitmap.copyPixelsFromBuffer(buffer);
+                String filePath = writeBitmap(bitmap);
+                bitmap.recycle();
+                image.close();
+                result.success(filePath);
+                return;
+            }
+            result.success(null);
+        });
+
     }
 
     private String getScreenshotName() {
@@ -211,5 +218,11 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
         }
 
         return null;
+    }
+
+    protected synchronized void runInBackground(final Runnable r) {
+        if (this.handler != null) {
+            this.handler.post(r);
+        }
     }
 }

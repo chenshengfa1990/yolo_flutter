@@ -5,6 +5,8 @@ import 'package:flutter_bug_logger/flutter_logger.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ncnn_plugin/export.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot_plugin/screenshot_plugin.dart';
 import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
 
@@ -49,6 +51,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
+  late ScreenshotPlugin screenshotPlugin;
+  Timer? screenshotTimer;
+
   int num = 0;
   int notice = 0;
   int screenWidth = 0;
@@ -58,10 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
+    screenshotPlugin = ScreenshotPlugin();
     super.initState();
-    Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      _updateNotice();
-    });
+    // Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+    //   _updateNotice();
+    // });
   }
 
   void _showLog() async {
@@ -73,14 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // }
     // ConsoleOverlay.show(context);
 
-    // Map<String, dynamic> httpParams = {};
-    // httpParams['num_cards_left_dict'] = {"landlord": 0, "landlord_down": 17, "landlord_up": 17};
-    // httpParams['action'] = {"position": "landlord", "need_play_card": true};
-    // httpParams['user_id'] = 123;
-    // httpParams['round'] = 1;
-    // httpParams["player_position"] = "landlord";
-    // httpParams['player_hand_cards'] = [3, 4, 4, 5, 5, 5, 6, 6, 7, 8, 9, 9, 11, 11, 12, 12, 13, 17, 17, 30];
-    // httpParams['three_landlord_cards'] = [17, 17, 1];
+    Map<String, dynamic> httpParams = {};
+    httpParams['num_cards_left_dict'] = {"landlord": 0, "landlord_down": 17, "landlord_up": 17};
+    httpParams['action'] = {"position": "landlord", "need_play_card": true};
+    httpParams['user_id'] = 123;
+    httpParams['round'] = 1;
+    httpParams["player_position"] = "landlord";
+    httpParams['player_hand_cards'] = [3, 4, 4, 5, 5, 5, 6, 6, 7, 8, 9, 9, 11, 11, 12, 12, 13, 17, 17, 30];
+    httpParams['three_landlord_cards'] = [17, 17, 1];
     // var jsonStr = json.encode(httpParams);
     // print(jsonStr);
     // Logger.i(jsonStr);
@@ -114,6 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
     }
+    bool storagePermission = await checkStoragePermission();
+    if (!storagePermission) {
+      return;
+    }
+
+    await screenshotPlugin.requestPermission();
+
     await FlutterOverlayWindow.showOverlay(
       width: 450,
       height: 330,
@@ -121,9 +134,20 @@ class _MyHomePageState extends State<MyHomePage> {
       flag: OverlayFlag.defaultFlag,
       enableDrag: true,
     );
+    _startScreenshotPeriodic();
+  }
+
+  Future<bool> checkStoragePermission() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void _endGame() async {
+    _stopScreenshot();
     await FlutterOverlayWindow.closeOverlay();
   }
 
@@ -132,10 +156,21 @@ class _MyHomePageState extends State<MyHomePage> {
     await FlutterOverlayWindow.shareData(notice);
   }
 
+  void _startScreenshotPeriodic() {
+    screenshotTimer = Timer.periodic(const Duration(milliseconds: 3000), (timer) async {
+      String? path = await screenshotPlugin.takeScreenshot();
+      print('yolo screenshot: $path');
+    });
+  }
+
+  void _stopScreenshot() {
+    screenshotTimer?.cancel();
+    screenshotTimer = null;
+    screenshotPlugin.stopScreenshot();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // screenWidth = MediaQuery.of(context).size.width.toInt();
-    // screenHeight = MediaQuery.of(context).size.height.toInt();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text(widget.title)),

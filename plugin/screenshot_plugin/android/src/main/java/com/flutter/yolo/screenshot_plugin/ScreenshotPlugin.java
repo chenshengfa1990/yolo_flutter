@@ -1,0 +1,214 @@
+package com.flutter.yolo.screenshot_plugin;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.Image;
+import android.media.ImageReader;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
+import android.view.Surface;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.util.Date;
+
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+
+/**
+ * ScreenshotPlugin
+ */
+public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
+    /// The MethodChannel that will the communication between Flutter and native Android
+    ///
+    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// when the Flutter Engine is detached from the Activity
+    private static final String TAG = "ScreenshotPlugin";
+    private MethodChannel channel;
+    private Activity mActivity;
+    private Context mContext;
+    static public Intent screenShotIntent;
+    static public MediaProjectionManager mediaProjectionManager = null;
+    private VirtualDisplay mVirtualDisplay = null;
+    ImageReader imageReader = null;
+    static public int screenshotPermissionResultCode = Activity.RESULT_CANCELED;
+
+    static public int REQUEST_CODE_CAPTURE_SCREEN = 1001;
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "screenshot_plugin");
+        channel.setMethodCallHandler(this);
+        mContext = flutterPluginBinding.getApplicationContext();
+    }
+
+    @Override
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+        if (call.method.equals("getPlatformVersion")) {
+            result.success("Android " + android.os.Build.VERSION.RELEASE);
+        } else if (call.method.equals("takeScreenshot")) {
+            String path = takeScreenshot();
+            result.success(path);
+        } else if (call.method.equals("stopScreenshot")) {
+            stopScreenshot();
+            result.success(null);
+        } else if (call.method.equals("requestPermission")) {
+            requestPermission();
+            result.success(true);
+        } else {
+            result.notImplemented();
+        }
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
+        mContext = null;
+    }
+
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        mActivity = binding.getActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        mActivity = null;
+    }
+
+
+    private void requestPermission() {
+        mediaProjectionManager = (MediaProjectionManager) mContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        Intent permissionIntent = mediaProjectionManager.createScreenCaptureIntent();
+        mActivity.startActivityForResult(permissionIntent, REQUEST_CODE_CAPTURE_SCREEN);
+    }
+
+    private void stopScreenshot() {
+        if (mVirtualDisplay != null) {
+            mVirtualDisplay.release();
+            mVirtualDisplay = null;
+        }
+        if (imageReader != null) {
+            imageReader.close();
+            imageReader = null;
+        }
+        screenShotIntent = null;
+        screenshotPermissionResultCode = Activity.RESULT_CANCELED;
+    }
+
+    @SuppressLint("WrongConstant")
+    private void initScreenShot() {
+        //通过权限返回的结果获取MediaProjection
+        MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(screenshotPermissionResultCode, screenShotIntent);
+        if (mediaProjection == null) {
+            return;
+        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        display.getRealMetrics(metrics);
+
+        //横屏
+        int screenWidth = metrics.heightPixels;
+        int screenHeight = metrics.widthPixels;
+
+        //创建用于接收投影的容器
+        imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
+
+        //通过MediaProjection创建创建虚拟显示器对象，创建后物理屏幕画面会不断地投影到虚拟显示器VirtualDisplay上，输出到虚拟现实器创建时设定的输出Surface上
+        mVirtualDisplay = mediaProjection.createVirtualDisplay("mediaprojection", screenWidth, screenHeight,
+                metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, imageReader.getSurface(), null, null);
+
+    }
+
+    private String takeScreenshot() {
+        if (screenShotIntent == null || mediaProjectionManager == null) {
+            return null;
+        }
+
+        if (imageReader == null || mVirtualDisplay == null) {
+            initScreenShot();
+        }
+
+        //从容器中获取image
+        Image image = imageReader.acquireLatestImage();
+        if (image != null) {
+            Image.Plane[] planes = image.getPlanes();
+            ByteBuffer buffer = planes[0].getBuffer();
+            int pixelStride = planes[0].getPixelStride();
+            int rowStride = planes[0].getRowStride();
+            int rowPadding = rowStride - pixelStride * image.getWidth();
+            Bitmap bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride,
+                        image.getHeight(), Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(buffer);
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(90.0f);
+            String filePath = writeBitmap(bitmap);
+            bitmap.recycle();
+            image.close();
+            return filePath;
+        }
+        return null;
+    }
+
+    private String getScreenshotName() {
+        java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+        String sDate = sf.format(new Date());
+
+        return "yolo_screenshot-" + sDate + ".png";
+    } // getScreenshotName()
+
+    private String getScreenshotPath() {
+        String pathTemporary = mContext.getCacheDir().getPath();
+
+        return pathTemporary + "/" + getScreenshotName();
+    } // getScreenshotPath()
+
+    private String writeBitmap(Bitmap bitmap) {
+        try {
+            String path = getScreenshotPath();
+            File imageFile = new File(path);
+            FileOutputStream oStream = new FileOutputStream(imageFile);
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, oStream);
+            oStream.flush();
+            oStream.close();
+
+            return path;
+        } catch (Exception ex) {
+            Log.println(Log.INFO, TAG, "Error writing bitmap: " + ex.getMessage());
+        }
+
+        return null;
+    }
+}

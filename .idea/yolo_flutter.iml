@@ -15,6 +15,12 @@
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

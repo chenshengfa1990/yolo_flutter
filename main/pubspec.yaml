@@ -39,21 +39,37 @@ dependencies:
 
   # 图片选择器 https://pub.dev/packages/image_picker
   image_picker: ^0.8.0
-  dio: ^4.0.6 #网络请求
-  connectivity_plus: ^3.0.2 #获取网络状态
+
+  # 网络请求
+  dio: ^4.0.6
+
+  # 获取网络状态
+  connectivity_plus: ^3.0.2
 
   # 屏幕适配方案: https://pub.dev/packages/flutter_screenutil
   flutter_screenutil: ^5.6.0
 
+  # 日志
   flutter_bug_logger: 1.0.0
 
+  # 悬浮窗, 横屏有bug
   flutter_overlay_window: ^0.4.3
+
+  flutter_native_screenshot: ^1.1.2
+
+  # 权限申请
+  permission_handler: 10.4.3
+
+####################### 以下为自定义插件 #######################
 
   tensorflow_plugin:
     path: ../plugin/tensorflow_plugin
 
   ncnn_plugin:
     path: ../plugin/ncnn_plugin
+
+  screenshot_plugin:
+    path: ../plugin/screenshot_plugin
 
 dev_dependencies:
   flutter_test:

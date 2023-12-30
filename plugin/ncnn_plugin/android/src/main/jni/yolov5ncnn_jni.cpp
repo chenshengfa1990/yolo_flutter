@@ -400,7 +400,7 @@ JNIEXPORT jboolean JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Init(JN
 
     // init param
     {
-        int ret = yolov5.load_param(mgr, "best.ncnn.param");
+        int ret = yolov5.load_param(mgr, "best2.ncnn.param");
         if (ret != 0)
         {
             __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "load_param failed");
@@ -410,7 +410,7 @@ JNIEXPORT jboolean JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Init(JN
 
     // init bin
     {
-        int ret = yolov5.load_model(mgr, "best.ncnn.bin");
+        int ret = yolov5.load_model(mgr, "best2.ncnn.bin");
         if (ret != 0)
         {
             __android_log_print(ANDROID_LOG_DEBUG, "YoloV5Ncnn", "load_model failed");
@@ -604,24 +604,26 @@ JNIEXPORT jobjectArray JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Det
 //    };
 
     static const char* class_names[] = {
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-            "11", "12", "13", "20", "30", "dizhu"
+            "card1", "card10", "card_J", "card_Q", "card_K", "card2", "card_xiaowang", "card3", "card_dawang", "card4",
+            "card5", "card6", "card7", "card8", "card9", "buchu", "chupai", "dizhu"
     };
 
     jobjectArray jObjArray = env->NewObjectArray(objects.size(), objCls, NULL);
 
     for (size_t i=0; i<objects.size(); i++)
     {
-        jobject jObj = env->NewObject(objCls, constructortorId, thiz);
+        if (objects[i].label < (sizeof(class_names) / sizeof(class_names[0]))) {
+            jobject jObj = env->NewObject(objCls, constructortorId, thiz);
 
-        env->SetFloatField(jObj, xId, objects[i].x);
-        env->SetFloatField(jObj, yId, objects[i].y);
-        env->SetFloatField(jObj, wId, objects[i].w);
-        env->SetFloatField(jObj, hId, objects[i].h);
-        env->SetObjectField(jObj, labelId, env->NewStringUTF(class_names[objects[i].label]));
-        env->SetFloatField(jObj, probId, objects[i].prob);
+            env->SetFloatField(jObj, xId, objects[i].x);
+            env->SetFloatField(jObj, yId, objects[i].y);
+            env->SetFloatField(jObj, wId, objects[i].w);
+            env->SetFloatField(jObj, hId, objects[i].h);
+            env->SetObjectField(jObj, labelId, env->NewStringUTF(class_names[objects[i].label]));
+            env->SetFloatField(jObj, probId, objects[i].prob);
 
-        env->SetObjectArrayElement(jObjArray, i, jObj);
+            env->SetObjectArrayElement(jObjArray, i, jObj);
+        }
     }
 
     double elasped = ncnn::get_current_time() - start_time;

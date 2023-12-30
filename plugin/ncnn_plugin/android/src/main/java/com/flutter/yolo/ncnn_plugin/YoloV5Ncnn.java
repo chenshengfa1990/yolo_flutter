@@ -17,15 +17,10 @@ package com.flutter.yolo.ncnn_plugin;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import org.json.JSONObject;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class YoloV5Ncnn
 {

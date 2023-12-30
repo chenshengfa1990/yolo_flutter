@@ -105,26 +105,26 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
 
     // Rotate according to EXIF
     int rotate = 0;
-    try
-    {
-      ExifInterface exif = new ExifInterface(inputStream);
-      int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-      switch (orientation) {
-        case ExifInterface.ORIENTATION_ROTATE_270:
-          rotate = 270;
-          break;
-        case ExifInterface.ORIENTATION_ROTATE_180:
-          rotate = 180;
-          break;
-        case ExifInterface.ORIENTATION_ROTATE_90:
-          rotate = 90;
-          break;
-      }
-    }
-    catch (IOException e)
-    {
-      Log.e("NcnnPlugin", "ExifInterface IOException");
-    }
+//    try
+//    {
+//      ExifInterface exif = new ExifInterface(inputStream);
+//      int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//      switch (orientation) {
+//        case ExifInterface.ORIENTATION_ROTATE_270:
+//          rotate = 270;
+//          break;
+//        case ExifInterface.ORIENTATION_ROTATE_180:
+//          rotate = 180;
+//          break;
+//        case ExifInterface.ORIENTATION_ROTATE_90:
+//          rotate = 90;
+//          break;
+//      }
+//    }
+//    catch (IOException e)
+//    {
+//      Log.e("NcnnPlugin", "ExifInterface IOException");
+//    }
 
     Matrix matrix = new Matrix();
     matrix.postRotate(rotate);
@@ -146,7 +146,9 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
   private ArrayList<String> getDetectRes(YoloV5Ncnn.Obj[] objects) {
     ArrayList<String> resList = new ArrayList<>();
     for (YoloV5Ncnn.Obj object : objects) {
-      resList.add(object.toJson());
+      if (object != null) {
+        resList.add(object.toJson());
+      }
     }
     return resList;
   }

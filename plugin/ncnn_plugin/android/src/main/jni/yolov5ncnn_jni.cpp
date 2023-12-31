@@ -484,8 +484,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Det
     // yolov5
     std::vector<Object> objects;
     {
-        const float prob_threshold = 0.25f;
-        const float nms_threshold = 0.45f;
+        const float prob_threshold = 0.12f;
+        const float nms_threshold = 0.35f;
 
         const float norm_vals[3] = {1 / 255.f, 1 / 255.f, 1 / 255.f};
         in_pad.substract_mean_normalize(0, norm_vals);
@@ -604,9 +604,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Det
 //    };
 
     static const char* class_names[] = {
-            "card1", "card10", "card_J", "card_Q", "card_K", "card2", "card_xiaowang", "card3", "card_dawang", "card4",
-            "card5", "card6", "card7", "card8", "card9", "buchu", "chupai", "dizhu"
-    };
+                "A", "10", "J", "Q", "K", "2", "xw", "3", "dw", "4",
+                "5", "6", "7", "8", "9", "buchu", "chupai", "dizhu"
+        };
 
     jobjectArray jObjArray = env->NewObjectArray(objects.size(), objCls, NULL);
 

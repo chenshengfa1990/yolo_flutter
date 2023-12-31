@@ -1,17 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bug_logger/flutter_logger.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot_plugin/export.dart';
 import 'package:screenshot_plugin/screenshot_plugin.dart';
 import 'package:tensorflow_plugin/export.dart';
+import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
 
-import 'overlay_window.dart';
+import 'landlord_manager.dart';
+import 'overlay_window_widget.dart';
 
 void main() {
   initWidgetError();
@@ -56,8 +64,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
-  late ScreenshotPlugin screenshotPlugin;
-  Timer? screenshotTimer;
+  late ScreenShotManager screenShotManager;
+  late LandlordManager landlordManager;
 
   int num = 0;
   int notice = 0;
@@ -68,11 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
-    screenshotPlugin = ScreenshotPlugin();
+    screenShotManager = ScreenShotManager(ncnnPlugin);
     super.initState();
-    // Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-    //   _updateNotice();
-    // });
   }
 
   void _showLog() async {
@@ -111,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (selectImage?.path.isNotEmpty ?? false) {
       var result = await ncnnPlugin.startDetectImage(selectImage!.path);
+      var model = ScreenshotModel(selectImage.path, 2368, 1080);
+      var res = LandlordManager.getMyHandCard(result, model);
       setState(() {
         num = result?.length ?? 0;
       });
@@ -130,16 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    await screenshotPlugin.requestPermission();
-
     await FlutterOverlayWindow.showOverlay(
       width: 450,
-      height: 330,
+      height: 350,
       alignment: OverlayAlignment.topLeft,
       flag: OverlayFlag.defaultFlag,
       enableDrag: true,
     );
-    _startScreenshotPeriodic();
+
+    await screenShotManager.requestPermission();
+    screenShotManager.startScreenshotPeriodic();
   }
 
   Future<bool> checkStoragePermission() async {
@@ -152,26 +159,44 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _endGame() async {
-    _stopScreenshot();
-    await FlutterOverlayWindow.closeOverlay();
+    screenShotManager.stopScreenshot();
+    FlutterOverlayWindow.closeOverlay();
   }
 
-  void _updateNotice() async {
-    notice++;
-    await FlutterOverlayWindow.shareData(notice);
+  void zipScreenshotFile() async {
+    DateTime now = DateTime.now();
+    var zipFileName = '${DateFormat('yyyyMMdd-HHmmss-SSS').format(now)}.zip';
+    var zipPath = '${(await getExternalStorageDirectory())?.path}/$zipFileName';
+    Directory cacheDir = await getTemporaryDirectory();
+
+    ZipFileEncoder().zipDirectory(cacheDir, filename: zipPath);
+    cacheDir.delete(recursive: true);
+
+
+    // List<FileSystemEntity> files = cacheDir.listSync(recursive: true);
+    //
+    // Archive archive = Archive();
+    //
+    // for (var file in files) {
+    //   if (file is File) {
+    //     String filePath = file.path;
+    //     String relativePath = filePath.substring(cacheDir.path.length + 1);
+    //
+    //     archive.addFile(ArchiveFile(relativePath, file.lengthSync(), file.readAsBytesSync()));
+    //   }
+    // }
+    //
+    // List<int>? encodedZip = ZipEncoder().encode(archive);
+    //
+    // File(zipPath).writeAsBytes(encodedZip!);
   }
 
-  void _startScreenshotPeriodic() {
-    screenshotTimer = Timer.periodic(const Duration(milliseconds: 300), (timer) async {
-      String? path = await screenshotPlugin.takeScreenshot();
-      print('yolo screenshot: $path');
-    });
+  void _zipScreenshot() async {
+    zipScreenshotFile();
   }
 
-  void _stopScreenshot() {
-    screenshotTimer?.cancel();
-    screenshotTimer = null;
-    screenshotPlugin.stopScreenshot();
+  void _test() async {
+    await FlutterOverlayWindow.shareData("ddddhh");
   }
 
   @override
@@ -197,10 +222,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
+                const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: _updateNotice,
+                  onTap: _test,
                   child: Text(
-                    '更新悬浮窗出牌提示',
+                    '测试',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
@@ -243,5 +269,5 @@ class _MyHomePageState extends State<MyHomePage> {
 // overlay entry point
 @pragma("vm:entry-point")
 void overlayMain() {
-  runApp(const OverlayWindow());
+  runApp(const OverlayWindowWidget());
 }

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'screenshot_plugin_platform_interface.dart';
+import 'screenshot_model.dart';
 
 /// An implementation of [ScreenshotPluginPlatform] that uses method channels.
 class MethodChannelScreenshotPlugin extends ScreenshotPluginPlatform {
@@ -16,9 +19,13 @@ class MethodChannelScreenshotPlugin extends ScreenshotPluginPlatform {
   }
 
   @override
-  Future<String?> takeScreenshot() async {
-    final path = await methodChannel.invokeMethod<String>('takeScreenshot');
-    return path;
+  Future<ScreenshotModel?> takeScreenshot() async {
+    var resJson = await methodChannel.invokeMethod<String>('takeScreenshot');
+    if (resJson != null) {
+      var resModel = ScreenshotModel.fromJson(jsonDecode(resJson));
+      return resModel;
+    }
+    return null;
   }
 
   @override

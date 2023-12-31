@@ -1,4 +1,6 @@
 
+import 'package:screenshot_plugin/screenshot_model.dart';
+
 import 'screenshot_plugin_platform_interface.dart';
 
 class ScreenshotPlugin {
@@ -6,7 +8,7 @@ class ScreenshotPlugin {
     return ScreenshotPluginPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> takeScreenshot() async {
+  Future<ScreenshotModel?> takeScreenshot() async {
     return await ScreenshotPluginPlatform.instance.takeScreenshot();
   }
 

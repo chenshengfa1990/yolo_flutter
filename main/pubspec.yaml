@@ -60,6 +60,13 @@ dependencies:
   # 权限申请
   permission_handler: 10.4.3
 
+  # 路径管理
+  path_provider: ^2.0.9
+
+  archive: ^3.3.5
+
+  intl: 0.17.0
+
 ####################### 以下为自定义插件 #######################
 
   tensorflow_plugin:

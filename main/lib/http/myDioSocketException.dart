@@ -13,7 +13,7 @@ class MyDioSocketException extends SocketException {
   late String message;
 
   MyDioSocketException(
-      message, {
+      this.message, {
         osError,
         address,
         port,

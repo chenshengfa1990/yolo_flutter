@@ -1,4 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:screenshot_plugin/screenshot_model.dart';
 
 import 'screenshot_plugin_method_channel.dart';
 
@@ -27,7 +28,7 @@ abstract class ScreenshotPluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> takeScreenshot();
+  Future<ScreenshotModel?> takeScreenshot();
   Future<void> stopScreenshot();
   Future<bool?> requestPermission();
 }

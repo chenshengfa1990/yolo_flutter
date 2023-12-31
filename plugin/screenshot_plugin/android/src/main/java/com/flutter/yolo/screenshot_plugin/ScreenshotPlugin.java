@@ -15,6 +15,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.DisplayMetrics;
@@ -25,10 +26,14 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -123,10 +128,11 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
             mVirtualDisplay.release();
             mVirtualDisplay = null;
         }
-        if (imageReader != null) {
-            imageReader.close();
-            imageReader = null;
-        }
+        //todo 此处可能造成崩溃，暂时注释
+//        if (imageReader != null) {
+//            imageReader.close();
+//            imageReader = null;
+//        }
         screenShotIntent = null;
         screenshotPermissionResultCode = Activity.RESULT_CANCELED;
     }
@@ -175,13 +181,20 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
                 int pixelStride = planes[0].getPixelStride();
                 int rowStride = planes[0].getRowStride();
                 int rowPadding = rowStride - pixelStride * image.getWidth();
-                Bitmap bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride,
-                        image.getHeight(), Bitmap.Config.ARGB_8888);
+                int realWidth = image.getWidth() + rowPadding / pixelStride;
+                int realHeight = image.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(realWidth, realHeight, Bitmap.Config.ARGB_8888);
                 bitmap.copyPixelsFromBuffer(buffer);
                 String filePath = writeBitmap(bitmap);
+
+                Map<String, Object> resultMap = new HashMap<>();
+                resultMap.put("filePath", filePath);
+                resultMap.put("width", realWidth);
+                resultMap.put("height", realHeight);
+                String resStr = mapToString(resultMap);
                 bitmap.recycle();
                 image.close();
-                result.success(filePath);
+                result.success(resStr);
                 return;
             }
             result.success(null);
@@ -189,15 +202,23 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
 
     }
 
+    private String mapToString(Map<String, Object> map) {
+        if (map == null) {
+            return "";
+        }
+        return new JSONObject(map).toString();
+    }
+
     private String getScreenshotName() {
         java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss-SSS");
         String sDate = sf.format(new Date());
 
-        return "yolo_screenshot-" + sDate + ".png";
+        return "yolo_screenshot-" + sDate + ".jpg";
     } // getScreenshotName()
 
     private String getScreenshotPath() {
-        String pathTemporary = mContext.getCacheDir().getPath();
+//        String pathTemporary = mContext.getCacheDir().getPath();
+        String pathTemporary = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
 
         return pathTemporary + "/" + getScreenshotName();
     } // getScreenshotPath()

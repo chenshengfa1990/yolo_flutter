@@ -11,6 +11,10 @@ import 'landlord_manager.dart';
 ///出牌策略
 class StrategyManager {
   static int round = 0;
+
+  static void destroy() {
+    round = 0;
+  }
   static getLandlordStrategy(GameStatus nextStatus, List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     if (nextStatus == GameStatus.myTurn) {
       getServerSuggestion(detectList, screenshotModel);
@@ -26,12 +30,13 @@ class StrategyManager {
   static getServerSuggestion(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
+    httpParams['num_cards_left_dict'] = {"landlord": 17, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "need_play_card": true};
     httpParams['user_id'] = 123;
     httpParams['round'] = round++;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;
-    // httpParams['three_landlord_cards'] = [17, 17, 1];
+    httpParams['three_landlord_cards'] = [17, 17, 1];
     var jsonStr = json.encode(httpParams);
     var res = await HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
     print(res);

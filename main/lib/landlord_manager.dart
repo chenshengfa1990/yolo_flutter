@@ -20,6 +20,12 @@ class LandlordManager {
   static String leftPlayerIdentify = "";
   static String rightPlayerIdentify = "";
 
+  static void destroy() {
+    myIdentify = "";
+    leftPlayerIdentify = "";
+    rightPlayerIdentify = "";
+  }
+
   ///对牌进行排列
   static String getCardsSorted(List<NcnnDetectModel>? detectModels) {
     List<int> sortedList = [];
@@ -137,9 +143,19 @@ class LandlordManager {
     }
   }
 
+  ///出牌
   static NcnnDetectModel? getChuPai(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     try {
       return detectList?.firstWhere((element) => element.label == 'chupai');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  ///要不起
+  static NcnnDetectModel? getYaobuqi(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
+    try {
+      return detectList?.firstWhere((element) => element.label == 'yaobuqi');
     } catch (e) {
       return null;
     }

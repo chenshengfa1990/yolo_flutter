@@ -16,8 +16,10 @@ import 'package:screenshot_plugin/export.dart';
 import 'package:screenshot_plugin/screenshot_plugin.dart';
 import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screen_shot_manager.dart';
+import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
 
+import 'game_status.dart';
 import 'landlord_manager.dart';
 import 'overlay_window_widget.dart';
 
@@ -141,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
       width: 450,
       height: 350,
       alignment: OverlayAlignment.topLeft,
+      overlayTitle: '牌面识别中',
       flag: OverlayFlag.defaultFlag,
       enableDrag: true,
     );
@@ -159,7 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _endGame() async {
-    screenShotManager.stopScreenshot();
+    screenShotManager.destroy();
+    GameStatusManager.destroy();
+    LandlordManager.destroy();
+    StrategyManager.destroy();
     FlutterOverlayWindow.closeOverlay();
   }
 

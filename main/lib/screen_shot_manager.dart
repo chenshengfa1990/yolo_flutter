@@ -73,7 +73,7 @@ class ScreenShotManager {
     }
   }
 
-  void stopScreenshot() {
+  void destroy() {
     screenshotTimer?.cancel();
     screenshotTimer = null;
     screenshotPlugin.stopScreenshot();

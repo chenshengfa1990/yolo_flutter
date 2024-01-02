@@ -26,7 +26,7 @@ class ScreenShotManager {
   }
 
   void startScreenshotPeriodic() {
-    screenshotTimer = Timer.periodic(const Duration(milliseconds: 300), timerCallback);
+    screenshotTimer = Timer.periodic(const Duration(milliseconds: 500), timerCallback);
   }
 
   Future<void> timerCallback(Timer timer) async {
@@ -70,6 +70,11 @@ class ScreenShotManager {
       String leftPlayerCardStr = LandlordManager.getCardsSorted(leftPlayerCards);
       String rightPlayerCardStr = LandlordManager.getCardsSorted(rightPlayerCards);
       await FlutterOverlayWindow.shareData([gameStatusStr, threeCardStr, leftPlayerCardStr, rightPlayerCardStr, myHandCardStr, myOutCardStr]);
+      if (nextStatus == GameStatus.myTurn) {
+        screenshotTimer?.cancel();
+        screenshotTimer = null;
+        screenshotTimer = Timer.periodic(const Duration(milliseconds: 500), timerCallback);
+      }
     }
   }
 

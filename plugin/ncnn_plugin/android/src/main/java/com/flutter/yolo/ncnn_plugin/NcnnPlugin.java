@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,8 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
   private MethodChannel channel;
   public static Context activityContext;
   private YoloV5Ncnn yolov5ncnn = new YoloV5Ncnn();
+  private HandlerThread handlerThread;
+  private Handler handler;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -62,15 +66,21 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
   }
 
   public void startDetectImage(String imagePath, Result result) {
-    Bitmap bitmap = null;
-    try {
-      bitmap = getBitmap(imagePath);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    YoloV5Ncnn.Obj[] objects = yolov5ncnn.Detect(bitmap, false);
-    ArrayList<String> resList = getDetectRes(objects);
-    result.success(resList);
+    runInBackground(new Runnable() {
+      @Override
+      public void run() {
+        Bitmap bitmap = null;
+        try {
+          bitmap = getBitmap(imagePath);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+        YoloV5Ncnn.Obj[] objects = yolov5ncnn.Detect(bitmap, false);
+        ArrayList<String> resList = getDetectRes(objects);
+        result.success(resList);
+      }
+    });
+
   }
 
   public Bitmap getBitmap(String imagePath) throws Exception {
@@ -83,7 +93,7 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     BitmapFactory.decodeByteArray(inputStream2ByteArr, 0, inputStream2ByteArr.length, o);
 
     // The new size we want to scale to
-    final int REQUIRED_SIZE = 640;
+    final int REQUIRED_SIZE = 1280;
 
     // Find the correct scale value. It should be the power of 2.
     int width_tmp = o.outWidth, height_tmp = o.outHeight;
@@ -161,6 +171,9 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     {
       Log.e("NcnnPlugin", "yolov5ncnn Init failed");
     }
+    handlerThread = new HandlerThread("ncnnPlugin");
+    handlerThread.start();
+    handler = new Handler(handlerThread.getLooper());
   }
 
   @Override
@@ -176,5 +189,11 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
   @Override
   public void onDetachedFromActivity() {
     activityContext = null;
+  }
+
+  protected synchronized void runInBackground(final Runnable r) {
+    if (this.handler != null) {
+      this.handler.post(r);
+    }
   }
 }

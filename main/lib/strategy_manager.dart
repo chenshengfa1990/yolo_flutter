@@ -17,13 +17,13 @@ class StrategyManager {
   }
   static getLandlordStrategy(GameStatus nextStatus, List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     if (nextStatus == GameStatus.myTurn) {
-      getServerSuggestion(detectList, screenshotModel);
+      //getServerSuggestion(detectList, screenshotModel);
     } else if (nextStatus == GameStatus.iDone) {
-      tellServerIDone(detectList, screenshotModel);
+      //tellServerIDone(detectList, screenshotModel);
     } else if (nextStatus == GameStatus.rightDone) {
-      tellServerRightPlayerDone(detectList, screenshotModel);
+      //tellServerRightPlayerDone(detectList, screenshotModel);
     } else if (nextStatus == GameStatus.leftDone) {
-      tellServerLeftPlayerDone(detectList, screenshotModel);
+      //tellServerLeftPlayerDone(detectList, screenshotModel);
     }
   }
 

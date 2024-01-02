@@ -8,8 +8,8 @@ class RegionManager {
     ///三张牌区域
     static bool inThreeCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       double bottomYBorder = 110.0 / 1080.0 * screenshotModel.height;
-      double leftXBorder = 960.0 / 2368.0 * screenshotModel.width;
-      double rightXBorder = 1400.0 / 2368.0 * screenshotModel.width;
+      double leftXBorder = 580.0 / 2368.0 * screenshotModel.width;
+      double rightXBorder = 1760.0 / 2368.0 * screenshotModel.width;
       if (model.y! < bottomYBorder && model.x! > leftXBorder && model.x! < rightXBorder) {
         return true;
       }
@@ -63,6 +63,18 @@ class RegionManager {
       return false;
     }
 
+    ///我的出牌区域
+    static bool inMyCenterBuChuRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
+      double topYBorder = 460.0 / 1080.0 * screenshotModel.height;
+      double bottomYBorder = 620.0 / 1080.0 * screenshotModel.height;
+      double leftXBorder = 1000.0 / 2368.0 * screenshotModel.width;
+      double rightXBorder = 1300.0 / 2368.0 * screenshotModel.width;
+      if (model.y! > topYBorder && model.y! < bottomYBorder && model.x! > leftXBorder && model.x! < rightXBorder) {
+        return true;
+      }
+      return false;
+    }
+
     ///我是地主
     static bool inMyLandlordRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       double rightXBorder = 430.0 / 2368.0 * screenshotModel.width;
@@ -96,7 +108,7 @@ class RegionManager {
     ///我不出牌
     static bool inMyBuchuRegion(List<NcnnDetectModel>? models, ScreenshotModel screenshotModel) {
       for(int i = 0; i < (models?.length ?? 0); i++) {
-        if (inMyOutCardRegion(models![i], screenshotModel)) {
+        if (inMyCenterBuChuRegion(models![i], screenshotModel)) {
           return true;
         }
       }

@@ -69,6 +69,34 @@ class LandlordManager {
     return cardList;
   }
 
+  static List<NcnnDetectModel>? sortedByXPos(List<NcnnDetectModel>? detectModels) {
+    List<NcnnDetectModel> sortedList = [];
+    void insertSorted(NcnnDetectModel value) {
+      int insertionIndex = -1;
+      for (int i = 0; i < sortedList.length; i++) {
+        if (value.x! < sortedList[i].x!) {
+          insertionIndex = i;
+          break;
+        }
+      }
+      if (insertionIndex == -1) {
+        sortedList.add(value);
+      } else {
+        sortedList.insert(insertionIndex, value);
+      }
+    }
+
+    detectModels?.forEach((model) {
+      if (labelIndex.containsKey(model.label)) {
+        insertSorted(model);
+      }
+    });
+    if (sortedList.isNotEmpty) {
+      return sortedList;
+    }
+    return null;
+  }
+
   ///获取地主3张牌
   static List<NcnnDetectModel>? getThreeCard(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     List<NcnnDetectModel> resList = [];
@@ -79,7 +107,13 @@ class LandlordManager {
         }
       }
     });
-    return resList;
+    List<NcnnDetectModel>? sortedModels = sortedByXPos(resList);
+    if (sortedModels?.isNotEmpty ?? false) {
+      if (sortedModels!.length > 3) {
+        return sortedModels.sublist(sortedModels.length - 3);
+      }
+    }
+    return null;
   }
 
   ///获取我的手牌

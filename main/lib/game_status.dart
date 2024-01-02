@@ -26,6 +26,8 @@ enum GameStatus {
 
 ///状态管理
 class GameStatusManager {
+  static List<NcnnDetectModel>? lastOutCards;///最后的出牌
+  static String lastOutCardPlayer = '';///最后出牌的人
   static GameStatus curGameStatus = GameStatus.gamePreparing;
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
 
@@ -61,8 +63,12 @@ class GameStatusManager {
         } else {
           var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
           if (myOutCard?.isNotEmpty ?? false) {
-            print('chenshengfa iDone');
-            nextStatus = GameStatus.iDone;
+            if (lastOutCardPlayer == 'me' || isMatchLast(myOutCard)) {
+              lastOutCardPlayer = 'me';
+              lastOutCards = myOutCard;
+              print('chenshengfa iDone');
+              nextStatus = GameStatus.iDone;
+            }
           }
         }
         break;
@@ -82,8 +88,12 @@ class GameStatusManager {
         } else {
           var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
           if (rightOutCard?.isNotEmpty ?? false) {
-            print('chenshengfa rightDone');
-            nextStatus = GameStatus.rightDone;
+            if (lastOutCardPlayer == 'rightPlayer' || isMatchLast(rightOutCard)) {
+              lastOutCardPlayer = 'rightPlayer';
+              lastOutCards = rightOutCard;
+              print('chenshengfa rightDone');
+              nextStatus = GameStatus.rightDone;
+            }
           }
         }
         break;
@@ -103,8 +113,12 @@ class GameStatusManager {
         } else {
           var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
           if (leftOutCard?.isNotEmpty ?? false) {
-            print('chenshengfa leftDone, ');
-            nextStatus = GameStatus.leftDone;
+            if (lastOutCardPlayer == "leftPlayer" || isMatchLast(leftOutCard)) {
+              lastOutCardPlayer = 'leftPlayer';
+              lastOutCards = leftOutCard;
+              print('chenshengfa leftDone, ');
+              nextStatus = GameStatus.leftDone;
+            }
           }
         }
         break;
@@ -120,7 +134,31 @@ class GameStatusManager {
     return nextStatus;
   }
 
+  static bool isMatchLast(List<NcnnDetectModel>? detectList) {
+    if (lastOutCards == null) {
+      return true;
+    }
+    if (detectList?.length == lastOutCards?.length) {
+      return true;
+    }
+    if (detectList?.length == 4) {
+      if (detectList![0].label == detectList[1].label && detectList[0].label == detectList[2].label && detectList[0].label == detectList[3].label) {
+        return true;
+      }
+    }
+    if (detectList?.length == 2) {
+      if (detectList![0].label == 'W' && detectList[1].label == 'w') {
+        return true;
+      }
+      if (detectList![0].label == 'w' && detectList[1].label == 'W') {
+        return true;
+      }
+    }
+    return false;
+  }
   static void destroy() {
     curGameStatus = GameStatus.gamePreparing;
+    lastOutCards = null;
+    lastOutCardPlayer = "";
   }
 }

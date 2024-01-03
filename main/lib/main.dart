@@ -19,7 +19,7 @@ import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
 
-import 'game_status.dart';
+import 'game_status_manager.dart';
 import 'landlord_manager.dart';
 import 'overlay_window_widget.dart';
 
@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int notice = 0;
   int screenWidth = 0;
   int screenHeight = 0;
+  int hasDeleteScreenshot = 0;
 
   @override
   void initState() {
@@ -162,6 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _endGame() async {
+    setState(() {
+      hasDeleteScreenshot = 0;
+    });
     screenShotManager.destroy();
     GameStatusManager.destroy();
     LandlordManager.destroy();
@@ -202,7 +206,30 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _test() async {
-    await FlutterOverlayWindow.shareData("ddddhh");
+    setState( () {
+      hasDeleteScreenshot = 0;
+    });
+
+    Directory? cacheDir = await getExternalStorageDirectory();
+    deleteCacheScreenshot('${cacheDir?.path}/Pictures');
+
+    setState( () {
+      hasDeleteScreenshot = 1;
+    });
+  }
+
+  void deleteCacheScreenshot(String path) {
+    Directory directory = Directory(path);
+    if (directory.existsSync()) {
+      directory.listSync(recursive: true).forEach((element) {
+        if (element is File) {
+          element.deleteSync();
+        } else if (element is Directory) {
+          deleteCacheScreenshot(element.path);
+          element.deleteSync();
+        }
+      });
+    }
   }
 
   @override
@@ -232,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 GestureDetector(
                   onTap: _test,
                   child: Text(
-                    '测试',
+                    '删除截图缓存 $hasDeleteScreenshot',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 ),

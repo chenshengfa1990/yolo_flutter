@@ -68,7 +68,7 @@ class RegionManager {
       double topYBorder = 460.0 / 1080.0 * screenshotModel.height;
       double bottomYBorder = 620.0 / 1080.0 * screenshotModel.height;
       double leftXBorder = 1000.0 / 2368.0 * screenshotModel.width;
-      double rightXBorder = 1300.0 / 2368.0 * screenshotModel.width;
+      double rightXBorder = 1260.0 / 2368.0 * screenshotModel.width;
       if (model.y! > topYBorder && model.y! < bottomYBorder && model.x! > leftXBorder && model.x! < rightXBorder) {
         return true;
       }

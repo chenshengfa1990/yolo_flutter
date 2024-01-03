@@ -9,7 +9,7 @@ import 'package:ncnn_plugin/ncnn_plugin.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 
-import 'game_status.dart';
+import 'game_status_manager.dart';
 import 'landlord_manager.dart';
 
 class ScreenShotManager {
@@ -46,16 +46,16 @@ class ScreenShotManager {
             return;
           } else {
             LandlordManager.initPlayerIdentify(landlord, screenshotModel);
+            LandlordManager.getThreeCard(detectList, screenshotModel);
           }
         } else {
           return;
         }
       }
-      List<NcnnDetectModel>? threeCards = LandlordManager.getThreeCard(detectList, screenshotModel!);
-      List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
-      List<NcnnDetectModel>? myOutCards = LandlordManager.getMyOutCard(detectList, screenshotModel!);
-      List<NcnnDetectModel>? leftPlayerCards = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel!);
-      List<NcnnDetectModel>? rightPlayerCards = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel!);
+      List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
+      List<NcnnDetectModel>? myOutCards = LandlordManager.getMyOutCard(detectList, screenshotModel);
+      List<NcnnDetectModel>? leftPlayerCards = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
+      List<NcnnDetectModel>? rightPlayerCards = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
 
       print('chenshengfa current status: ${GameStatusManager.getGameStatusStr(GameStatusManager.curGameStatus)}');
       var nextStatus = GameStatusManager.calculateNextGameStatus(detectList, screenshotModel);
@@ -64,12 +64,11 @@ class ScreenShotManager {
       print('chenshengfa next status: $gameStatusStr');
       GameStatusManager.curGameStatus = nextStatus;
 
-      String threeCardStr = LandlordManager.getCardsSorted(threeCards);
       String myHandCardStr = LandlordManager.getCardsSorted(myHandCards);
       String myOutCardStr = LandlordManager.getCardsSorted(myOutCards);
       String leftPlayerCardStr = LandlordManager.getCardsSorted(leftPlayerCards);
       String rightPlayerCardStr = LandlordManager.getCardsSorted(rightPlayerCards);
-      await FlutterOverlayWindow.shareData([gameStatusStr, threeCardStr, leftPlayerCardStr, rightPlayerCardStr, myHandCardStr, myOutCardStr]);
+      await FlutterOverlayWindow.shareData([gameStatusStr, LandlordManager.threeCardStr, leftPlayerCardStr, rightPlayerCardStr, myHandCardStr, myOutCardStr]);
       if (nextStatus == GameStatus.myTurn) {
         screenshotTimer?.cancel();
         screenshotTimer = null;

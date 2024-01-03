@@ -68,6 +68,7 @@ class GameStatusManager {
               lastOutCards = myOutCard;
               print('chenshengfa iDone');
               nextStatus = GameStatus.iDone;
+              LandlordManager.updateMyLeftCards(myOutCard);
             }
           }
         }
@@ -93,6 +94,7 @@ class GameStatusManager {
               lastOutCards = rightOutCard;
               print('chenshengfa rightDone');
               nextStatus = GameStatus.rightDone;
+              LandlordManager.updateRightPlayerLeftCards(rightOutCard);
             }
           }
         }
@@ -118,6 +120,7 @@ class GameStatusManager {
               lastOutCards = leftOutCard;
               print('chenshengfa leftDone, ');
               nextStatus = GameStatus.leftDone;
+              LandlordManager.updateLeftPlayerLeftCards(leftOutCard);
             }
           }
         }

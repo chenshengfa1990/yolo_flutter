@@ -12,18 +12,33 @@ class LandlordManager {
 
   ///后台需要的纸牌对应的数字
   static Map<String, int> labelServerIndex = {"dw": 30, "xw": 20, "2": 17, "A": 14, "K": 13, "Q": 12, "J": 11, "10": 10, "9": 9, "8": 8, "7": 7, "6": 6, "5": 5, "4": 4, "3": 3};
+
+  static Map<int, String> serverIndexToCard = {30: "W", 20: "w", 17: "2", 14: "A", 13: "K", 12: "Q", 11: "J", 10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "3"};
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
 
-  ///玩家身份
+  ///地主额外三张牌
+  static List<NcnnDetectModel>? threeCards;
+  static String threeCardStr = '';
+  static List<int>? threeCardInt;
+
+  ///玩家身份, "landlord", "landlord_down", "landlord_up"
   static String myIdentify = "";
   static String leftPlayerIdentify = "";
   static String rightPlayerIdentify = "";
+
+  ///剩余牌数
+  static int myLeftCards = 0;
+  static int leftPlayerLeftCards = 0;
+  static int rightPlayerLeftCards = 0;
 
   static void destroy() {
     myIdentify = "";
     leftPlayerIdentify = "";
     rightPlayerIdentify = "";
+    threeCardStr = "";
+    threeCards = null;
+    threeCardInt = null;
   }
 
   ///对牌进行排列
@@ -69,6 +84,14 @@ class LandlordManager {
     return cardList;
   }
 
+  static String getSuggestionStr(List<int> suggestion) {
+    String res = '';
+    for (var element in suggestion) {
+      res = '$res${serverIndexToCard[element]}';
+    }
+    return res;
+  }
+
   static List<NcnnDetectModel>? sortedByXPos(List<NcnnDetectModel>? detectModels) {
     List<NcnnDetectModel> sortedList = [];
     void insertSorted(NcnnDetectModel value) {
@@ -110,7 +133,11 @@ class LandlordManager {
     List<NcnnDetectModel>? sortedModels = sortedByXPos(resList);
     if (sortedModels?.isNotEmpty ?? false) {
       if (sortedModels!.length > 3) {
-        return sortedModels.sublist(sortedModels.length - 3);
+        var models = sortedModels.sublist(sortedModels.length - 3);
+        threeCards = models;
+        threeCardStr = getCardsSorted(threeCards);
+        threeCardInt = getServerCardFormat(threeCards);
+        return models;
       }
     }
     return null;
@@ -142,6 +169,11 @@ class LandlordManager {
     return resList;
   }
 
+  ///更新我自己剩余牌数
+  static updateMyLeftCards(List<NcnnDetectModel>? myOutCards) {
+    myLeftCards = myLeftCards - (myOutCards?.length ?? 0);
+  }
+
   ///获取左边玩家出牌
   static List<NcnnDetectModel>? getLeftPlayerOutCard(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     List<NcnnDetectModel> resList = [];
@@ -153,6 +185,11 @@ class LandlordManager {
       }
     });
     return resList;
+  }
+
+  ///更新左边玩家剩余牌数
+  static updateLeftPlayerLeftCards(List<NcnnDetectModel>? leftPlayerOutCards) {
+    leftPlayerLeftCards = leftPlayerLeftCards - (leftPlayerOutCards?.length ?? 0);
   }
 
   ///获取右边玩家出牌
@@ -167,6 +204,11 @@ class LandlordManager {
     });
     return resList;
   }
+
+  ///更新右边玩家剩余牌数
+  static updateRightPlayerLeftCards(List<NcnnDetectModel>? rightPlayerOutCards) {
+    rightPlayerLeftCards = rightPlayerLeftCards - (rightPlayerOutCards?.length ?? 0);
+  }
   
   ///获取是否检测到地主，地主出现表示准备好
   static NcnnDetectModel? getLandlord(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
@@ -180,7 +222,8 @@ class LandlordManager {
   ///出牌
   static NcnnDetectModel? getChuPai(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     try {
-      return detectList?.firstWhere((element) => element.label == 'chupai');
+      ///有些误判，所以通过宽度w过滤
+      return detectList?.firstWhere((element) => (element.label == 'chupai' && element.w! < (265.0 / 2368.0 * screenshotModel.width)));
     } catch (e) {
       return null;
     }
@@ -213,14 +256,24 @@ class LandlordManager {
       myIdentify = "landlord";
       rightPlayerIdentify = "landlord_down";
       leftPlayerIdentify = "landlord_up";
+      myLeftCards = 20;
+      leftPlayerLeftCards = 17;
+      rightPlayerLeftCards = 17;
     } else if (RegionManager.inLeftPlayerLandlordRegion(landlord, screenshotModel)) {
       leftPlayerIdentify = "landlord";
       myIdentify = "landlord_down";
       rightPlayerIdentify = "landlord_up";
+      myLeftCards = 17;
+      leftPlayerLeftCards = 20;
+      rightPlayerLeftCards = 17;
+
     } else if (RegionManager.inRightPlayerLandlordRegion(landlord, screenshotModel)) {
       rightPlayerIdentify = "landlord";
       myIdentify = "landlord_up";
       leftPlayerIdentify = "landlord_down";
+      myLeftCards = 17;
+      leftPlayerLeftCards = 17;
+      rightPlayerLeftCards = 20;
     }
   }
 }

@@ -99,6 +99,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.7.10"
+  device_info:
+    dependency: "direct main"
+    description:
+      name: device_info
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.3"
+  device_info_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -149,9 +163,9 @@ packages:
   flutter_overlay_window:
     dependency: "direct main"
     description:
-      name: flutter_overlay_window
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../plugin/flutter_overlay_window"
+      relative: true
+    source: path
     version: "0.4.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive

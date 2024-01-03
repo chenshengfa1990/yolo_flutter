@@ -53,8 +53,9 @@ dependencies:
   flutter_bug_logger: 1.0.0
 
   # 悬浮窗, 横屏有bug
-  flutter_overlay_window: ^0.4.3
+#  flutter_overlay_window: ^0.4.3
 
+  # layer方式截图，暂不使用
   flutter_native_screenshot: ^1.1.2
 
   # 权限申请
@@ -63,9 +64,14 @@ dependencies:
   # 路径管理
   path_provider: ^2.0.9
 
+  #解压缩
   archive: ^3.3.5
 
+  #日期
   intl: 0.17.0
+
+  #设备信息
+  device_info: ^2.0.0
 
 ####################### 以下为自定义插件 #######################
 
@@ -77,6 +83,9 @@ dependencies:
 
   screenshot_plugin:
     path: ../plugin/screenshot_plugin
+
+  flutter_overlay_window:
+    path: ../plugin/flutter_overlay_window
 
 dev_dependencies:
   flutter_test:

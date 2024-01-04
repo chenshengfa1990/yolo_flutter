@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/material.dart';
 import 'package:ncnn_plugin/ncnn_detect_model.dart';
 import 'package:screenshot_plugin/export.dart';
 
@@ -22,6 +23,8 @@ class LandlordManager {
   static String threeCardStr = '';
   static List<int>? threeCardInt;
 
+  static ValueNotifier<String> myHandCardsNotifier = ValueNotifier('');
+
   ///玩家身份, "landlord", "landlord_down", "landlord_up"
   static String myIdentify = "";
   static String leftPlayerIdentify = "";
@@ -32,6 +35,8 @@ class LandlordManager {
   static int leftPlayerLeftCards = 0;
   static int rightPlayerLeftCards = 0;
 
+  static String serverSuggestion = '';
+
   static void destroy() {
     myIdentify = "";
     leftPlayerIdentify = "";
@@ -39,6 +44,7 @@ class LandlordManager {
     threeCardStr = "";
     threeCards = null;
     threeCardInt = null;
+    serverSuggestion = '';
   }
 
   ///对牌进行排列
@@ -84,12 +90,12 @@ class LandlordManager {
     return cardList;
   }
 
-  static String getSuggestionStr(List<int> suggestion) {
+  static void updateServerSuggestion(List<int> suggestion) {
     String res = '';
     for (var element in suggestion) {
       res = '$res${serverIndexToCard[element]}';
     }
-    return res;
+    serverSuggestion = res;
   }
 
   static List<NcnnDetectModel>? sortedByXPos(List<NcnnDetectModel>? detectModels) {
@@ -222,8 +228,7 @@ class LandlordManager {
   ///出牌
   static NcnnDetectModel? getChuPai(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     try {
-      ///有些误判，所以通过宽度w过滤
-      return detectList?.firstWhere((element) => (element.label == 'chupai' && element.w! < (265.0 / 2368.0 * screenshotModel.width)));
+      return detectList?.firstWhere((element) => (element.label == 'chupai'));
     } catch (e) {
       return null;
     }

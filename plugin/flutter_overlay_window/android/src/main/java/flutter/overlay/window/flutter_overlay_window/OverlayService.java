@@ -19,6 +19,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -140,7 +141,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
                 WindowSetup.width == -1999 ? -1 : WindowSetup.width,
                 WindowSetup.height != -1999 ? WindowSetup.height : screenHeight(),
                 0,
-                -statusBarHeightPx(),
+//                -statusBarHeightPx(),
+                0,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE,
                 WindowSetup.flag | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
                         | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
@@ -151,12 +153,27 @@ public class OverlayService extends Service implements View.OnTouchListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && WindowSetup.flag == clickableFlag) {
             params.alpha = MAXIMUM_OPACITY_ALLOWED_FOR_S_AND_HIGHER;
         }
-        params.gravity = WindowSetup.gravity;
+        params.gravity = Gravity.CENTER;
         flutterView.setOnTouchListener(this);
         windowManager.addView(flutterView, params);
         return START_STICKY;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (windowManager != null) {
+            WindowManager.LayoutParams params = (WindowManager.LayoutParams) flutterView.getLayoutParams();
+            params.x = 0;
+            params.y = 0;
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                params.gravity = Gravity.CENTER;
+            } else {
+                params.gravity = WindowSetup.gravity;
+            }
+            windowManager.updateViewLayout(flutterView, params);
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private int screenHeight() {

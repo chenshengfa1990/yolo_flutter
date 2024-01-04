@@ -21,6 +21,7 @@ import 'package:yolo_flutter/util/colorConstant.dart';
 
 import 'game_status_manager.dart';
 import 'landlord_manager.dart';
+import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
 
 void main() {
@@ -141,12 +142,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     await FlutterOverlayWindow.showOverlay(
-      width: 450,
-      height: 350,
-      alignment: OverlayAlignment.topLeft,
+      width: 900,
+      height: 190,
+      alignment: OverlayAlignment.bottomCenter,
       overlayTitle: '牌面识别中',
-      flag: OverlayFlag.defaultFlag,
-      enableDrag: true,
+      flag: OverlayFlag.clickThrough,
+      // enableDrag: true,
+      // positionGravity: PositionGravity.left,
     );
 
     await screenShotManager.requestPermission();
@@ -170,6 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
     GameStatusManager.destroy();
     LandlordManager.destroy();
     StrategyManager.destroy();
+    LandlordRecorder.destroy();
     FlutterOverlayWindow.closeOverlay();
   }
 

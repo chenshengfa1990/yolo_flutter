@@ -49,8 +49,8 @@ class StrategyManager {
     Map<String, dynamic> resMap = json.decode(res);
     if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
       List<int> serverSuggestion = resMap['action'].cast<int>().toList();
-      String suggestion = LandlordManager.getSuggestionStr(serverSuggestion);
-      await FlutterOverlayWindow.shareData(suggestion);
+      LandlordManager.updateServerSuggestion(serverSuggestion);
+      // await FlutterOverlayWindow.shareData(suggestion);
     }
     print('getServerSuggestion $res');
   }

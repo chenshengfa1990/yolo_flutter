@@ -7,10 +7,12 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:ncnn_plugin/ncnn_plugin.dart';
 import 'package:screenshot_plugin/export.dart';
+import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 
 import 'game_status_manager.dart';
 import 'landlord_manager.dart';
+import 'overlay_window_widget.dart';
 
 class ScreenShotManager {
   late ScreenshotPlugin screenshotPlugin;
@@ -39,6 +41,7 @@ class ScreenShotManager {
         return;
       }
       if (GameStatusManager.curGameStatus == GameStatus.gamePreparing) {
+        ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         if (landlord != null) {
           GameStatus status = GameStatusManager.initGameStatus(landlord, screenshotModel);
@@ -46,35 +49,70 @@ class ScreenShotManager {
             return;
           } else {
             LandlordManager.initPlayerIdentify(landlord, screenshotModel);
-            LandlordManager.getThreeCard(detectList, screenshotModel);
+            List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel);
+            if (threeCard?.length == 3) {
+              notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
+            }
+            LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
           }
         } else {
           return;
         }
       }
-      List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
-      List<NcnnDetectModel>? myOutCards = LandlordManager.getMyOutCard(detectList, screenshotModel);
-      List<NcnnDetectModel>? leftPlayerCards = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
-      List<NcnnDetectModel>? rightPlayerCards = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
+      if (LandlordManager.threeCards?.length != 3) {
+        List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
+        if (threeCard?.length == 3) {
+          notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
+        }
+      }
 
-      print('chenshengfa current status: ${GameStatusManager.getGameStatusStr(GameStatusManager.curGameStatus)}');
+      ///刷新手牌
+      List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
+      notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
+
+      ///刷新我的出牌
+      List<NcnnDetectModel>? myOutCards = LandlordManager.getMyOutCard(detectList, screenshotModel);
+      notifyOverlayWindow(OverlayUpdateType.myOutCard, models: myOutCards);
+
+      ///刷新左边玩家出牌
+      List<NcnnDetectModel>? leftPlayerCards = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
+      notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: leftPlayerCards);
+
+      ///刷新右边玩家出牌
+      List<NcnnDetectModel>? rightPlayerCards = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
+      notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: rightPlayerCards);
+
+      ///计算下一个状态
       var nextStatus = GameStatusManager.calculateNextGameStatus(detectList, screenshotModel);
-      StrategyManager.getLandlordStrategy(nextStatus, detectList, screenshotModel);
-      String gameStatusStr = GameStatusManager.getGameStatusStr(nextStatus);
-      print('chenshengfa next status: $gameStatusStr');
+
+      ///刷新游戏状态
+      notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+
+      ///请求出牌策略，告知后台牌面信息
+      // StrategyManager.getLandlordStrategy(nextStatus, detectList, screenshotModel);
+
       GameStatusManager.curGameStatus = nextStatus;
 
-      String myHandCardStr = LandlordManager.getCardsSorted(myHandCards);
-      String myOutCardStr = LandlordManager.getCardsSorted(myOutCards);
-      String leftPlayerCardStr = LandlordManager.getCardsSorted(leftPlayerCards);
-      String rightPlayerCardStr = LandlordManager.getCardsSorted(rightPlayerCards);
-      await FlutterOverlayWindow.shareData([gameStatusStr, LandlordManager.threeCardStr, leftPlayerCardStr, rightPlayerCardStr, myHandCardStr, myOutCardStr]);
+      ///根据左右两边玩家出牌，更新记牌器
+      if (nextStatus == GameStatus.leftDone) {
+        LandlordRecorder.updateRecorder(LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel));
+      }
+      if (nextStatus == GameStatus.rightDone) {
+        LandlordRecorder.updateRecorder(LandlordManager.getRightPlayerOutCard(detectList, screenshotModel));
+      }
+
+      ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态
       if (nextStatus == GameStatus.myTurn) {
         screenshotTimer?.cancel();
         screenshotTimer = null;
         screenshotTimer = Timer.periodic(const Duration(milliseconds: 500), timerCallback);
       }
     }
+  }
+
+  void notifyOverlayWindow(OverlayUpdateType updateType, {List<NcnnDetectModel>? models, String? showString}) {
+    String showStr = (models != null ? LandlordManager.getCardsSorted(models) : showString) ?? '';
+    FlutterOverlayWindow.shareData([updateType.index, showStr]);
   }
 
   void destroy() {

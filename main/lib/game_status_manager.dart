@@ -49,11 +49,11 @@ class GameStatusManager {
 
   static GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     GameStatus nextStatus = curGameStatus;
-    if (LandlordManager.getChuPai(detectList, screenshotModel) != null || LandlordManager.getYaobuqi(detectList, screenshotModel) != null ) {
-      print('chenshengfa chupai');
-      nextStatus = GameStatus.myTurn;
-      return nextStatus;
-    }
+    // if (LandlordManager.getChuPai(detectList, screenshotModel) != null || LandlordManager.getYaobuqi(detectList, screenshotModel) != null ) {
+    //   print('chenshengfa chupai');
+    //   nextStatus = GameStatus.myTurn;
+    //   return nextStatus;
+    // }
     switch (curGameStatus) {
       case GameStatus.myTurn:
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);

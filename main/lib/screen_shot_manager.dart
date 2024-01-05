@@ -37,7 +37,15 @@ class ScreenShotManager {
     if (screenshotModel?.filePath.isNotEmpty ?? false) {
       var detectList = await ncnnPlugin.startDetectImage((screenshotModel?.filePath)!);
       if (detectList?.isEmpty ?? true) {
-        File((screenshotModel?.filePath)!).delete();
+        if (GameStatusManager.curGameStatus != GameStatus.gamePreparing) {
+          GameStatusManager.destroy();
+          LandlordManager.destroy();
+          StrategyManager.destroy();
+          LandlordRecorder.destroy();
+        } else {
+          File((screenshotModel?.filePath)!).delete();
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing)]);
+        }
         return;
       }
       if (GameStatusManager.curGameStatus == GameStatus.gamePreparing) {
@@ -95,10 +103,15 @@ class ScreenShotManager {
 
       ///根据左右两边玩家出牌，更新记牌器
       if (nextStatus == GameStatus.leftDone) {
-        LandlordRecorder.updateRecorder(LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel));
+        LandlordRecorder.updateRecorder(GameStatusManager.leftOutCardBuff);
+        GameStatusManager.leftOutCardBuff = null;//用完即恢复，不影响下一次
       }
       if (nextStatus == GameStatus.rightDone) {
-        LandlordRecorder.updateRecorder(LandlordManager.getRightPlayerOutCard(detectList, screenshotModel));
+        LandlordRecorder.updateRecorder(GameStatusManager.rightOutCardBuff);
+        GameStatusManager.rightOutCardBuff = null;
+      }
+      if (nextStatus == GameStatus.iDone) {
+        GameStatusManager.myOutCardBuff = null;
       }
 
       ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态

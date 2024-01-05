@@ -39,7 +39,7 @@ class RegionManager {
     static bool inRightPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       double leftXBorder = 1180.0 / 2368.0 * screenshotModel.width;
       // double rightXBorder = 1640.0 / 2368.0 * screenshotModel.width;
-      double topYBorder = 175.0 / 1080.0 * screenshotModel.height;
+      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
       double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
       if (model.x! > leftXBorder) {
         if (model.y! > topYBorder && model.y! < bottomYBorder) {
@@ -53,7 +53,7 @@ class RegionManager {
     static bool inLeftPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       // double leftXBorder = 680.0 / 2368.0 * screenshotModel.width;
       double rightXBorder = 1180.0 / 2368.0 * screenshotModel.width;
-      double topYBorder = 175.0 / 1080.0 * screenshotModel.height;
+      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
       double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
       if (model.x! < rightXBorder) {
         if (model.y! > topYBorder && model.y! < bottomYBorder) {
@@ -63,7 +63,35 @@ class RegionManager {
       return false;
     }
 
-    ///我的出牌区域
+    ///左边玩家出牌区域
+    static bool inLeftPlayerBuChuRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
+      // double leftXBorder = 680.0 / 2368.0 * screenshotModel.width;
+      double rightXBorder = 900.0 / 2368.0 * screenshotModel.width;
+      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
+      double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
+      if (model.x! < rightXBorder) {
+        if (model.y! > topYBorder && model.y! < bottomYBorder) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    ///右边玩家不出区域
+    static bool inRightPlayerBuChuRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
+      double leftXBorder = 1400.0 / 2368.0 * screenshotModel.width;
+      // double rightXBorder = 1640.0 / 2368.0 * screenshotModel.width;
+      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
+      double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
+      if (model.x! > leftXBorder) {
+        if (model.y! > topYBorder && model.y! < bottomYBorder) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    ///我的不出区域
     static bool inMyCenterBuChuRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       double topYBorder = 460.0 / 1080.0 * screenshotModel.height;
       double bottomYBorder = 620.0 / 1080.0 * screenshotModel.height;
@@ -118,7 +146,7 @@ class RegionManager {
     ///右边玩家不出牌
     static bool inRightBuchuRegion(List<NcnnDetectModel>? models, ScreenshotModel screenshotModel) {
       for(int i = 0; i < (models?.length ?? 0); i++) {
-        if (inRightPlayerOutCardRegion(models![i], screenshotModel)) {
+        if (inRightPlayerBuChuRegion(models![i], screenshotModel)) {
           return true;
         }
       }
@@ -128,7 +156,7 @@ class RegionManager {
     ///左边玩家不出牌
     static bool inLeftBuchuRegion(List<NcnnDetectModel>? models, ScreenshotModel screenshotModel) {
       for(int i = 0; i < (models?.length ?? 0); i++) {
-        if (inLeftPlayerOutCardRegion(models![i], screenshotModel)) {
+        if (inLeftPlayerBuChuRegion(models![i], screenshotModel)) {
           return true;
         }
       }

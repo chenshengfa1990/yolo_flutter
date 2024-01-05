@@ -587,7 +587,7 @@ class _DraggableContentState extends State<DraggableContent> {
                             ValueListenableBuilder(
                                 valueListenable: handCardsNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
                                 }),
                           ],
                         )),
@@ -641,7 +641,7 @@ class _DraggableContentState extends State<DraggableContent> {
               ValueListenableBuilder(
                 valueListenable: leftPlayerCardNotifier,
                 builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
                 },
               ),
             ],
@@ -652,18 +652,18 @@ class _DraggableContentState extends State<DraggableContent> {
               ValueListenableBuilder(
                 valueListenable: rightPlayerCardNotifier,
                 builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
                 },
               ),
             ],
           ),
           Row(
             children: [
-              const Text('我的出牌:', style: TextStyle(fontSize: 9, color: Colors.white)),
+              const Text('我出牌:', style: TextStyle(fontSize: 7, color: Colors.white)),
               ValueListenableBuilder(
                 valueListenable: myOutCardsNotifier,
                 builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
                 },
               ),
             ],

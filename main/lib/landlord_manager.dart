@@ -1,9 +1,11 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:ncnn_plugin/ncnn_detect_model.dart';
 import 'package:screenshot_plugin/export.dart';
 
+import 'overlay_window_widget.dart';
 import 'region_manager.dart';
 
 class LandlordManager {
@@ -45,6 +47,13 @@ class LandlordManager {
     threeCards = null;
     threeCardInt = null;
     serverSuggestion = '';
+    FlutterOverlayWindow.shareData([OverlayUpdateType.threeCard.index, threeCardStr]);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.leftOutCard.index, '']);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.rightOutCard.index, '']);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.myOutCard.index, '']);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.handCard.index, '']);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '']);
+
   }
 
   ///对牌进行排列

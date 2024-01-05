@@ -10,6 +10,7 @@ class LandlordRecorder {
 
   static void destroy() {
     leftCardMap = {"dw": 1, "xw": 1, "2": 4, "A": 4, "K": 4, "Q": 4, "J": 4, "10": 4, "9": 4, "8": 4, "7": 4, "6": 4, "5": 4, "4": 4, "3": 4};
+    FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, leftCardMap]);
   }
 
   static void updateRecorder(List<NcnnDetectModel>? detectModels) {

@@ -1,8 +1,10 @@
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/region_manager.dart';
 
 import 'landlord_manager.dart';
+import 'overlay_window_widget.dart';
 
 enum GameStatus {
   gamePreparing, // 游戏准备中
@@ -26,10 +28,12 @@ enum GameStatus {
 
 ///状态管理
 class GameStatusManager {
-  static List<NcnnDetectModel>? lastOutCards;///最后的出牌
-  static String lastOutCardPlayer = '';///最后出牌的人
   static GameStatus curGameStatus = GameStatus.gamePreparing;
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
+  static List<NcnnDetectModel>? myOutCardBuff;
+  static List<NcnnDetectModel>? leftOutCardBuff;
+  static List<NcnnDetectModel>? rightOutCardBuff;
+  static int outCardBuffLength = 0;///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
 
   static GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel) {
     curGameStatus = GameStatus.gamePreparing;
@@ -63,12 +67,21 @@ class GameStatusManager {
         } else {
           var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
           if (myOutCard?.isNotEmpty ?? false) {
-            if (lastOutCardPlayer == 'me' || isMatchLast(myOutCard)) {
-              lastOutCardPlayer = 'me';
-              lastOutCards = myOutCard;
-              print('chenshengfa iDone');
-              nextStatus = GameStatus.iDone;
-              LandlordManager.updateMyLeftCards(myOutCard);
+            ///缓存一次，判断哪个长度更长，就用哪个，排除动画的影响
+            if (myOutCardBuff == null) {
+              myOutCardBuff = myOutCard;
+              outCardBuffLength++;
+            } else {
+              if ((myOutCard?.length ?? 0) > (myOutCardBuff?.length ?? 0)) {
+                myOutCardBuff = myOutCard;
+              }
+              outCardBuffLength++;
+              if (outCardBuffLength == 2) {
+                outCardBuffLength = 0;
+                print('chenshengfa iDone');
+                nextStatus = GameStatus.iDone;
+                // LandlordManager.updateMyLeftCards(myOutCardBuff);
+              }
             }
           }
         }
@@ -89,12 +102,21 @@ class GameStatusManager {
         } else {
           var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
           if (rightOutCard?.isNotEmpty ?? false) {
-            if (lastOutCardPlayer == 'rightPlayer' || isMatchLast(rightOutCard)) {
-              lastOutCardPlayer = 'rightPlayer';
-              lastOutCards = rightOutCard;
-              print('chenshengfa rightDone');
-              nextStatus = GameStatus.rightDone;
-              LandlordManager.updateRightPlayerLeftCards(rightOutCard);
+            ///缓存一次，判断哪个长度更长，就用哪个，排除动画的影响
+            if (rightOutCardBuff == null) {
+              rightOutCardBuff = rightOutCard;
+              outCardBuffLength++;
+            } else {
+              if ((rightOutCard?.length ?? 0) > (rightOutCardBuff?.length ?? 0)) {
+                rightOutCardBuff = rightOutCard;
+              }
+              outCardBuffLength++;
+              if (outCardBuffLength == 3) {
+                outCardBuffLength = 0;
+                print('chenshengfa rightDone');
+                nextStatus = GameStatus.rightDone;
+                // LandlordManager.updateRightPlayerLeftCards(rightOutCardBuff);
+              }
             }
           }
         }
@@ -115,12 +137,21 @@ class GameStatusManager {
         } else {
           var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
           if (leftOutCard?.isNotEmpty ?? false) {
-            if (lastOutCardPlayer == "leftPlayer" || isMatchLast(leftOutCard)) {
-              lastOutCardPlayer = 'leftPlayer';
-              lastOutCards = leftOutCard;
-              print('chenshengfa leftDone, ');
-              nextStatus = GameStatus.leftDone;
-              LandlordManager.updateLeftPlayerLeftCards(leftOutCard);
+            ///缓存一次，判断哪个长度更长，就用哪个，排除动画的影响
+            if (leftOutCardBuff == null) {
+              leftOutCardBuff = leftOutCard;
+              outCardBuffLength++;
+            } else {
+              if ((leftOutCard?.length ?? 0) > (leftOutCardBuff?.length ?? 0)) {
+                leftOutCardBuff = leftOutCard;
+              }
+              outCardBuffLength++;
+              if (outCardBuffLength == 3) {
+                outCardBuffLength = 0;
+                print('chenshengfa leftDone');
+                nextStatus = GameStatus.leftDone;
+                // LandlordManager.updateLeftPlayerLeftCards(leftOutCardBuff);
+              }
             }
           }
         }
@@ -137,31 +168,12 @@ class GameStatusManager {
     return nextStatus;
   }
 
-  static bool isMatchLast(List<NcnnDetectModel>? detectList) {
-    if (lastOutCards == null) {
-      return true;
-    }
-    if (detectList?.length == lastOutCards?.length) {
-      return true;
-    }
-    if (detectList?.length == 4) {
-      if (detectList![0].label == detectList[1].label && detectList[0].label == detectList[2].label && detectList[0].label == detectList[3].label) {
-        return true;
-      }
-    }
-    if (detectList?.length == 2) {
-      if (detectList![0].label == 'W' && detectList[1].label == 'w') {
-        return true;
-      }
-      if (detectList![0].label == 'w' && detectList[1].label == 'W') {
-        return true;
-      }
-    }
-    return false;
-  }
   static void destroy() {
     curGameStatus = GameStatus.gamePreparing;
-    lastOutCards = null;
-    lastOutCardPlayer = "";
+    myOutCardBuff = null;
+    leftOutCardBuff = null;
+    rightOutCardBuff = null;
+    outCardBuffLength = 0;
+    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatus.gameOver)]);
   }
 }

@@ -56,7 +56,7 @@ class StrategyManager {
   }
 
   static tellServerIDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
-    List<int>? myOutCards = LandlordManager.getServerCardFormat(LandlordManager.getMyOutCard(detectList, screenshotModel));
+    List<int>? myOutCards = LandlordManager.getServerCardFormat(GameStatusManager.myOutCardBuff);
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
@@ -88,7 +88,7 @@ class StrategyManager {
 
   static tellServerRightPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
-    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(LandlordManager.getRightPlayerOutCard(detectList, screenshotModel));
+    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.rightOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": rightPlayerOutCards, "need_play_card": false};
@@ -119,7 +119,7 @@ class StrategyManager {
 
   static tellServerLeftPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
-    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel));
+    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.leftOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": leftPlayerOutCards, "need_play_card": false};

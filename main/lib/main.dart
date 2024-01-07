@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int screenWidth = 0;
   int screenHeight = 0;
   int hasDeleteScreenshot = 0;
+  bool useGPU = false;
 
   @override
   void initState() {
@@ -82,31 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
     ncnnPlugin = NcnnPlugin();
     screenShotManager = ScreenShotManager(ncnnPlugin);
     super.initState();
-  }
-
-  void _showLog() async {
-    // final ImagePicker picker = ImagePicker();
-    // var inferenceImage = await picker.getImage(source: ImageSource.gallery);
-    // if (inferenceImage?.path.isNotEmpty ?? false) {
-    //   List<InferenceModel> result = await tensorflowPlugin.startInference(inferenceImage!.path);
-    //   print(result);
-    // }
-    // ConsoleOverlay.show(context);
-
-    Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 0, "landlord_down": 17, "landlord_up": 17};
-    httpParams['action'] = {"position": "landlord", "need_play_card": true};
-    httpParams['user_id'] = 123;
-    httpParams['round'] = 1;
-    httpParams["player_position"] = "landlord";
-    httpParams['player_hand_cards'] = [3, 4, 4, 5, 5, 5, 6, 6, 7, 8, 9, 9, 11, 11, 12, 12, 13, 17, 17, 30];
-    httpParams['three_landlord_cards'] = [17, 17, 1];
-    // var jsonStr = json.encode(httpParams);
-    // print(jsonStr);
-    // Logger.i(jsonStr);
-    // var res = await HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    // // var res = await HttpUtils.get('http://172.16.3.225:7070/');
-    // print(res);
   }
 
   void _onDetectImage() async {
@@ -142,8 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     await FlutterOverlayWindow.showOverlay(
-      width: 900,
-      height: 190,
+      width: 305,
+      height: 62,
       alignment: OverlayAlignment.bottomCenter,
       overlayTitle: '牌面识别中',
       flag: OverlayFlag.clickThrough,
@@ -245,20 +221,41 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  '$num张纸牌',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorConstant.colorGrey1),
-                ),
-                GestureDetector(
-                  onTap: _onDetectImage,
-                  child: Text(
-                    '检测图片',
-                    style: Theme.of(context).textTheme.headline4,
+                // Text(
+                //   '$num张纸牌',
+                //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorConstant.colorGrey1),
+                // ),
+                // GestureDetector(
+                //   onTap: _onDetectImage,
+                //   child: Text(
+                //     '检测图片',
+                //     style: Theme.of(context).textTheme.headline4,
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        'GPU硬解',
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(child: Container()),
+                      Switch(
+                        value: useGPU,
+                        onChanged: (value) {
+                          setState(() {
+                            useGPU = value;
+                            ncnnPlugin.setGPU(useGPU);
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: _test,
                   child: Text(

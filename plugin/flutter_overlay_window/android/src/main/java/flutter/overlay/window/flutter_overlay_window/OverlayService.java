@@ -138,8 +138,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
             szWindow.set(w, h);
         }
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowSetup.width == -1999 ? -1 : WindowSetup.width,
-                WindowSetup.height != -1999 ? WindowSetup.height : screenHeight(),
+                WindowSetup.width == -1999 ? -1 : dpToPx(WindowSetup.width),
+                WindowSetup.height != -1999 ? dpToPx(WindowSetup.height) : screenHeight(),
                 0,
 //                -statusBarHeightPx(),
                 0,

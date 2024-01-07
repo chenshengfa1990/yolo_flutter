@@ -19,8 +19,8 @@ class MethodChannelNcnnPlugin extends NcnnPluginPlatform {
   }
 
   @override
-  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath) async {
-    var res = await methodChannel.invokeMethod<List<dynamic>?>('detectImage', imagePath);
+  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath, bool useGPU) async {
+    var res = await methodChannel.invokeMethod<List<dynamic>?>('detectImage', {'imagePath': imagePath, 'useGPU': useGPU});
     List<NcnnDetectModel> detectResList = [];
     res?.forEach((element) {
       var model = NcnnDetectModel.fromJson(jsonDecode(element));

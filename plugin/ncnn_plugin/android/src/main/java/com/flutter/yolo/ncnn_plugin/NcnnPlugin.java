@@ -52,8 +52,9 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("detectImage")) {
-      String imagePath = (String)call.arguments;
-      startDetectImage(imagePath, result);
+      Boolean useGPU = call.<Boolean>argument("useGPU") == Boolean.TRUE;
+      String imagePath = call.argument("imagePath");
+      startDetectImage(imagePath, useGPU, result);
     } else {
       result.notImplemented();
     }
@@ -65,7 +66,7 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     activityContext = null;
   }
 
-  public void startDetectImage(String imagePath, Result result) {
+  public void startDetectImage(String imagePath, Boolean useGPU, Result result) {
     runInBackground(new Runnable() {
       @Override
       public void run() {
@@ -76,7 +77,7 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
           Log.e("NcnnPlugin", "getBitmap error: " + e);
           return;
         }
-        YoloV5Ncnn.Obj[] objects = yolov5ncnn.Detect(bitmap, false);
+        YoloV5Ncnn.Obj[] objects = yolov5ncnn.Detect(bitmap, useGPU);
         ArrayList<String> resList = getDetectRes(objects);
         result.success(resList);
       }

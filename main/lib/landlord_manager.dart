@@ -105,6 +105,7 @@ class LandlordManager {
       res = '$res${serverIndexToCard[element]}';
     }
     serverSuggestion = res;
+    FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, serverSuggestion]);
   }
 
   static List<NcnnDetectModel>? sortedByXPos(List<NcnnDetectModel>? detectModels) {

@@ -97,7 +97,7 @@ class ScreenShotManager {
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
 
       ///请求出牌策略，告知后台牌面信息
-      // StrategyManager.getLandlordStrategy(nextStatus, detectList, screenshotModel);
+      StrategyManager.getLandlordStrategy(nextStatus, detectList, screenshotModel);
 
       GameStatusManager.curGameStatus = nextStatus;
 
@@ -112,6 +112,9 @@ class ScreenShotManager {
       }
       if (nextStatus == GameStatus.iDone) {
         GameStatusManager.myOutCardBuff = null;
+      }
+      if (nextStatus == GameStatus.iDone || nextStatus == GameStatus.iSkip) {
+        notifyOverlayWindow(OverlayUpdateType.suggestion, showString: "");
       }
 
       ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态

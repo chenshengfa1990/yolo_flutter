@@ -441,13 +441,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
-  tensorflow_plugin:
-    dependency: "direct main"
-    description:
-      path: "../plugin/tensorflow_plugin"
-      relative: true
-    source: path
-    version: "0.0.1"
   term_glyph:
     dependency: transitive
     description:

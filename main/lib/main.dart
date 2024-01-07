@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:screenshot_plugin/screenshot_plugin.dart';
-import 'package:tensorflow_plugin/export.dart';
+// import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/colorConstant.dart';
@@ -65,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TensorflowPlugin tensorflowPlugin;
+  // late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
   late ScreenShotManager screenShotManager;
   late LandlordManager landlordManager;
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    tensorflowPlugin = TensorflowPlugin();
+    // tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
     screenShotManager = ScreenShotManager(ncnnPlugin);
     super.initState();

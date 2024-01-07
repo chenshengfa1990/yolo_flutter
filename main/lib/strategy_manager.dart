@@ -8,9 +8,12 @@ import 'package:screenshot_plugin/export.dart';
 import 'game_status_manager.dart';
 import 'http/httpUtils.dart';
 import 'landlord_manager.dart';
+import 'overlay_window_widget.dart';
 
 ///出牌策略
 class StrategyManager {
+  // static String serverUrl = 'http://172.16.3.225:7070/data';
+  static String serverUrl = 'http://216.83.44.19:7070/data';
   static int round = 0;
 
   static void destroy() {
@@ -45,14 +48,17 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = await HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
+    print('getServerSuggestion param=$jsonStr');
+    var res = await HttpUtils.post(serverUrl, data: jsonStr);
     Map<String, dynamic> resMap = json.decode(res);
     if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
       List<int> serverSuggestion = resMap['action'].cast<int>().toList();
       LandlordManager.updateServerSuggestion(serverSuggestion);
       // await FlutterOverlayWindow.shareData(suggestion);
+    } else {
+      FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '不出']);
     }
-    print('getServerSuggestion $res');
+    print('getServerSuggestion res=$res');
   }
 
   static tellServerIDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -67,8 +73,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    print('tellServerIDone $res');
+    print('tellServerIDone param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    print('tellServerIDone res=$res');
   }
 
   static tellServerISkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -82,8 +89,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    print('tellServerISkip $res');
+    print('tellServerISkip param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    print('tellServerISkip res=$res');
   }
 
   static tellServerRightPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -98,8 +106,9 @@ class StrategyManager {
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    print('tellServerRightPlayerDone $res');
+    print('tellServerRightPlayerDone param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    print('tellServerRightPlayerDone res=$res');
   }
 
   static tellServerRightPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -113,8 +122,9 @@ class StrategyManager {
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    print('tellServerRightPlayerSkip $res');
+    print('tellServerRightPlayerSkip param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    print('tellServerRightPlayerSkip res=$res');
   }
 
   static tellServerLeftPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -129,8 +139,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
-    print('tellServerLeftPlayerDone $res');
+    print('tellServerLeftPlayerDone param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    print('tellServerLeftPlayerDone res=$res');
   }
 
   static tellServerLeftPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -144,7 +155,8 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    var res = HttpUtils.post('http://172.16.3.225:7070/data', data: jsonStr);
+    print('tellServerLeftPlayerSkip param=$jsonStr');
+    var res = HttpUtils.post(serverUrl, data: jsonStr);
     print('tellServerLeftPlayerSkip $res');
   }
 }

@@ -75,8 +75,8 @@ dependencies:
 
 ####################### 以下为自定义插件 #######################
 
-  tensorflow_plugin:
-    path: ../plugin/tensorflow_plugin
+#  tensorflow_plugin:
+#    path: ../plugin/tensorflow_plugin
 
   ncnn_plugin:
     path: ../plugin/ncnn_plugin

@@ -73,7 +73,8 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         try {
           bitmap = getBitmap(imagePath);
         } catch (Exception e) {
-          throw new RuntimeException(e);
+          Log.e("NcnnPlugin", "getBitmap error: " + e);
+          return;
         }
         YoloV5Ncnn.Obj[] objects = yolov5ncnn.Detect(bitmap, false);
         ArrayList<String> resList = getDetectRes(objects);

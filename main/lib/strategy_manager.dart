@@ -12,8 +12,8 @@ import 'overlay_window_widget.dart';
 
 ///出牌策略
 class StrategyManager {
-  // static String serverUrl = 'http://172.16.3.225:7070/data';
-  static String serverUrl = 'http://216.83.44.19:7070/data';
+  // static String serverUrl = 'http://172.16.3.225:7070/data';//内网
+  static String serverUrl = 'http://216.83.44.19:7070/data';//公网
   static int round = 0;
 
   static void destroy() {
@@ -54,9 +54,10 @@ class StrategyManager {
     if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
       List<int> serverSuggestion = resMap['action'].cast<int>().toList();
       LandlordManager.updateServerSuggestion(serverSuggestion);
-      // await FlutterOverlayWindow.shareData(suggestion);
     } else {
-      FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '不出']);
+      if (round > 1) {
+        FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '不出']);
+      }
     }
     print('getServerSuggestion res=$res');
   }

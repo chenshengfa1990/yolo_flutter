@@ -29,5 +29,5 @@ abstract class NcnnPluginPlatform extends PlatformInterface {
   }
 
   ///开始检测
-  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath, bool useGPU);
+  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath, bool useGPU, {bool test});
 }

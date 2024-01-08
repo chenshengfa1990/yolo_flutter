@@ -12,7 +12,7 @@ class NcnnPlugin {
     this.useGPU = useGPU;
   }
 
-  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath) {
-    return NcnnPluginPlatform.instance.startDetectImage(imagePath, useGPU);
+  Future<List<NcnnDetectModel>?> startDetectImage(String imagePath, {bool test = false}) {
+    return NcnnPluginPlatform.instance.startDetectImage(imagePath, useGPU, test: test);
   }
 }

@@ -73,6 +73,8 @@ dependencies:
   #设备信息
   device_info: ^2.0.0
 
+  flutter_easyloading: 3.0.5
+
 ####################### 以下为自定义插件 #######################
 
 #  tensorflow_plugin:

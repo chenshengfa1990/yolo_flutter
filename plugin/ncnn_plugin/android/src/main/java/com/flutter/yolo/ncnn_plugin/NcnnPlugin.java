@@ -53,8 +53,9 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("detectImage")) {
       Boolean useGPU = call.<Boolean>argument("useGPU") == Boolean.TRUE;
+      Boolean isTest = call.<Boolean>argument("test") == Boolean.TRUE;
       String imagePath = call.argument("imagePath");
-      startDetectImage(imagePath, useGPU, result);
+      startDetectImage(imagePath, useGPU, isTest, result);
     } else {
       result.notImplemented();
     }
@@ -66,13 +67,13 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     activityContext = null;
   }
 
-  public void startDetectImage(String imagePath, Boolean useGPU, Result result) {
+  public void startDetectImage(String imagePath, Boolean useGPU, Boolean isTest, Result result) {
     runInBackground(new Runnable() {
       @Override
       public void run() {
         Bitmap bitmap = null;
         try {
-          bitmap = getBitmap(imagePath);
+          bitmap = getBitmap(imagePath, isTest);
         } catch (Exception e) {
           Log.e("NcnnPlugin", "getBitmap error: " + e);
           return;
@@ -85,9 +86,14 @@ public class NcnnPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
 
   }
 
-  public Bitmap getBitmap(String imagePath) throws Exception {
-    File file = new File(imagePath);
-    InputStream inputStream = new FileInputStream(file);
+  public Bitmap getBitmap(String imagePath, boolean isTest) throws Exception {
+    InputStream inputStream;
+    if (isTest) {
+      inputStream = activityContext.getAssets().open("test0.jpg");
+    } else {
+      File file = new File(imagePath);
+      inputStream = new FileInputStream(file);
+    }
     byte[] inputStream2ByteArr = inputStream2ByteArr(inputStream);
     // Decode image size
     BitmapFactory.Options o = new BitmapFactory.Options();

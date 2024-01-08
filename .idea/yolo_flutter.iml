@@ -21,6 +21,12 @@
       <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/screenshot_plugin/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,23 +1,21 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:archive/archive_io.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bug_logger/flutter_logger.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:screenshot_plugin/export.dart';
-import 'package:screenshot_plugin/screenshot_plugin.dart';
+
 // import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
-import 'package:yolo_flutter/util/colorConstant.dart';
 
 import 'game_status_manager.dart';
 import 'landlord_manager.dart';
@@ -50,6 +48,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
             ),
             home: const MyHomePage(title: '智能记牌器'),
+            builder: EasyLoading.init(),
           );
         });
   }
@@ -76,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int screenHeight = 0;
   int hasDeleteScreenshot = 0;
   bool useGPU = false;
+  int detectAverage = 0;
 
   @override
   void initState() {
@@ -86,22 +86,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onDetectImage() async {
-    final ImagePicker picker = ImagePicker();
-    var selectImage = await picker.getImage(source: ImageSource.gallery);
+    // final ImagePicker picker = ImagePicker();
+    // var selectImage = await picker.getImage(source: ImageSource.gallery);
 
     // if (selectImage?.path.isNotEmpty ?? false) {
     //   List<InferenceModel> result = await tensorflowPlugin.startInference(selectImage!.path);
     //   print(result);
     // }
-
-    if (selectImage?.path.isNotEmpty ?? false) {
-      var result = await ncnnPlugin.startDetectImage(selectImage!.path);
-      var model = ScreenshotModel(selectImage.path, 2368, 1080);
-      var res = LandlordManager.getMyHandCard(result, model);
-      setState(() {
-        num = result?.length ?? 0;
-      });
+    EasyLoading.show(dismissOnTap: false);
+    int before = DateTime.now().millisecondsSinceEpoch;
+    for (int i = 0; i < 10; i++) {
+      await ncnnPlugin.startDetectImage('', test: true);
     }
+    int after = DateTime.now().millisecondsSinceEpoch;
+
+    setState(() {
+      detectAverage = (after - before) ~/ 10.0;
+    });
+    EasyLoading.dismiss();
   }
 
   void _startGame() async {
@@ -161,7 +163,6 @@ class _MyHomePageState extends State<MyHomePage> {
     ZipFileEncoder().zipDirectory(cacheDir, filename: zipPath);
     cacheDir.delete(recursive: true);
 
-
     // List<FileSystemEntity> files = cacheDir.listSync(recursive: true);
     //
     // Archive archive = Archive();
@@ -185,14 +186,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _test() async {
-    setState( () {
+    setState(() {
       hasDeleteScreenshot = 0;
     });
 
     Directory? cacheDir = await getExternalStorageDirectory();
     deleteCacheScreenshot('${cacheDir?.path}/Pictures');
 
-    setState( () {
+    setState(() {
       hasDeleteScreenshot = 1;
     });
   }
@@ -221,6 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Center(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 // Text(
@@ -256,11 +258,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: _test,
-                  child: Text(
-                    '删除截图缓存 $hasDeleteScreenshot',
-                    style: Theme.of(context).textTheme.headline4,
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: _test,
+                    child: Text(
+                      '删除截图缓存 $hasDeleteScreenshot',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
+                ),
+
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: _onDetectImage,
+                    child: Row(
+                      children: [
+                        Text(
+                          '手机性能测试: ',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text(
+                          '$detectAverage ms/张图',
+                          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18.sp),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

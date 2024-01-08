@@ -1,3 +1,8 @@
+def STORE_FILE = "${rootDir}/yolo.keystore"
+def STORE_PWD = "fa123456"
+def STORE_KEY_ALIAS = "yolo"
+def STORE_KEY_PWD = "fa123456"
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -52,6 +57,15 @@ android {
 //        targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            keyAlias STORE_KEY_ALIAS
+            keyPassword STORE_KEY_PWD
+            storeFile file(STORE_FILE)
+            storePassword STORE_PWD
+        }
     }
 
     buildTypes {

@@ -89,6 +89,9 @@ dependencies:
   flutter_overlay_window:
     path: ../plugin/flutter_overlay_window
 
+  flutter_xlog:
+    path: ../plugin/flutter_xlog
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

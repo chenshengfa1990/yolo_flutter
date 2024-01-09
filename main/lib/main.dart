@@ -8,6 +8,7 @@ import 'package:flutter_bug_logger/flutter_logger.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,9 +23,18 @@ import 'landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initXLog();
   initWidgetError();
   runApp(const MyApp());
+}
+
+Future<void> initXLog() async {
+  var cacheDir = (await getApplicationCacheDirectory()).path;
+  var logDir = (await getExternalCacheDirectories())?[0].path ?? cacheDir;
+
+  return await XLog.open(XLogConfig(cacheDir: cacheDir, logDir: logDir, namePrefix: 'yolo_xlog', consoleLogOpen: true));
 }
 
 void initWidgetError() {
@@ -104,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       detectAverage = (after - before) ~/ 10.0;
     });
     EasyLoading.dismiss();
+    XLog.i("Yolo", "detectAverage is $detectAverage");
   }
 
   void _startGame() async {
@@ -152,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
     StrategyManager.destroy();
     LandlordRecorder.destroy();
     FlutterOverlayWindow.closeOverlay();
+    XLog.flush();
   }
 
   void zipScreenshotFile() async {
@@ -242,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Row(
                     children: [
                       Text(
-                        'GPU硬解',
+                        'GPU硬件加速',
                         style: TextStyle(fontSize: 14.sp, color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                       Expanded(child: Container()),

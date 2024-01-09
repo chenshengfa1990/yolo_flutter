@@ -45,3 +45,4 @@
 -keepattributes Signature
 
 -keep class com.flutter.yolo.ncnn_plugin.** {*;}
+-keep class com.tencent.mars.** {*;}

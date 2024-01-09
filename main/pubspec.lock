@@ -205,6 +205,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_xlog:
+    dependency: "direct main"
+    description:
+      path: "../plugin/flutter_xlog"
+      relative: true
+    source: path
+    version: "0.1.1"
   http:
     dependency: transitive
     description:

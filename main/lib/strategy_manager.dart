@@ -43,7 +43,6 @@ class StrategyManager {
   static getServerSuggestion(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "need_play_card": round == 0 ? false : true};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -69,7 +68,6 @@ class StrategyManager {
     List<int>? myOutCards = LandlordManager.getServerCardFormat(GameStatusManager.myOutCardBuff);
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": myOutCards, "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -85,7 +83,6 @@ class StrategyManager {
   static tellServerISkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": [], "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -102,7 +99,6 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.rightOutCardBuff);
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": rightPlayerOutCards, "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -118,7 +114,6 @@ class StrategyManager {
   static tellServerRightPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": [], "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -135,7 +130,6 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.leftOutCardBuff);
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": leftPlayerOutCards, "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;
@@ -151,7 +145,6 @@ class StrategyManager {
   static tellServerLeftPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
-    httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17,"landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": [], "need_play_card": false};
     httpParams['user_id'] = 123;
     httpParams['round'] = ++round;

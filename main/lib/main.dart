@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bug_logger/flutter_logger.dart';
@@ -23,6 +24,8 @@ import 'landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
 
+const String LOG_TAG = 'YoloApp';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initXLog();
@@ -39,7 +42,7 @@ Future<void> initXLog() async {
 
 void initWidgetError() {
   FlutterError.onError = (FlutterErrorDetails details) {
-    Logger.i(details);
+    XLog.i(LOG_TAG, details.toString());
   };
 }
 
@@ -93,6 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ncnnPlugin = NcnnPlugin();
     screenShotManager = ScreenShotManager(ncnnPlugin);
     super.initState();
+
+    XLog.i(LOG_TAG, "app init, isDebugMode:$kDebugMode");
   }
 
   void _onDetectImage() async {
@@ -114,19 +119,22 @@ class _MyHomePageState extends State<MyHomePage> {
       detectAverage = (after - before) ~/ 10.0;
     });
     EasyLoading.dismiss();
-    XLog.i("Yolo", "detectAverage is $detectAverage");
+    XLog.i(LOG_TAG, "test detectAverage is ${detectAverage}ms");
   }
 
   void _startGame() async {
+    XLog.i(LOG_TAG, "_startGame");
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
     if (!status) {
       bool? result = await FlutterOverlayWindow.requestPermission();
       if (result == false) {
+        XLog.i(LOG_TAG, "FlutterOverlayWindow permission deny");
         return;
       }
     }
     bool storagePermission = await checkStoragePermission();
     if (!storagePermission) {
+      XLog.i(LOG_TAG, "storagePermission deny");
       return;
     }
 
@@ -141,7 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     await screenShotManager.requestPermission();
-    screenShotManager.startScreenshotPeriodic();
+    XLog.i(LOG_TAG, "start screenshot");
+    screenShotManager.startScreenshotRepeat();
   }
 
   Future<bool> checkStoragePermission() async {
@@ -154,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _endGame() async {
+    XLog.i(LOG_TAG, "_endGame");
     setState(() {
       hasDeleteScreenshot = 0;
     });
@@ -208,6 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       hasDeleteScreenshot = 1;
     });
+    XLog.i(LOG_TAG, "deleteCacheScreenshot cache");
   }
 
   void deleteCacheScreenshot(String path) {
@@ -237,18 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                // Text(
-                //   '$num张纸牌',
-                //   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorConstant.colorGrey1),
-                // ),
-                // GestureDetector(
-                //   onTap: _onDetectImage,
-                //   child: Text(
-                //     '检测图片',
-                //     style: Theme.of(context).textTheme.headline4,
-                //   ),
-                // ),
-                // const SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
@@ -262,6 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: useGPU,
                         onChanged: (value) {
                           setState(() {
+                            XLog.i(LOG_TAG, "GPU硬件加速$value");
                             useGPU = value;
                             ncnnPlugin.setGPU(useGPU);
                           });

@@ -75,6 +75,10 @@ dependencies:
 
   flutter_easyloading: 3.0.5
 
+  #cpu温度
+  cpu_reader: ^3.0.0
+
+
 ####################### 以下为自定义插件 #######################
 
 #  tensorflow_plugin:

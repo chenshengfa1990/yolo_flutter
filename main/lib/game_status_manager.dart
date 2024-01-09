@@ -28,6 +28,7 @@ enum GameStatus {
 
 ///状态管理
 class GameStatusManager {
+  static String LOG_TAG = 'GameStatusManager';
   static GameStatus curGameStatus = GameStatus.gamePreparing;
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
   static List<NcnnDetectModel>? myOutCardBuff;

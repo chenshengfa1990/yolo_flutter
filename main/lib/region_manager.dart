@@ -4,7 +4,7 @@ import 'package:screenshot_plugin/export.dart';
 
 ///区域识别管理
 class RegionManager {
-
+    static String LOG_TAG = 'RegionManager';
     ///三张牌区域
     static bool inThreeCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       double bottomYBorder = 110.0 / 1080.0 * screenshotModel.height;

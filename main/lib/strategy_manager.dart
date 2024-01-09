@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 
@@ -12,6 +13,7 @@ import 'overlay_window_widget.dart';
 
 ///出牌策略
 class StrategyManager {
+  static String LOG_TAG = "StrategyManager";
   // static String serverUrl = 'http://172.16.3.225:7070/data';//内网
   static String serverUrl = 'http://216.83.44.19:7070/data';//公网
   static int round = 0;
@@ -20,6 +22,7 @@ class StrategyManager {
     round = 0;
   }
   static getLandlordStrategy(GameStatus nextStatus, List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
+    XLog.i(LOG_TAG, 'request Landlord strategy');
     if (nextStatus == GameStatus.myTurn) {
       getServerSuggestion(detectList, screenshotModel);
     } else if (nextStatus == GameStatus.iDone) {
@@ -48,7 +51,7 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('getServerSuggestion param=$jsonStr');
+    XLog.i(LOG_TAG, 'getServerSuggestion param=$jsonStr');
     var res = await HttpUtils.post(serverUrl, data: jsonStr);
     Map<String, dynamic> resMap = json.decode(res);
     if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
@@ -59,7 +62,7 @@ class StrategyManager {
         FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '不出']);
       }
     }
-    print('getServerSuggestion res=$res');
+    XLog.i(LOG_TAG, 'getServerSuggestion res=$res');
   }
 
   static tellServerIDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -74,9 +77,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerIDone param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerIDone param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerIDone res=$res');
+    XLog.i(LOG_TAG, 'tellServerIDone res=$res');
   }
 
   static tellServerISkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -90,9 +93,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerISkip param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerISkip param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerISkip res=$res');
+    XLog.i(LOG_TAG, 'tellServerISkip res=$res');
   }
 
   static tellServerRightPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -107,9 +110,9 @@ class StrategyManager {
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerRightPlayerDone param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerRightPlayerDone param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerRightPlayerDone res=$res');
+    XLog.i(LOG_TAG, 'tellServerRightPlayerDone res=$res');
   }
 
   static tellServerRightPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -123,9 +126,9 @@ class StrategyManager {
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerRightPlayerSkip param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerRightPlayerSkip param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerRightPlayerSkip res=$res');
+    XLog.i(LOG_TAG, 'tellServerRightPlayerSkip res=$res');
   }
 
   static tellServerLeftPlayerDone(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -140,9 +143,9 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerLeftPlayerDone param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerLeftPlayerDone param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerLeftPlayerDone res=$res');
+    XLog.i(LOG_TAG, 'tellServerLeftPlayerDone res=$res');
   }
 
   static tellServerLeftPlayerSkip(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) async {
@@ -156,8 +159,8 @@ class StrategyManager {
     httpParams['player_hand_cards'] = myHandCards;
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
-    print('tellServerLeftPlayerSkip param=$jsonStr');
+    XLog.i(LOG_TAG, 'tellServerLeftPlayerSkip param=$jsonStr');
     var res = HttpUtils.post(serverUrl, data: jsonStr);
-    print('tellServerLeftPlayerSkip $res');
+    XLog.i(LOG_TAG, 'tellServerLeftPlayerSkip $res');
   }
 }

@@ -71,6 +71,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.1"
+  cpu_reader:
+    dependency: "direct main"
+    description:
+      name: cpu_reader
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.0.0"
   cross_file:
     dependency: transitive
     description:

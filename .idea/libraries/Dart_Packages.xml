@@ -73,6 +73,13 @@
             </list>
           </value>
         </entry>
+        <entry key="cpu_reader">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/cpu_reader-3.0.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="cross_file">
           <value>
             <list>
@@ -687,6 +694,7 @@
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/connectivity_plus-3.0.6/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/connectivity_plus_platform_interface-1.2.4/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/convert-3.1.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/cpu_reader-3.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/cross_file-0.3.3+4/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/crypto-3.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/cupertino_icons-1.0.5/lib" />

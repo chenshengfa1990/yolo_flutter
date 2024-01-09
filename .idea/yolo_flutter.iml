@@ -27,6 +27,12 @@
       <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/ncnn_plugin/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

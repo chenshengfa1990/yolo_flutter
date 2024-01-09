@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/ncnn_detect_model.dart';
 import 'package:screenshot_plugin/export.dart';
 
@@ -9,7 +10,7 @@ import 'overlay_window_widget.dart';
 import 'region_manager.dart';
 
 class LandlordManager {
-
+  static String LOG_TAG = 'LandlordManager';
   ///纸牌按人类思维的排序顺序
   static Map<String, int> labelIndex = {"dw": 0, "xw": 1, "2": 2, "A": 3, "K": 4, "Q": 5, "J": 6, "10": 7, "9": 8, "8": 9, "7": 10, "6": 11, "5": 12, "4": 13, "3": 14};
 
@@ -268,6 +269,7 @@ class LandlordManager {
 
   static void initPlayerIdentify(NcnnDetectModel landlord, ScreenshotModel screenshotModel) {
     if (RegionManager.inMyLandlordRegion(landlord, screenshotModel)) {
+      XLog.i(LOG_TAG, 'I am landlord');
       myIdentify = "landlord";
       rightPlayerIdentify = "landlord_down";
       leftPlayerIdentify = "landlord_up";
@@ -275,14 +277,15 @@ class LandlordManager {
       leftPlayerLeftCards = 17;
       rightPlayerLeftCards = 17;
     } else if (RegionManager.inLeftPlayerLandlordRegion(landlord, screenshotModel)) {
+      XLog.i(LOG_TAG, 'LeftPlayer is landlord');
       leftPlayerIdentify = "landlord";
       myIdentify = "landlord_down";
       rightPlayerIdentify = "landlord_up";
       myLeftCards = 17;
       leftPlayerLeftCards = 20;
       rightPlayerLeftCards = 17;
-
     } else if (RegionManager.inRightPlayerLandlordRegion(landlord, screenshotModel)) {
+      XLog.i(LOG_TAG, 'RightPlayer is landlord');
       rightPlayerIdentify = "landlord";
       myIdentify = "landlord_up";
       leftPlayerIdentify = "landlord_down";

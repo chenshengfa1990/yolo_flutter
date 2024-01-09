@@ -148,7 +148,7 @@ class ScreenShotManager {
 
       ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态
       if (nextStatus == GameStatus.myTurn) {
-        XLog.i(LOG_TAG, 'myTurn, restart screenshot timer');
+        XLog.i(LOG_TAG, 'myTurn, sleep 500ms');
         await Future.delayed(const Duration(milliseconds: 500));
       }
     }

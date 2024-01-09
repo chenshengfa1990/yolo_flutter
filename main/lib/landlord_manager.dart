@@ -149,13 +149,17 @@ class LandlordManager {
     });
     List<NcnnDetectModel>? sortedModels = sortedByXPos(resList);
     if (sortedModels?.isNotEmpty ?? false) {
-      if (sortedModels!.length > 3) {
+      if (sortedModels!.length >= 3) {
         var models = sortedModels.sublist(sortedModels.length - 3);
         threeCards = models;
         threeCardStr = getCardsSorted(threeCards);
         threeCardInt = getServerCardFormat(threeCards);
         return models;
+      } else {
+        XLog.i(LOG_TAG, 'sortedModels length is ${sortedModels.length}');
       }
+    } else {
+      XLog.i(LOG_TAG, 'sortedModels is null');
     }
     return null;
   }

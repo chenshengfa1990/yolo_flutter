@@ -105,7 +105,7 @@ class RegionManager {
 
     ///我是地主
     static bool inMyLandlordRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
-      double rightXBorder = 430.0 / 2368.0 * screenshotModel.width;
+      double rightXBorder = 330.0 / 2368.0 * screenshotModel.width;
       double topYBorder = 670.0 / 1080.0 * screenshotModel.height;
       if (model.x! < rightXBorder && model.y! > topYBorder) {
         return true;

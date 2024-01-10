@@ -35,7 +35,8 @@ void main() async {
 
 Future<void> initXLog() async {
   var cacheDir = (await getApplicationCacheDirectory()).path;
-  var logDir = (await getExternalCacheDirectories())?[0].path ?? cacheDir;
+  // var logDir = (await getExternalCacheDirectories())?[0].path ?? cacheDir;
+  var logDir = cacheDir;
 
   return await XLog.open(XLogConfig(cacheDir: cacheDir, logDir: logDir, namePrefix: 'yolo_xlog', consoleLogOpen: true));
 }

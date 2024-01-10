@@ -77,7 +77,7 @@ class GameStatusManager {
                 myOutCardBuff = myOutCard;
               }
               outCardBuffLength++;
-              if (outCardBuffLength == 2) {
+              if (outCardBuffLength == 3) {
                 outCardBuffLength = 0;
                 print('chenshengfa iDone');
                 nextStatus = GameStatus.iDone;
@@ -112,7 +112,7 @@ class GameStatusManager {
                 rightOutCardBuff = rightOutCard;
               }
               outCardBuffLength++;
-              if (outCardBuffLength == 3) {
+              if (outCardBuffLength == 4) {
                 outCardBuffLength = 0;
                 print('chenshengfa rightDone');
                 nextStatus = GameStatus.rightDone;
@@ -143,11 +143,11 @@ class GameStatusManager {
               leftOutCardBuff = leftOutCard;
               outCardBuffLength++;
             } else {
-              if ((leftOutCard?.length ?? 0) > (leftOutCardBuff?.length ?? 0)) {
+              if ((leftOutCard?.length ?? 0) >= (leftOutCardBuff?.length ?? 0)) {
                 leftOutCardBuff = leftOutCard;
               }
               outCardBuffLength++;
-              if (outCardBuffLength == 3) {
+              if (outCardBuffLength == 4) {
                 outCardBuffLength = 0;
                 print('chenshengfa leftDone');
                 nextStatus = GameStatus.leftDone;

@@ -117,11 +117,11 @@ class _DraggableContentState extends State<DraggableContent> {
           if (speed < 400) {
             speedColor = Colors.green;
           } else if (speed < 600) {
-            speedColor = Colors.yellow;
+            speedColor = Colors.blue;
           } else if (speed < 800) {
-            speedColor = Colors.red;
+            speedColor = Colors.yellow;
           } else {
-            speedColor = Colors.purple;
+            speedColor = Colors.red;
           }
           speedNotifier.value = showData[1].toString();
         }

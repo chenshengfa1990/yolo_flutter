@@ -71,6 +71,8 @@ class _DraggableContentState extends State<DraggableContent> {
   ValueNotifier<String> card5NumNotifier = ValueNotifier('');
   ValueNotifier<String> card4NumNotifier = ValueNotifier('');
   ValueNotifier<String> card3NumNotifier = ValueNotifier('');
+  ValueNotifier<String> speedNotifier = ValueNotifier('0');
+  Color speedColor = Colors.green;
 
   @override
   void initState() {
@@ -110,6 +112,18 @@ class _DraggableContentState extends State<DraggableContent> {
           card5NumNotifier.value = leftCardMap['5'].toString();
           card4NumNotifier.value = leftCardMap['4'].toString();
           card3NumNotifier.value = leftCardMap['3'].toString();
+        } else if (showType == OverlayUpdateType.speed.index) {
+          int speed = showData[1];
+          if (speed < 400) {
+            speedColor = Colors.green;
+          } else if (speed < 600) {
+            speedColor = Colors.yellow;
+          } else if (speed < 800) {
+            speedColor = Colors.red;
+          } else {
+            speedColor = Colors.purple;
+          }
+          speedNotifier.value = showData[1].toString();
         }
       }
     });
@@ -117,560 +131,574 @@ class _DraggableContentState extends State<DraggableContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Column(
-        children: [
-          Row(
+    return Stack(
+      children: [
+        Row(children: [
+          Column(
             children: [
-              Column(
+              Row(
                 children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'W',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'W',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
-                    ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardDWNumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardDWNumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                            border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white))),
+                        child: const Center(
+                          child: Text(
+                            'w',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardXWNumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '2',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card2NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'A',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardANumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'K',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardKNumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Q',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardQNumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'J',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: cardJNumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '10',
+                            style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card10NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '9',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card9NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '8',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card8NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '7',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card7NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '6',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card6NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '5',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card5NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '4',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card4NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '3',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 15,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
+                        ),
+                        child: ValueListenableBuilder(
+                          valueListenable: card3NumNotifier,
+                          builder: (BuildContext context, value, Widget? child) {
+                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                        border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white))),
-                    child: const Center(
-                      child: Text(
-                        'w',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardXWNumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '2',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card2NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'A',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardANumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'K',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardKNumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Q',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardQNumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'J',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: cardJNumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '10',
-                        style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card10NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '9',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card9NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '8',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card8NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '7',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card7NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '6',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card6NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '5',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card5NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '4',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card4NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '3',
-                        style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 15,
-                    height: 18,
-                    decoration: const BoxDecoration(
-                      border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: card3NumNotifier,
-                      builder: (BuildContext context, value, Widget? child) {
-                        return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
-                      },
-                    ),
-                  )
-                ],
-              ),
+              Expanded(
+                child: Container(
+                    width: 225,
+                    decoration: const BoxDecoration(border: Border(right: BorderSide(width: 1, color: Colors.white))),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                const Text('手牌:', style: TextStyle(fontSize: 10, color: Colors.white)),
+                                ValueListenableBuilder(
+                                    valueListenable: handCardsNotifier,
+                                    builder: (BuildContext context, value, Widget? child) {
+                                      return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
+                                    }),
+                              ],
+                            )),
+                        Expanded(
+                            flex: 1,
+                            child: Row(
+                              children: [
+                                const Text('建议出牌:', style: TextStyle(fontSize: 10, color: Colors.white)),
+                                ValueListenableBuilder(
+                                  valueListenable: suggestionOutCardNotifier,
+                                  builder: (BuildContext context, value, Widget? child) {
+                                    return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                                  },
+                                ),
+                              ],
+                            )),
+                      ],
+                    )),
+              )
             ],
           ),
           Expanded(
-            child: Container(
-                width: 225,
-                decoration: const BoxDecoration(border: Border(right: BorderSide(width: 1, color: Colors.white))),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: [
-                            const Text('手牌:', style: TextStyle(fontSize: 10, color: Colors.white)),
-                            ValueListenableBuilder(
-                                valueListenable: handCardsNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
-                                }),
-                          ],
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Row(
-                          children: [
-                            const Text('建议出牌:', style: TextStyle(fontSize: 10, color: Colors.white)),
-                            ValueListenableBuilder(
-                              valueListenable: suggestionOutCardNotifier,
-                              builder: (BuildContext context, value, Widget? child) {
-                                return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
-                              },
-                            ),
-                          ],
-                        )),
-                  ],
-                )),
-          )
-        ],
-      ),
-      Expanded(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('状态:', style: TextStyle(fontSize: 9, color: Colors.white)),
-              ValueListenableBuilder(
-                valueListenable: gameStatusNotifier,
-                builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
-                },
+              Row(
+                children: [
+                  const Text('状态:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: gameStatusNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('3张牌:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: threeCardNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('上家:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: leftPlayerCardNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('下家:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: rightPlayerCardNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('我出牌:', style: TextStyle(fontSize: 7, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: myOutCardsNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
+                    },
+                  ),
+                ],
               ),
             ],
+          )),
+        ]),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: ValueListenableBuilder(
+            valueListenable: speedNotifier,
+            builder: (BuildContext context, value, Widget? child) {
+              return Text('${value}ms', style: TextStyle(fontSize: 8, color: speedColor));
+            },
           ),
-          Row(
-            children: [
-              const Text('3张牌:', style: TextStyle(fontSize: 9, color: Colors.white)),
-              ValueListenableBuilder(
-                valueListenable: threeCardNotifier,
-                builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text('上家:', style: TextStyle(fontSize: 9, color: Colors.white)),
-              ValueListenableBuilder(
-                valueListenable: leftPlayerCardNotifier,
-                builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text('下家:', style: TextStyle(fontSize: 9, color: Colors.white)),
-              ValueListenableBuilder(
-                valueListenable: rightPlayerCardNotifier,
-                builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text('我出牌:', style: TextStyle(fontSize: 7, color: Colors.white)),
-              ValueListenableBuilder(
-                valueListenable: myOutCardsNotifier,
-                builder: (BuildContext context, value, Widget? child) {
-                  return Text(value, style: const TextStyle(fontSize: 6, color: Colors.white));
-                },
-              ),
-            ],
-          ),
-        ],
-      )),
-    ]);
+        )
+      ],
+    );
   }
 }
 
@@ -683,4 +711,5 @@ enum OverlayUpdateType {
   rightOutCard,
   suggestion,
   cardRecorder, //记牌器
+  speed, //检测速度
 }

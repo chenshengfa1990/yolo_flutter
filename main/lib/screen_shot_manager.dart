@@ -53,6 +53,7 @@ class ScreenShotManager {
       int after = DateTime.now().millisecondsSinceEpoch;
       XLog.i(LOG_TAG,
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
+      FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
         if (GameStatusManager.curGameStatus != GameStatus.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");

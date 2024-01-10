@@ -5,7 +5,7 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bug_logger/flutter_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         designSize: const Size(375, 812),
         builder: (context, child) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Flutter Yolo',
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late NcnnPlugin ncnnPlugin;
   late ScreenShotManager screenShotManager;
   late LandlordManager landlordManager;
-
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   int num = 0;
   int notice = 0;
   int screenWidth = 0;
@@ -94,12 +94,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     // tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
     screenShotManager = ScreenShotManager(ncnnPlugin);
-    super.initState();
-
+    getSharePreference();
     XLog.i(LOG_TAG, "app init, isDebugMode:$kDebugMode");
+  }
+
+  void getSharePreference() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      useGPU = (prefs.get('useGPU') ?? false) as bool;
+    });
   }
 
   void _onDetectImage() async {
@@ -263,6 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         value: useGPU,
                         onChanged: (value) {
                           setState(() {
+                            _prefs.then((preference) => preference.setBool('useGPU', value));
                             XLog.i(LOG_TAG, "GPU硬件加速$value");
                             useGPU = value;
                             ncnnPlugin.setGPU(useGPU);

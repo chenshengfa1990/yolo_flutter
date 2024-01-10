@@ -81,11 +81,13 @@ dependencies:
   #设备码
   platform_device_id: ^1.0.1
 
+  shared_preferences: ^2.0.3
 
-####################### 以下为自定义插件 #######################
 
-#  tensorflow_plugin:
-#    path: ../plugin/tensorflow_plugin
+  ####################### 以下为自定义插件 #######################
+
+  #  tensorflow_plugin:
+  #    path: ../plugin/tensorflow_plugin
 
   ncnn_plugin:
     path: ../plugin/ncnn_plugin

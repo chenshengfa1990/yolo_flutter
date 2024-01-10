@@ -73,7 +73,7 @@ class GameStatusManager {
               myOutCardBuff = myOutCard;
               outCardBuffLength++;
             } else {
-              if ((myOutCard?.length ?? 0) > (myOutCardBuff?.length ?? 0)) {
+              if ((myOutCard?.length ?? 0) >= (myOutCardBuff?.length ?? 0)) {
                 myOutCardBuff = myOutCard;
               }
               outCardBuffLength++;
@@ -108,7 +108,7 @@ class GameStatusManager {
               rightOutCardBuff = rightOutCard;
               outCardBuffLength++;
             } else {
-              if ((rightOutCard?.length ?? 0) > (rightOutCardBuff?.length ?? 0)) {
+              if ((rightOutCard?.length ?? 0) >= (rightOutCardBuff?.length ?? 0)) {
                 rightOutCardBuff = rightOutCard;
               }
               outCardBuffLength++;

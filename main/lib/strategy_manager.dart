@@ -5,6 +5,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
+import 'package:yolo_flutter/user_manager.dart';
 
 import 'game_status_manager.dart';
 import 'http/httpUtils.dart';
@@ -44,7 +45,7 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "need_play_card": round == 0 ? false : true};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;
@@ -69,7 +70,7 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": myOutCards, "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;
@@ -84,7 +85,7 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": [], "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;
@@ -100,7 +101,7 @@ class StrategyManager {
     List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.rightOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": rightPlayerOutCards, "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams['player_hand_cards'] = myHandCards;
     httpParams["player_position"] = LandlordManager.myIdentify;
@@ -115,7 +116,7 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": [], "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams['player_hand_cards'] = myHandCards;
     httpParams["player_position"] = LandlordManager.myIdentify;
@@ -131,7 +132,7 @@ class StrategyManager {
     List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.leftOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": leftPlayerOutCards, "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;
@@ -146,7 +147,7 @@ class StrategyManager {
     List<int>? myHandCards = LandlordManager.getServerCardFormat(LandlordManager.getMyHandCard(detectList, screenshotModel));
     Map<String, dynamic> httpParams = {};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": [], "need_play_card": false};
-    httpParams['user_id'] = 123;
+    httpParams['user_id'] = UserManager.deviceId;
     httpParams['round'] = ++round;
     httpParams["player_position"] = LandlordManager.myIdentify;
     httpParams['player_hand_cards'] = myHandCards;

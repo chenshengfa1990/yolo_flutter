@@ -510,6 +510,48 @@
             </list>
           </value>
         </entry>
+        <entry key="platform_device_id">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id-1.0.1/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="platform_device_id_linux">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_linux-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="platform_device_id_macos">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_macos-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="platform_device_id_platform_interface">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_platform_interface-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="platform_device_id_web">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_web-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="platform_device_id_windows">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_windows-1.0.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="plugin_platform_interface">
           <value>
             <list>
@@ -753,6 +795,12 @@
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/petitparser-5.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform-3.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform-3.1.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id-1.0.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_linux-1.0.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_macos-1.0.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_platform_interface-1.0.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_web-1.0.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform_device_id_windows-1.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/plugin_platform_interface-2.1.5/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/pointycastle-3.7.3/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/process-4.2.4/lib" />

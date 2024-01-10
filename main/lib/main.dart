@@ -18,6 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 // import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
+import 'package:yolo_flutter/user_manager.dart';
 
 import 'game_status_manager.dart';
 import 'landlord_manager.dart';
@@ -29,6 +30,7 @@ const String LOG_TAG = 'YoloApp';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initXLog();
+  await UserManager.init();
   initWidgetError();
   runApp(const MyApp());
 }

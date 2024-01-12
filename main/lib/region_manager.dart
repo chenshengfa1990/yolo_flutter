@@ -37,33 +37,33 @@ class RegionManager {
 
     ///右边玩家出牌区域
     static bool inRightPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
-      double leftXBorder = 1180.0 / 2368.0 * screenshotModel.width;
-      // double rightXBorder = 1640.0 / 2368.0 * screenshotModel.width;
-      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
-      double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
-      if (model.x! > leftXBorder) {
-        if (model.y! > topYBorder && model.y! < bottomYBorder) {
-          return true;
-        }
+    double leftXBorder = 1180.0 / 2368.0 * screenshotModel.width;
+    // double rightXBorder = 1640.0 / 2368.0 * screenshotModel.width;
+    double topYBorder = 170.0 / 1080.0 * screenshotModel.height;
+    double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
+    if (model.x! > leftXBorder) {
+      if (model.y! > topYBorder && model.y! < bottomYBorder) {
+        return true;
       }
-      return false;
     }
+    return false;
+  }
 
-    ///左边玩家出牌区域
+  ///左边玩家出牌区域
     static bool inLeftPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
-      // double leftXBorder = 680.0 / 2368.0 * screenshotModel.width;
-      double rightXBorder = 1180.0 / 2368.0 * screenshotModel.width;
-      double topYBorder = 215.0 / 1080.0 * screenshotModel.height;
-      double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
-      if (model.x! < rightXBorder) {
-        if (model.y! > topYBorder && model.y! < bottomYBorder) {
-          return true;
-        }
+    // double leftXBorder = 680.0 / 2368.0 * screenshotModel.width;
+    double rightXBorder = 1180.0 / 2368.0 * screenshotModel.width;
+    double topYBorder = 170.0 / 1080.0 * screenshotModel.height;
+    double bottomYBorder = 460.0 / 1080.0 * screenshotModel.height;
+    if (model.x! < rightXBorder) {
+      if (model.y! > topYBorder && model.y! < bottomYBorder) {
+        return true;
       }
-      return false;
     }
+    return false;
+  }
 
-    ///左边玩家出牌区域
+  ///左边玩家出牌区域
     static bool inLeftPlayerBuChuRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
       // double leftXBorder = 680.0 / 2368.0 * screenshotModel.width;
       double rightXBorder = 900.0 / 2368.0 * screenshotModel.width;

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cpu_reader/cpu_reader.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
@@ -21,6 +20,7 @@ class ScreenShotManager {
   int screenShotCount = 0;
   int detectCount = 0;
   bool isGameRunning = false;
+  bool firstCheck = true;
 
   ScreenShotManager(this.ncnnPlugin) {
     screenshotPlugin = ScreenshotPlugin();
@@ -86,6 +86,10 @@ class ScreenShotManager {
               notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
             }
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
+            if (LandlordManager.myIdentify == 'landlord') {
+              StrategyManager.getServerSuggestion();
+              StrategyManager.getServerSuggestion();
+            }
           }
         } else {
           return;
@@ -102,19 +106,8 @@ class ScreenShotManager {
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
+      XLog.i(LOG_TAG, 'show myHandCards ${LandlordManager.getCardsSorted(myHandCards)}');
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
-
-      ///刷新我的出牌
-      List<NcnnDetectModel>? myOutCards = LandlordManager.getMyOutCard(detectList, screenshotModel);
-      notifyOverlayWindow(OverlayUpdateType.myOutCard, models: myOutCards);
-
-      ///刷新左边玩家出牌
-      List<NcnnDetectModel>? leftPlayerCards = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
-      notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: leftPlayerCards);
-
-      ///刷新右边玩家出牌
-      List<NcnnDetectModel>? rightPlayerCards = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
-      notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: rightPlayerCards);
 
       ///计算下一个状态
       var nextStatus = GameStatusManager.calculateNextGameStatus(detectList, screenshotModel);
@@ -123,34 +116,37 @@ class ScreenShotManager {
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
 
-      ///请求出牌策略，告知后台牌面信息
-      StrategyManager.getLandlordStrategy(nextStatus, detectList, screenshotModel);
-
       GameStatusManager.curGameStatus = nextStatus;
 
-      ///根据左右两边玩家出牌，更新记牌器
-      if (nextStatus == GameStatus.leftDone) {
-        XLog.i(LOG_TAG, 'leftPlayerDone, updateRecorder, outCard: ${LandlordManager.getCardsSorted(GameStatusManager.leftOutCardBuff)}');
-        LandlordRecorder.updateRecorder(GameStatusManager.leftOutCardBuff);
-        GameStatusManager.leftOutCardBuff = null; //用完即恢复，不影响下一次
-      }
-      if (nextStatus == GameStatus.rightDone) {
-        XLog.i(LOG_TAG, 'rightPlayerDone, updateRecorder, outCard: ${LandlordManager.getCardsSorted(GameStatusManager.rightOutCardBuff)}');
-        LandlordRecorder.updateRecorder(GameStatusManager.rightOutCardBuff);
-        GameStatusManager.rightOutCardBuff = null;
-      }
-      if (nextStatus == GameStatus.iDone) {
-        XLog.i(LOG_TAG, 'iDone, myOutCard: ${LandlordManager.getCardsSorted(GameStatusManager.myOutCardBuff)}');
-        GameStatusManager.myOutCardBuff = null;
-      }
-      if (nextStatus == GameStatus.iDone || nextStatus == GameStatus.iSkip) {
-        notifyOverlayWindow(OverlayUpdateType.suggestion, showString: "");
-      }
-
       ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态
-      if (nextStatus == GameStatus.myTurn) {
-        XLog.i(LOG_TAG, 'myTurn, sleep 500ms');
-        await Future.delayed(const Duration(milliseconds: 500));
+      if (nextStatus == GameStatus.myTurn || nextStatus == GameStatus.leftTurn || nextStatus == GameStatus.rightTurn) {
+        if (nextStatus == GameStatus.myTurn) {
+          notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "");
+        } else if (nextStatus == GameStatus.leftTurn) {
+          notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "");
+        } else if (nextStatus == GameStatus.rightTurn) {
+          notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "");
+        }
+
+        if (firstCheck) {
+          if (nextStatus == GameStatus.myTurn) {
+            XLog.i(LOG_TAG, 'myTurn, sleep 1200ms');
+          } else if (nextStatus == GameStatus.rightTurn) {
+            XLog.i(LOG_TAG, 'rightTurn, sleep 1200ms');
+          } else if (nextStatus == GameStatus.leftTurn) {
+            XLog.i(LOG_TAG, 'leftTurn, sleep 1200ms');
+          }
+          firstCheck = false;
+          await Future.delayed(const Duration(milliseconds: 1200));
+        }
+      }
+      if (nextStatus == GameStatus.iDone ||
+          nextStatus == GameStatus.iSkip ||
+          nextStatus == GameStatus.leftSkip ||
+          nextStatus == GameStatus.leftDone ||
+          nextStatus == GameStatus.rightSkip ||
+          nextStatus == GameStatus.rightDone) {
+        firstCheck = true;
       }
     }
   }
@@ -164,5 +160,6 @@ class ScreenShotManager {
     screenshotPlugin.stopScreenshot();
     screenShotCount = 0;
     detectCount = 0;
+    firstCheck = true;
   }
 }

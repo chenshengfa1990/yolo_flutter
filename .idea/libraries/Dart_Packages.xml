@@ -5,8 +5,8 @@
         <entry key="archive">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/archive-3.4.2/lib" />
               <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/archive-3.3.0/lib" />
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/archive-3.4.2/lib" />
             </list>
           </value>
         </entry>
@@ -146,8 +146,8 @@
         <entry key="file">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/file-6.1.4/lib" />
               <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/file-6.1.2/lib" />
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/file-6.1.4/lib" />
             </list>
           </value>
         </entry>
@@ -506,8 +506,8 @@
         <entry key="platform">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform-3.1.1/lib" />
               <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform-3.1.0/lib" />
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/platform-3.1.1/lib" />
             </list>
           </value>
         </entry>
@@ -753,8 +753,8 @@
         <entry key="win32">
           <value>
             <list>
-              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/win32-4.1.4/lib" />
               <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/win32-3.1.4/lib" />
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/win32-4.1.4/lib" />
             </list>
           </value>
         </entry>

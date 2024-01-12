@@ -11,13 +11,63 @@ import 'region_manager.dart';
 
 class LandlordManager {
   static String LOG_TAG = 'LandlordManager';
+
   ///纸牌按人类思维的排序顺序
-  static Map<String, int> labelIndex = {"dw": 0, "xw": 1, "2": 2, "A": 3, "K": 4, "Q": 5, "J": 6, "10": 7, "9": 8, "8": 9, "7": 10, "6": 11, "5": 12, "4": 13, "3": 14};
+  static Map<String, int> labelIndex = {
+    "dw": 0,
+    "xw": 1,
+    "2": 2,
+    "A": 3,
+    "K": 4,
+    "Q": 5,
+    "J": 6,
+    "10": 7,
+    "9": 8,
+    "8": 9,
+    "7": 10,
+    "6": 11,
+    "5": 12,
+    "4": 13,
+    "3": 14
+  };
 
   ///后台需要的纸牌对应的数字
-  static Map<String, int> labelServerIndex = {"dw": 30, "xw": 20, "2": 17, "A": 14, "K": 13, "Q": 12, "J": 11, "10": 10, "9": 9, "8": 8, "7": 7, "6": 6, "5": 5, "4": 4, "3": 3};
+  static Map<String, int> labelServerIndex = {
+    "dw": 30,
+    "xw": 20,
+    "2": 17,
+    "A": 14,
+    "K": 13,
+    "Q": 12,
+    "J": 11,
+    "10": 10,
+    "9": 9,
+    "8": 8,
+    "7": 7,
+    "6": 6,
+    "5": 5,
+    "4": 4,
+    "3": 3
+  };
 
-  static Map<int, String> serverIndexToCard = {30: "W", 20: "w", 17: "2", 14: "A", 13: "K", 12: "Q", 11: "J", 10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "3"};
+  static Map<int, String> serverIndexToCard = {
+    30: "W",
+    20: "w",
+    17: "2",
+    14: "A",
+    13: "K",
+    12: "Q",
+    11: "J",
+    10: "10",
+    9: "9",
+    8: "8",
+    7: "7",
+    6: "6",
+    5: "5",
+    4: "4",
+    3: "3"
+  };
+
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
 
@@ -26,7 +76,8 @@ class LandlordManager {
   static String threeCardStr = '';
   static List<int>? threeCardInt;
 
-  static ValueNotifier<String> myHandCardsNotifier = ValueNotifier('');
+  ///传给后台
+  static List<int>? myHandCardServerFormat;
 
   ///玩家身份, "landlord", "landlord_down", "landlord_up"
   static String myIdentify = "";
@@ -174,6 +225,7 @@ class LandlordManager {
         }
       }
     });
+    myHandCardServerFormat = getServerCardFormat(resList);
     return resList;
   }
 

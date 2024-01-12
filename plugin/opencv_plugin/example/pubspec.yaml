@@ -1,23 +1,9 @@
-name: yolo_flutter
-description: A new Flutter project.
+name: opencv_plugin_example
+description: Demonstrates how to use the opencv_plugin plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -32,77 +18,17 @@ dependencies:
   flutter:
     sdk: flutter
 
+  opencv_plugin:
+    # When depending on this package from a real application you should use:
+    #   opencv_plugin: ^x.y.z
+    # See https://dart.dev/tools/pub/dependencies#version-constraints
+    # The example app is bundled with the plugin so we use a path dependency on
+    # the parent directory to use the current plugin's version.
+    path: ../
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-
-  # 图片选择器 https://pub.dev/packages/image_picker
-  image_picker: ^0.8.0
-
-  # 网络请求
-  dio: ^4.0.6
-
-  # 获取网络状态
-  connectivity_plus: ^3.0.2
-
-  # 屏幕适配方案: https://pub.dev/packages/flutter_screenutil
-  flutter_screenutil: ^5.6.0
-
-  # 日志
-  flutter_bug_logger: 1.0.0
-
-  # 悬浮窗, 横屏有bug
-#  flutter_overlay_window: ^0.4.3
-
-  # layer方式截图，暂不使用
-  flutter_native_screenshot: ^1.1.2
-
-  # 权限申请
-  permission_handler: 10.4.3
-
-  # 路径管理
-  path_provider: ^2.0.9
-
-  #解压缩
-  archive: ^3.3.5
-
-  #日期
-  intl: 0.17.0
-
-  #设备信息
-  device_info: ^2.0.0
-
-  flutter_easyloading: 3.0.5
-
-  #cpu温度
-  cpu_reader: ^3.0.0
-
-  #设备码
-  platform_device_id: ^1.0.1
-
-  shared_preferences: ^2.0.3
-
-
-  ####################### 以下为自定义插件 #######################
-
-  #  tensorflow_plugin:
-  #    path: ../plugin/tensorflow_plugin
-
-  ncnn_plugin:
-    path: ../plugin/ncnn_plugin
-
-  screenshot_plugin:
-    path: ../plugin/screenshot_plugin
-
-  flutter_overlay_window:
-    path: ../plugin/flutter_overlay_window
-
-  flutter_xlog:
-    path: ../plugin/flutter_xlog
-
-  opencv_plugin:
-    path: ../plugin/opencv_plugin
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url 'https://jitpack.io' }
+        maven { url "https://www.jitpack.io" }
     }
 
     dependencies {
@@ -31,5 +39,14 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        ndk {
+            abiFilters "armeabi-v7a", 'arm64-v8a'
+        }
     }
+}
+
+dependencies {
+//    implementation 'com.github.hyb1996:OpenCvLib:2.4.13.4-imgproc'
+    implementation "ai.eye2you:opencv-android:4.5.2"
+    implementation project(':flutter_xlog')
 }

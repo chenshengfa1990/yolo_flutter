@@ -243,6 +243,13 @@
             </list>
           </value>
         </entry>
+        <entry key="fluttertoast">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.2.4/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="fuchsia_remote_debug_protocol">
           <value>
             <list>
@@ -808,6 +815,7 @@
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_plugin_android_lifecycle-2.0.15/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_screenutil-5.7.0/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/flutter_spinkit-5.2.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.2.4/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/http-0.13.5/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/http_parser-4.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../flutterSDK/flutter3.3.10/.pub-cache/hosted/pub.flutter-io.cn/image_picker-0.8.0/lib" />

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
@@ -23,7 +24,12 @@ class StrategyManager {
   static String LOG_TAG = "StrategyManager";
 
   // static String serverUrl = 'http://172.16.3.225:7070/data';//内网
-  static String serverUrl = 'http://216.83.44.19:7070/data'; //公网
+  // static String serverUrl = 'http://216.83.44.19:7070/data'; //公网
+  // static String serverUrl = 'https://ead8-14-145-204-91.ngrok-free.app/data'; //公网
+  // static String userInfoUrl = 'https://ead8-14-145-204-91.ngrok-free.app/self';//用户信息
+  static String serverUrl = 'http://alidouapi.xxrz.top/data'; //公网
+  static String userInfoUrl = 'http://alidouapi.xxrz.top/self'; //用户信息
+
   static int round = 0;
   static RequestTurn? currentTurn;
 
@@ -103,6 +109,8 @@ class StrategyManager {
     }
   }
 
+  static getPublicHeader() {}
+
   static getServerSuggestion() async {
     try {
       Map<String, dynamic> httpParams = {};
@@ -116,7 +124,12 @@ class StrategyManager {
       var jsonStr = json.encode(httpParams);
       XLog.i(LOG_TAG, 'getServerSuggestion param=$jsonStr');
 
-      var res = await HttpUtils.post(serverUrl, data: jsonStr);
+      String userId = UserManager.getUserId();
+      String hash = UserManager.getHash(jsonStr);
+      Options options = Options();
+      options.headers = {'userid': userId, 'hash': hash};
+
+      var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
       Map<String, dynamic> resMap = json.decode(res);
       if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
         List<int> serverSuggestion = resMap['action'].cast<int>().toList();
@@ -145,7 +158,13 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerIDone param=$jsonStr');
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
+    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerIDone res=$res');
   }
 
@@ -160,7 +179,13 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerISkip param=$jsonStr');
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
+    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerISkip res=$res');
   }
 
@@ -176,7 +201,13 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerRightPlayerDone param=$jsonStr');
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
+    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerRightPlayerDone res=$res');
   }
 
@@ -191,6 +222,12 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerRightPlayerSkip param=$jsonStr');
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
     var res = HttpUtils.post(serverUrl, data: jsonStr);
     XLog.i(LOG_TAG, 'tellServerRightPlayerSkip res=$res');
   }
@@ -207,7 +244,13 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerDone param=$jsonStr');
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
+    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerDone res=$res');
   }
 
@@ -222,7 +265,13 @@ class StrategyManager {
     httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
     var jsonStr = json.encode(httpParams);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerSkip param=$jsonStr');
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+
+    String userId = UserManager.getUserId();
+    String hash = UserManager.getHash(jsonStr);
+    Options options = Options();
+    options.headers = {'userid': userId, 'hash': hash};
+
+    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerSkip $res');
   }
 }

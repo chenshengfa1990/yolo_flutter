@@ -2,8 +2,8 @@
     package="com.flutter.yolo">
    <application
         android:label="yolo_flutter"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+       android:name=".YoloApp"
+       android:icon="@mipmap/ic_launcher"
         android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
         android:requestLegacyExternalStorage="true">
         <activity

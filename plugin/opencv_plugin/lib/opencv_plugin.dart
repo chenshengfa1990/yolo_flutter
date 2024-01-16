@@ -4,4 +4,8 @@ class OpencvPlugin {
   Future<String?> getPlatformVersion() {
     return OpencvPluginPlatform.instance.getPlatformVersion();
   }
+
+  Future<void> startDetectImage(String imagePath) {
+    return OpencvPluginPlatform.instance.startDetectImage(imagePath);
+  }
 }

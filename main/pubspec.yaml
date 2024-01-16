@@ -81,7 +81,13 @@ dependencies:
   #设备码
   platform_device_id: ^1.0.1
 
+  #本地存储
   shared_preferences: ^2.0.3
+
+  #sha256
+  crypto: ^3.0.1
+
+  fluttertoast: ^8.0.8
 
 
   ####################### 以下为自定义插件 #######################

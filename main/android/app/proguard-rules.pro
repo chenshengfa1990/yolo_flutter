@@ -46,3 +46,11 @@
 
 -keep class com.flutter.yolo.ncnn_plugin.** {*;}
 -keep class com.tencent.mars.** {*;}
+
+# 保留opencv下的所有类及其内部类
+-keep class org.opencv.** {*;}
+-keep class org.opencv.* {}
+#tencent
+-keep class com.tencent.mm.sdk.** {
+     *;
+}

@@ -14,4 +14,9 @@ class MethodChannelOpencvPlugin extends OpencvPluginPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+
+  @override
+  Future<void> startDetectImage(String imagePath) async {
+    await methodChannel.invokeMethod<List<dynamic>?>('detectImage', {'imagePath': imagePath});
+  }
 }

@@ -126,16 +126,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getSharePreference() async {
     final SharedPreferences prefs = await _prefs;
-    setState(() async {
-      useGPU = (prefs.get('useGPU') ?? true) as bool;
-      editTextController.text = prefs.getString('loginToken') ?? "";
-      updateOutDate();
+    useGPU = (prefs.get('useGPU') ?? true) as bool;
+    editTextController.text = prefs.getString('loginToken') ?? "";
+    setState(() {
+
     });
+    updateOutDate();
   }
 
   void updateOutDate() async {
-    leftSecond = await UserManager.requestUserOutDate(editTextController.text);
-    setState(() {});
+    if (editTextController.text.isNotEmpty) {
+      leftSecond = await UserManager.requestUserOutDate(editTextController.text);
+      setState(() {});
+    }
   }
 
   void _onDetectImage() async {
@@ -161,20 +164,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _opencvDetect() async {
-    // final ImagePicker picker = ImagePicker();
-    // var selectImage = await picker.getImage(source: ImageSource.gallery);
-    // if (selectImage?.path.isNotEmpty ?? false) {
-    //   opencvPlugin.startDetectImage(selectImage!.path);
-    // }
+    final ImagePicker picker = ImagePicker();
+    var selectImage = await picker.getImage(source: ImageSource.gallery);
+    if (selectImage?.path.isNotEmpty ?? false) {
+      opencvPlugin.startDetectImage(selectImage!.path);
+      // opencvPlugin.cropTemplate(selectImage!.path, "/card4.png", 1528, 29, 1608, 119);
+    }
   }
 
   void _startGame() async {
     XLog.i(LOG_TAG, "_startGame");
     focusNode.unfocus();
-    bool loginResult = await UserManager.userLogin(editTextController.text);
-    if (loginResult == false) {
-      return;
-    }
+    // bool loginResult = await UserManager.userLogin(editTextController.text);
+    // if (loginResult == false) {
+    //   return;
+    // }
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
     if (!status) {
       bool? result = await FlutterOverlayWindow.requestPermission();

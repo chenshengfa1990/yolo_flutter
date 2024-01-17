@@ -1,10 +1,13 @@
 package com.flutter.yolo.opencv_plugin;
 
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.util.Pair;
 import android.util.TimingLogger;
 
 import com.tencent.mars.xlog.Log;
 
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvException;
 import org.opencv.core.CvType;
@@ -13,9 +16,11 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -234,13 +239,14 @@ public class TemplateMatching {
     public static ArrayList<Pair<Point, Double>> getAllMatch1(Mat src, Mat template, float threshold, int matchMethod) {
         ArrayList<Pair<Point, Double>> resultList = new ArrayList<>();
         // 获取匹配结果
+        long before = System.currentTimeMillis();
         while(true) {
             double value;
             Point pos;
-            long before = System.currentTimeMillis();
+
             Mat matchResult = matchTemplate(src, template, matchMethod);
-            long after = System.currentTimeMillis();
-            Log.i("chenshengfa", "cost %d", after - before);
+
+
             Core.MinMaxLocResult mmr = Core.minMaxLoc(matchResult);
             if (matchMethod == Imgproc.TM_SQDIFF || matchMethod == Imgproc.TM_SQDIFF_NORMED) {
                 pos = mmr.minLoc;
@@ -256,34 +262,50 @@ public class TemplateMatching {
                 break;
             }
         }
+        long after = System.currentTimeMillis();
+        Log.i("chenshengfa", "cost %d", after - before);
         return resultList;
     }
 
 
-    public static ArrayList<Point> getAllMatch2(Mat src, Mat template1, float threshold, int matchMethod) {
-        Mat greyImage = new Mat();
-        Mat greyTemplate = new Mat();
-        Imgproc.cvtColor(src, greyImage, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.cvtColor(src, greyTemplate, Imgproc.COLOR_BGR2GRAY);
+    public static ArrayList<Pair<Point, Double>> getAllMatch2(Mat src, Mat template, boolean useBinary, float threshold, int matchMethod) {
+        Mat matchSource = src;
+        Mat templateSource = template;
+        if (useBinary) {
+            Mat greyImage = new Mat();
+            Mat greyTemplate = new Mat();
+            Imgproc.cvtColor(src, greyImage, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.cvtColor(template, greyTemplate, Imgproc.COLOR_BGR2GRAY);;
 
-        Mat binarySrc = new Mat();
-        Mat binaryTemplate = new Mat();
-        Imgproc.threshold(greyImage, binarySrc, 180, 255, Imgproc.THRESH_BINARY);
-        Imgproc.threshold(greyTemplate, binaryTemplate, 180, 255, Imgproc.THRESH_BINARY);
+            Mat binarySrc = new Mat();
+            Mat binaryTemplate = new Mat();
+            Imgproc.threshold(greyImage, binarySrc, 180, 255, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(greyTemplate, binaryTemplate, 180, 255, Imgproc.THRESH_BINARY);
 
-        ArrayList<Point> resultList = new ArrayList<>();
+            matchSource = binarySrc;
+            templateSource = binaryTemplate;
+        } else {
+//            Log.i("chenshengfa", "useBinary is false");
+        }
+//        Bitmap srcBitmap = matToBitmap(matchSource);
+//        Bitmap templateBitmap = matToBitmap(templateSource);
+        ArrayList<Pair<Point, Double>> resultList = new ArrayList<>();
         // 创建匹配结果
-        int resultWidth = binarySrc.cols() - binaryTemplate.cols() + 1;
-        int resultHeight = binarySrc.rows() - binaryTemplate.rows() + 1;
+        int resultWidth = matchSource.cols() - templateSource.cols() + 1;
+        int resultHeight = matchSource.rows() - templateSource.rows() + 1;
 //        Mat result = new Mat(resultHeight, resultWidth, CvType.CV_32FC1);
         Mat result = new Mat(resultHeight, resultWidth, CvType.CV_8UC1);
 
         // 进行模板匹配
-//        Imgproc.matchTemplate(src, template, result, Imgproc.TM_CCOEFF_NORMED);
         long before = System.currentTimeMillis();
-        Imgproc.matchTemplate(binarySrc, binaryTemplate, result, Imgproc.TM_CCOEFF_NORMED);
-        long after = System.currentTimeMillis();
-        Log.i("chenshengfa", "detect cost %d", after - before);
+        Imgproc.matchTemplate(matchSource, templateSource, result, Imgproc.TM_CCOEFF_NORMED);
+        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+        double maxValue = mmr.maxVal;
+        if (maxValue < threshold) {
+            return resultList;
+        }
+//        long after1 = System.currentTimeMillis();
+//        Log.i("chenshengfa", "detect cost %d", after1 - before);
 
         // 遍历二值化结果，获取匹配位置
         for (int row = 0; row < result.rows(); row++) {
@@ -294,46 +316,47 @@ public class TemplateMatching {
                     // 过滤重复区域
                     Point currentPoint = new Point(col, row);
                     boolean isDuplicate = false;
-                    for (Point existingPoint : resultList) {
-                        double distance = Math.sqrt(Math.pow(currentPoint.x - existingPoint.x, 2) + Math.pow(currentPoint.y - existingPoint.y, 2));
-                        if (distance < 20) {
+                    for (Pair<Point, Double> existingPoint : resultList) {
+                        double xDistance = Math.abs(currentPoint.x - existingPoint.first.x);
+                        double yDistance = Math.abs(currentPoint.y - existingPoint.first.y);
+                        if (xDistance < 50 && yDistance < 50) {
                             isDuplicate = true;
+                            if (value > existingPoint.second) {
+                                resultList.remove(existingPoint);
+                                resultList.add(new Pair<>(currentPoint, value));
+                            }
                             break;
                         }
                     }
                     if (!isDuplicate) {
-                        resultList.add(currentPoint);
+                        resultList.add(new Pair<>(currentPoint, value));
                     }
                 }
             }
         }
+//        long after2 = System.currentTimeMillis();
+//        Log.i("chenshengfa", "result cost %d", after2 - after1);
+//        Log.i("chenshengfa", "res %d", resultList.size());
+//        for(int i = 0; i < resultList.size(); i++) {
+//            Imgproc.rectangle(src, resultList.get(i).first,
+//                    new Point(resultList.get(i).first.x + templateSource.cols(), resultList.get(i).first.y + templateSource.rows()),
+//                    new Scalar(0, 0, 255), 2);
+//        }
+
+//        Bitmap resultBitmap = matToBitmap(src);
+//        if (resultList.size() == 0) {
+//            Imgproc.rectangle(src, mmr.maxLoc,
+//                    new Point(mmr.maxLoc.x + binaryTemplate.cols(), mmr.maxLoc.y + binaryTemplate.rows()),
+//                    new Scalar(0, 0, 255), 2);
+//        }
+
         return resultList;
     }
 
-    public static ArrayList<Point> getAllMatch3(Mat src, Mat template, float threshold, int matchMethod) {
-        ArrayList<Point> resultList = new ArrayList<>();
-        // 获取匹配结果
-        int resultWidth = src.cols() - template.cols() + 1;
-        int resultHeight = src.rows() - template.rows() + 1;
-        Mat result = new Mat(resultHeight, resultWidth, CvType.CV_32FC1);
-
-        // 进行模板匹配
-        Imgproc.matchTemplate(src, template, result, Imgproc.TM_CCOEFF_NORMED);
-
-        // 获取匹配结果
-        Mat binaryResult = new Mat();
-        Core.compare(result, new Scalar(0,0,0), binaryResult, Core.CMP_GE);
-
-        // 遍历二值化结果，获取匹配位置
-        for (int row = 0; row < binaryResult.rows(); row++) {
-            for (int col = 0; col < binaryResult.cols(); col++) {
-                double value = binaryResult.get(row, col)[0];
-                if (value == 1) {
-                    resultList.add(new Point(col, row));
-                }
-            }
-        }
-        return resultList;
+    public static Bitmap matToBitmap(Mat mat) {
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bitmap);
+        return bitmap;
     }
 
 

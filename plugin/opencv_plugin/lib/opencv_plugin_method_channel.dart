@@ -19,4 +19,11 @@ class MethodChannelOpencvPlugin extends OpencvPluginPlatform {
   Future<void> startDetectImage(String imagePath) async {
     await methodChannel.invokeMethod<List<dynamic>?>('detectImage', {'imagePath': imagePath});
   }
+
+  @override
+  Future<void> cropTemplate(String imagePath, String outputName, int xLTop, int yLTop, int xRBottom, int yRBottom) async {
+    await methodChannel.invokeMethod<List<dynamic>?>('cropTemplate', {'imagePath': imagePath, 'outputName': outputName, 'xLTop': xLTop, 'yLTop': yLTop, 'xRBottom': xRBottom, 'yRBottom': yRBottom});
+  }
+
+
 }

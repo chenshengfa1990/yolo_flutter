@@ -8,4 +8,8 @@ class OpencvPlugin {
   Future<void> startDetectImage(String imagePath) {
     return OpencvPluginPlatform.instance.startDetectImage(imagePath);
   }
+
+  Future<void> cropTemplate(String imagePath, String outputName, int xLTop, int yLTop, int xRBottom, int yRBottom) {
+    return OpencvPluginPlatform.instance.cropTemplate(imagePath, outputName, xLTop, yLTop, xRBottom, yRBottom);
+  }
 }

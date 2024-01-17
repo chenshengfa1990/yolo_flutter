@@ -28,4 +28,6 @@ abstract class OpencvPluginPlatform extends PlatformInterface {
   }
 
   Future<void> startDetectImage(String imagePath);
+
+  Future<void> cropTemplate(String imagePath, String outputName, int xLTop, int yLTop, int xRBottom, int yRBottom);
 }

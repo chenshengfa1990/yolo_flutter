@@ -48,6 +48,14 @@ public class OpencvPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
     } else if (call.method.equals("detectImage")) {
       String imagePath = call.argument("imagePath");
       startDetectImage(imagePath, result);
+    } else if (call.method.equals("cropTemplate")) {
+      String imagePath = call.argument("imagePath");
+      String outputName = call.argument("outputName");
+      int xLTop = call.argument("xLTop");
+      int yLTop = call.argument("yLTop");
+      int xRBottom = call.argument("xRBottom");
+      int yRBottom = call.argument("yRBottom");
+      startCropTemplate(imagePath, outputName, xLTop, yLTop, xRBottom, yRBottom);
     } else {
       result.notImplemented();
     }
@@ -60,15 +68,25 @@ public class OpencvPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
         Bitmap assetBitmap = null;
         try {
           bitmap = getBitmap(imagePath);
-          assetBitmap = getAssetsBitmap("redA.png");
+          long before = System.currentTimeMillis();
+          for(int i = 0; i < 15; i++) {
+            String templateFile = "card" + (i+1) + ".png";
+            boolean useBinary = true;
+            assetBitmap = getAssetsBitmap(templateFile);
+            if (i == 13 || i == 14) {
+              useBinary = false;
+            }
+            MatchingUtil.match(bitmap, assetBitmap, useBinary, 80);
+            assetBitmap.recycle();
+          }
+          long after = System.currentTimeMillis();
+          Log.i("chenshengfa", "detect cost %d", after - before);
         } catch (Exception e) {
-          Log.e("NcnnPlugin", "getBitmap error: " + e);
+          Log.e("OpenCVPlugin", "getBitmap error: " + e);
           return;
         }
-        long before = System.currentTimeMillis();
-        MatchingUtil.match(bitmap, assetBitmap, 60);
-        long after = System.currentTimeMillis();
-        Log.i("chenshengfa", "getResult cost %d", after - before);
+        bitmap.recycle();
+//        Log.i("chenshengfa", "getResult cost %d", after - before);
 //        ArrayList<String> resList = getDetectRes(objects);
 //        result.success(resList);
       }
@@ -76,6 +94,21 @@ public class OpencvPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
 
   }
 
+  public void startCropTemplate(String imagePath, String outputName, int xLTop, int yLTop, int xRBottom, int yRBottom) {
+    runInBackground(new Runnable() {
+      @Override
+      public void run() {
+        Bitmap bitmap = null;
+        try {
+          bitmap = getBitmap(imagePath);
+        } catch (Exception e) {
+          Log.e("OpenCVPlugin", "cropBitmap error: " + e);
+          return;
+        }
+        CropTemplate.crop(bitmap, outputName, xLTop, yLTop, xRBottom, yRBottom);
+      }
+    });
+  }
   public Bitmap getBitmap(String imagePath) throws Exception {
     File file = new File(imagePath);
     InputStream inputStream = new FileInputStream(file);

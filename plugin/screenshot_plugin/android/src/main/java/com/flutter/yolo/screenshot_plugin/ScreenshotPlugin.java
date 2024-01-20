@@ -189,8 +189,8 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
 
                 Map<String, Object> resultMap = new HashMap<>();
                 resultMap.put("filePath", filePath);
-                resultMap.put("width", realWidth);
-                resultMap.put("height", realHeight);
+                resultMap.put("width", realWidth / 2);
+                resultMap.put("height", realHeight / 2);
                 String resStr = mapToString(resultMap);
                 bitmap.recycle();
                 image.close();

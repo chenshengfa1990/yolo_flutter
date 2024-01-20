@@ -131,9 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final SharedPreferences prefs = await _prefs;
     useGPU = (prefs.get('useGPU') ?? true) as bool;
     editTextController.text = prefs.getString('loginToken') ?? "";
-    setState(() {
-
-    });
+    LandlordManager.curLandlordType = LandlordType.values[prefs.getInt("landlordType") ?? 0];
+    setState(() {});
     updateOutDate();
   }
 
@@ -307,6 +306,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Widget buildDropdownButton() {
+    return DropdownButton(
+      value: LandlordManager.curLandlordType,
+      items: const [
+        DropdownMenuItem(value: LandlordType.huanle, child: Text('欢乐斗地主')),
+        DropdownMenuItem(value: LandlordType.weile, child: Text('微乐斗地主')),
+        DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
+      ],
+      onChanged: (value) {
+        setState(() {
+          _prefs.then((preference) => preference.setInt('landlordType', (value as LandlordType).index));
+          LandlordManager.curLandlordType = value as LandlordType;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,15 +337,14 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 10),
-                Container(
-                  child: Center(
-                    child: Text(
-                      '有效期: ${formatDuration(Duration(seconds: leftSecond))}',
-                      style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
-                    ),
+                Center(
+                  child: Text(
+                    '有效期: ${formatDuration(Duration(seconds: leftSecond))}',
+                    style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
                   ),
                 ),
                 const SizedBox(height: 10),
+                //激活码
                 Container(
                   padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                   child: Row(
@@ -403,6 +418,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
+                //硬件加速
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: Row(
@@ -426,6 +442,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
+                //下拉选择
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: buildDropdownButton(),
+                ),
+                //删除截图
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: GestureDetector(

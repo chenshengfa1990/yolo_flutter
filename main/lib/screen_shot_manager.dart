@@ -17,6 +17,8 @@ class ScreenShotManager {
   static const String LOG_TAG = 'ScreenShotManager';
   late ScreenshotPlugin screenshotPlugin;
   late NcnnPlugin ncnnPlugin;
+  static double width = 0;
+  static double height = 0;
   int screenShotCount = 0;
   int detectCount = 0;
   bool isGameRunning = false;
@@ -45,6 +47,8 @@ class ScreenShotManager {
     ScreenshotModel? screenshotModel = await screenshotPlugin.takeScreenshot();
 
     if (screenshotModel?.filePath.isNotEmpty ?? false) {
+      width = (screenshotModel?.width ?? 0).toDouble();
+      height = (screenshotModel?.height ?? 0).toDouble();
       screenShotCount++;
       XLog.i(LOG_TAG,
           'Yolo screenshot $screenShotCount, width: ${screenshotModel?.width}, height: ${screenshotModel?.height}, path: ${screenshotModel?.filePath}');

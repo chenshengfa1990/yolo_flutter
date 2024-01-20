@@ -6,9 +6,12 @@ import 'package:screenshot_plugin/export.dart';
 
 import '../overlay_window_widget.dart';
 import '../region/region_manager.dart';
+import 'landlord_type.dart';
 
 class LandlordManager {
   static String LOG_TAG = 'LandlordManager';
+
+  static LandlordType curLandlordType = LandlordType.huanle;
 
   ///纸牌按人类思维的排序顺序
   static Map<String, int> labelIndex = {

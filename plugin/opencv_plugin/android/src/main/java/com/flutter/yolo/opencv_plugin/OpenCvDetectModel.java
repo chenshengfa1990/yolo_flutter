@@ -21,18 +21,20 @@ import java.util.Map;
 
 public class OpenCvDetectModel
 {
-    public float x;
-    public float y;
-    public float w;
-    public float h;
+    public double x;
+    public double y;
+    public double w;
+    public double h;
     public String label;
-    public float prob;
+    public double prob;
 
-    public OpenCvDetectModel(int imgX, int imgY, int imgWidth, int imgHeight) {
+    public OpenCvDetectModel(double imgX, double imgY, int imgWidth, int imgHeight, double prob, String label) {
         this.x = imgX;
         this.y = imgY;
         this.w = imgWidth;
         this.h = imgHeight;
+        this.prob = prob;
+        this.label = label;
     }
 
     String toJson() {

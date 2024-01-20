@@ -1,13 +1,11 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/ncnn_detect_model.dart';
 import 'package:screenshot_plugin/export.dart';
 
-import 'overlay_window_widget.dart';
-import 'region_manager.dart';
+import '../overlay_window_widget.dart';
+import '../region/region_manager.dart';
 
 class LandlordManager {
   static String LOG_TAG = 'LandlordManager';

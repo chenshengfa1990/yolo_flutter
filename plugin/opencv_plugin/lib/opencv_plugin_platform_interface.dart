@@ -27,7 +27,8 @@ abstract class OpencvPluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<void> startDetectImage(String imagePath);
+  Future<void> startDetectHandCard(String imagePath, int landlordType, int regionType);
 
+  ///裁剪模板
   Future<void> cropTemplate(String imagePath, String outputName, int xLTop, int yLTop, int xRBottom, int yRBottom);
 }

@@ -15,8 +15,8 @@ public class CropTemplate {
         Mat sourceMat = new Mat();
         Utils.bitmapToMat(sourceBitmap, sourceMat);
 
-        Point pointLeftTop = new Point(251 * sourceMat.cols() / 2368, 659 *  sourceMat.rows() / 1080);
-        Point pointRightBottom = new Point(1945 * sourceMat.cols() / 2368, 800 * sourceMat.rows() / 1080);
+        Point pointLeftTop = new Point(125 * sourceMat.cols() / 1184, 339 *  sourceMat.rows() / 540);
+        Point pointRightBottom = new Point(985 * sourceMat.cols() / 1184, 400 * sourceMat.rows() / 540);
         Rect regionRect = new Rect(pointLeftTop, pointRightBottom);
 
         Mat croppedSourceMat = new Mat(sourceMat, regionRect);

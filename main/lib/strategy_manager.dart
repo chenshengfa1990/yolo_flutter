@@ -9,7 +9,7 @@ import 'package:yolo_flutter/user_manager.dart';
 
 import 'game_status_manager.dart';
 import 'http/httpUtils.dart';
-import 'landlord_manager.dart';
+import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
 

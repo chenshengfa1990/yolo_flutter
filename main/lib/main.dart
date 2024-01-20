@@ -17,6 +17,9 @@ import 'package:opencv_plugin/opencv_plugin.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yolo_flutter/landlord/landlord_type.dart';
+import 'package:yolo_flutter/region/region_factory.dart';
+import 'package:yolo_flutter/region/region_type.dart';
 
 // import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screen_shot_manager.dart';
@@ -24,7 +27,7 @@ import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
 import 'game_status_manager.dart';
-import 'landlord_manager.dart';
+import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
 
@@ -167,8 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final ImagePicker picker = ImagePicker();
     var selectImage = await picker.getImage(source: ImageSource.gallery);
     if (selectImage?.path.isNotEmpty ?? false) {
-      opencvPlugin.startDetectImage(selectImage!.path);
-      // opencvPlugin.cropTemplate(selectImage!.path, "/card4.png", 1528, 29, 1608, 119);
+      // opencvPlugin.startDetectImage(selectImage!.path, LandlordType.tx.index, RegionType.handCard.index);
+      opencvPlugin.cropTemplate(selectImage!.path, "/weile_buchu.png", RegionFactory.getRegion(LandlordType.weile, RegionType.leftSkip));
     }
   }
 

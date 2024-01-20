@@ -3,7 +3,9 @@ package com.flutter.yolo.opencv_plugin;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -13,40 +15,37 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MatchingUtil {
 
-    public static void match(Bitmap inFile, Bitmap detectFile, boolean useBinary, int threshold) {
-        Bitmap.Config config = inFile.getConfig();
-        Bitmap formatSrcImg = inFile;
-        if (config != Bitmap.Config.ARGB_8888 || config != Bitmap.Config.RGB_565) {
-            formatSrcImg = Bitmap.createBitmap(inFile.getWidth(), inFile.getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(formatSrcImg);
-            canvas.drawBitmap(inFile, 0, 0, null);
-        }
-        Mat sourceImg = new Mat();
-        Utils.bitmapToMat(formatSrcImg, sourceImg);
+    public static ArrayList<OpenCvDetectModel> match(Bitmap srcBitmap, Bitmap templateBitmap, String labelName, boolean useBinary, int threshold) {
+        Mat sourceMat = new Mat();
+        Utils.bitmapToMat(srcBitmap, sourceMat);
 
-        Point pointLeftTop = new Point(251 * sourceImg.cols() / 2368, 659 *  sourceImg.rows() / 1080);
-        Point pointRightBottom = new Point(1970 * sourceImg.cols() / 2368, 800 * sourceImg.rows() / 1080);
+        Point pointLeftTop = new Point(125 * sourceMat.cols() / 1184, 339 *  sourceMat.rows() / 540);
+        Point pointRightBottom = new Point(985 * sourceMat.cols() / 1184, 400 * sourceMat.rows() / 540);
         Rect regionRect = new Rect(pointLeftTop, pointRightBottom);
 
-        Mat croppedSrc = new Mat(sourceImg, regionRect);
+        Mat croppedSrc = new Mat(sourceMat, regionRect);
 
-        Mat detectImg = new Mat();
-        Utils.bitmapToMat(detectFile, detectImg);
+        Mat templateMat = new Mat();
+        Utils.bitmapToMat(templateBitmap, templateMat);
 
         Mat scaleDetect = new Mat();
-        Size newSize = new Size(detectImg.cols() * sourceImg.cols() / 2368, detectImg.rows() * sourceImg.rows() / 1080);
-        Imgproc.resize(detectImg, scaleDetect, newSize);
+        Size newSize = new Size(templateMat.cols() * sourceMat.cols() / 1184, templateMat.rows() * sourceMat.rows() / 540);
+        Imgproc.resize(templateMat, scaleDetect, newSize);
 
+        sourceMat.release();
+        templateMat.release();
 //        return pyramidMatch(sourceImg, detectImg,(float)threshold / 100.f);
 //        allMatch(sourceImg, detectImg, (float)threshold / 100.f);
-        allMatch2(croppedSrc, scaleDetect, useBinary, (float)threshold / 100.f);
+        return allMatch2(croppedSrc, scaleDetect, labelName, useBinary, (float)threshold / 100.f);
     }
 
     public static OpenCvDetectModel match(Mat inFile, Bitmap templateFile, android.graphics.Rect rect, int threshold) {
@@ -92,7 +91,7 @@ public class MatchingUtil {
 
         if (point != null) {
             //RuntimeLog.log("MatchingUtil","true math use "+(System.currentTimeMillis() - c)+"ms");
-            return new OpenCvDetectModel((int)point.x, (int)point.y, detectImg.cols(), detectImg.rows());
+//            return new OpenCvDetectModel((int)point.x, (int)point.y, detectImg.cols(), detectImg.rows());
         }
         //RuntimeLog.log("MatchingUtil","false math use "+(System.currentTimeMillis() - c)+"ms");
         return null;
@@ -102,7 +101,7 @@ public class MatchingUtil {
         TemplateMatching.getAllMatch1(src, template, threshold, TemplateMatching.MATCHING_METHOD_DEFAULT);
     }
 
-    private static void allMatch2(Mat src, Mat template, boolean useBinary, float threshold) {
-        TemplateMatching.getAllMatch2(src, template, useBinary, threshold, TemplateMatching.MATCHING_METHOD_DEFAULT);
+    private static ArrayList<OpenCvDetectModel> allMatch2(Mat src, Mat template, String labelName, boolean useBinary, float threshold) {
+        return TemplateMatching.getAllMatch2(src, template, labelName, useBinary, threshold);
     }
 }

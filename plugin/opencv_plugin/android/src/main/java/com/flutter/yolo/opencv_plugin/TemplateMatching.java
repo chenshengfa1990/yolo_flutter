@@ -268,14 +268,14 @@ public class TemplateMatching {
     }
 
 
-    public static ArrayList<Pair<Point, Double>> getAllMatch2(Mat src, Mat template, boolean useBinary, float threshold, int matchMethod) {
+    public static ArrayList<OpenCvDetectModel> getAllMatch2(Mat src, Mat template, String labelName, boolean useBinary, float threshold) {
         Mat matchSource = src;
         Mat templateSource = template;
         if (useBinary) {
             Mat greyImage = new Mat();
             Mat greyTemplate = new Mat();
             Imgproc.cvtColor(src, greyImage, Imgproc.COLOR_BGR2GRAY);
-            Imgproc.cvtColor(template, greyTemplate, Imgproc.COLOR_BGR2GRAY);;
+            Imgproc.cvtColor(template, greyTemplate, Imgproc.COLOR_BGR2GRAY);
 
             Mat binarySrc = new Mat();
             Mat binaryTemplate = new Mat();
@@ -284,12 +284,16 @@ public class TemplateMatching {
 
             matchSource = binarySrc;
             templateSource = binaryTemplate;
-        } else {
-//            Log.i("chenshengfa", "useBinary is false");
+            greyImage.release();
+            greyTemplate.release();
+            src.release();
+            template.release();
         }
 //        Bitmap srcBitmap = matToBitmap(matchSource);
 //        Bitmap templateBitmap = matToBitmap(templateSource);
-        ArrayList<Pair<Point, Double>> resultList = new ArrayList<>();
+
+        ArrayList<OpenCvDetectModel> resultList = new ArrayList<>();
+
         // 创建匹配结果
         int resultWidth = matchSource.cols() - templateSource.cols() + 1;
         int resultHeight = matchSource.rows() - templateSource.rows() + 1;
@@ -297,15 +301,15 @@ public class TemplateMatching {
         Mat result = new Mat(resultHeight, resultWidth, CvType.CV_8UC1);
 
         // 进行模板匹配
-        long before = System.currentTimeMillis();
         Imgproc.matchTemplate(matchSource, templateSource, result, Imgproc.TM_CCOEFF_NORMED);
         Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
         double maxValue = mmr.maxVal;
         if (maxValue < threshold) {
+            result.release();
+            matchSource.release();
+            templateSource.release();
             return resultList;
         }
-//        long after1 = System.currentTimeMillis();
-//        Log.i("chenshengfa", "detect cost %d", after1 - before);
 
         // 遍历二值化结果，获取匹配位置
         for (int row = 0; row < result.rows(); row++) {
@@ -316,40 +320,36 @@ public class TemplateMatching {
                     // 过滤重复区域
                     Point currentPoint = new Point(col, row);
                     boolean isDuplicate = false;
-                    for (Pair<Point, Double> existingPoint : resultList) {
-                        double xDistance = Math.abs(currentPoint.x - existingPoint.first.x);
-                        double yDistance = Math.abs(currentPoint.y - existingPoint.first.y);
-                        if (xDistance < 50 && yDistance < 50) {
+                    for (OpenCvDetectModel existingPoint : resultList) {
+                        double xDistance = Math.abs(currentPoint.x - existingPoint.x);
+                        double yDistance = Math.abs(currentPoint.y - existingPoint.y);
+                        if (xDistance < 30 && yDistance < 30) {
                             isDuplicate = true;
-                            if (value > existingPoint.second) {
+                            if (value > existingPoint.prob) {
                                 resultList.remove(existingPoint);
-                                resultList.add(new Pair<>(currentPoint, value));
+                                OpenCvDetectModel model = new OpenCvDetectModel(currentPoint.x, currentPoint.y, templateSource.cols(), templateSource.rows(), value, labelName);
+                                resultList.add(model);
                             }
                             break;
                         }
                     }
                     if (!isDuplicate) {
-                        resultList.add(new Pair<>(currentPoint, value));
+                        OpenCvDetectModel model = new OpenCvDetectModel(currentPoint.x, currentPoint.y, templateSource.cols(), templateSource.rows(), value, labelName);
+                        resultList.add(model);
                     }
                 }
             }
         }
-//        long after2 = System.currentTimeMillis();
-//        Log.i("chenshengfa", "result cost %d", after2 - after1);
-//        Log.i("chenshengfa", "res %d", resultList.size());
+
 //        for(int i = 0; i < resultList.size(); i++) {
-//            Imgproc.rectangle(src, resultList.get(i).first,
-//                    new Point(resultList.get(i).first.x + templateSource.cols(), resultList.get(i).first.y + templateSource.rows()),
+//            Imgproc.rectangle(matchSource, new Point(resultList.get(i).x, resultList.get(i).y),
+//                    new Point(resultList.get(i).x + templateSource.cols(), resultList.get(i).y + templateSource.rows()),
 //                    new Scalar(0, 0, 255), 2);
 //        }
-
-//        Bitmap resultBitmap = matToBitmap(src);
-//        if (resultList.size() == 0) {
-//            Imgproc.rectangle(src, mmr.maxLoc,
-//                    new Point(mmr.maxLoc.x + binaryTemplate.cols(), mmr.maxLoc.y + binaryTemplate.rows()),
-//                    new Scalar(0, 0, 255), 2);
-//        }
-
+//        Bitmap resultBitmap = matToBitmap(matchSource);
+        result.release();
+        matchSource.release();
+        templateSource.release();
         return resultList;
     }
 

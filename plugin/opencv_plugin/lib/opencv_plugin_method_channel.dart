@@ -16,8 +16,9 @@ class MethodChannelOpencvPlugin extends OpencvPluginPlatform {
   }
 
   @override
-  Future<void> startDetectImage(String imagePath) async {
-    await methodChannel.invokeMethod<List<dynamic>?>('detectImage', {'imagePath': imagePath});
+  Future<void> startDetectHandCard(String imagePath, int landlordType, int regionType) async {
+    await methodChannel
+        .invokeMethod<List<dynamic>?>('startDetectHandCard', {'imagePath': imagePath, 'landlordType': landlordType, 'regionType': regionType});
   }
 
   @override

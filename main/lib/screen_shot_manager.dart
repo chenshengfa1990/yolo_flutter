@@ -10,7 +10,7 @@ import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
 import 'game_status_manager.dart';
-import 'landlord_manager.dart';
+import 'landlord/landlord_manager.dart';
 import 'overlay_window_widget.dart';
 
 class ScreenShotManager {

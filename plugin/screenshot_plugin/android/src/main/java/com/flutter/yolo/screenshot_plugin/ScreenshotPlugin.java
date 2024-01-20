@@ -228,8 +228,9 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
             String path = getScreenshotPath();
             File imageFile = new File(path);
             FileOutputStream oStream = new FileOutputStream(imageFile);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, false);
 
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, oStream);
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 50, oStream);
             oStream.flush();
             oStream.close();
 

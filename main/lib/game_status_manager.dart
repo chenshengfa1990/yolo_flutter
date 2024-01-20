@@ -2,10 +2,10 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
-import 'package:yolo_flutter/region_manager.dart';
+import 'package:yolo_flutter/region/region_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 
-import 'landlord_manager.dart';
+import 'landlord/landlord_manager.dart';
 import 'overlay_window_widget.dart';
 
 enum GameStatus {

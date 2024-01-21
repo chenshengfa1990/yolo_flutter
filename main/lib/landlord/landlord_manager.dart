@@ -69,6 +69,8 @@ class LandlordManager {
     3: "3"
   };
 
+  static Map<LandlordType, String> landlordLabel = {LandlordType.huanle: 'dizhu', LandlordType.weile: 'weile_dizhu'};
+
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
 
@@ -287,7 +289,7 @@ class LandlordManager {
   ///获取是否检测到地主，地主出现表示准备好
   static NcnnDetectModel? getLandlord(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     try {
-      return detectList?.firstWhere((element) => element.label == 'dizhu');
+      return detectList?.firstWhere((element) => element.label == landlordLabel[curLandlordType]);
     } catch (e) {
       return null;
     }

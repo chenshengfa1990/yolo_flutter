@@ -21,6 +21,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getMyHandCardRegion();
+      case LandlordType.weile:
+        return WeileRegion.getMyHandCardRegion();
     }
     return Rect.zero;
   }
@@ -29,6 +31,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getMyOutCardRegion();
+      case LandlordType.weile:
+        return WeileRegion.getMyOutCardRegion();
     }
     return Rect.zero;
   }
@@ -37,6 +41,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getRightPlayerOutCardRegion();
+      case LandlordType.weile:
+        return WeileRegion.getRightPlayerOutCardRegion();
     }
     return Rect.zero;
   }
@@ -45,6 +51,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getLeftPlayerOutCardRegion();
+      case LandlordType.weile:
+        return WeileRegion.getLeftPlayerOutCardRegion();
     }
     return Rect.zero;
   }
@@ -77,6 +85,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getMyLandlordRegion();
+      case LandlordType.weile:
+        return WeileRegion.getMyLandlordRegion();
     }
     return Rect.zero;
   }
@@ -85,6 +95,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getLeftLandlordRegion();
+      case LandlordType.weile:
+        return WeileRegion.getLeftLandlordRegion();
     }
     return Rect.zero;
   }
@@ -93,6 +105,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getRightLandlordRegion();
+      case LandlordType.weile:
+        return WeileRegion.getRightLandlordRegion();
     }
     return Rect.zero;
   }

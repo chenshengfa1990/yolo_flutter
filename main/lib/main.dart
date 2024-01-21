@@ -26,7 +26,7 @@ import 'package:yolo_flutter/screen_shot_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'game_status_manager.dart';
+import 'status/game_status_manager.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
@@ -206,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     await screenShotManager.requestPermission();
-    XLog.i(LOG_TAG, "start screenshot");
+    XLog.i(LOG_TAG, "start screenshot, LandlordType: ${LandlordManager.curLandlordType}");
     screenShotManager.startScreenshotRepeat();
   }
 
@@ -312,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
       items: const [
         DropdownMenuItem(value: LandlordType.huanle, child: Text('欢乐斗地主')),
         DropdownMenuItem(value: LandlordType.weile, child: Text('微乐斗地主')),
-        DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
+        // DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
       ],
       onChanged: (value) {
         setState(() {

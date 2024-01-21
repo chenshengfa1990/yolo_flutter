@@ -605,7 +605,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_flutter_yolo_ncnn_1plugin_YoloV5Ncnn_Det
 
     static const char* class_names[] = {
             "A", "10", "J", "Q", "K", "2", "xw", "3", "dw", "4",
-            "5", "6", "7", "8", "9", "buchu", "chupai", "dizhu","weile_buchu", "weile_dizhu", "yaobuqi"
+            "5", "6", "7", "8", "9", "buchu", "chupai", "dizhu", "tuyou_buchu", "tuyou_dizhu", "weile_buchu", "weile_dizhu", "yaobuqi"
     };
 
     jobjectArray jObjArray = env->NewObjectArray(objects.size(), objCls, NULL);

@@ -7,7 +7,7 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'game_status_manager.dart';
+import 'status/game_status_manager.dart';
 import 'http/httpUtils.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';

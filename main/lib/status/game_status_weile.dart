@@ -167,7 +167,7 @@ class GameStatusMgrWeile {
         myOutCardBuffLength = 1;
       } else {
         myOutCardBuffLength++;
-        if (myOutCardBuffLength == 4) {
+        if (myOutCardBuffLength == 3) {
           myOutCardBuffLength = 0;
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
@@ -201,7 +201,7 @@ class GameStatusMgrWeile {
         rightOutCardBuffLength = 1;
       } else {
         rightOutCardBuffLength++;
-        if (rightOutCardBuffLength == 4) {
+        if (rightOutCardBuffLength == 3) {
           rightOutCardBuffLength = 0;
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
@@ -236,7 +236,7 @@ class GameStatusMgrWeile {
         leftOutCardBuffLength = 1;
       } else {
         leftOutCardBuffLength++;
-        if (leftOutCardBuffLength == 4) {
+        if (leftOutCardBuffLength == 3) {
           leftOutCardBuffLength = 0;
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;

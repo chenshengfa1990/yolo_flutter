@@ -108,6 +108,8 @@ class GameStatusMgrWeile {
       if (lastRightOutCard != null) {
         lastRightOutCard = null;
       }
+      rightOutCardBuff = null;
+      rightOutCardBuffLength = 0;
     }
 
     var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
@@ -117,6 +119,8 @@ class GameStatusMgrWeile {
       if (lastLeftOutCard != null) {
         lastLeftOutCard = null;
       }
+      leftOutCardBuffLength = 0;
+      leftOutCardBuff = null;
     }
 
     var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
@@ -126,6 +130,8 @@ class GameStatusMgrWeile {
       if (lastMyOutCard != null) {
         lastMyOutCard = null;
       }
+      myOutCardBuffLength = 0;
+      myOutCardBuff = null;
     }
 
     return nextStatus;

@@ -205,6 +205,9 @@ class ScreenShotManager {
             XLog.i(LOG_TAG, 'landLord appear');
             LandlordManager.initPlayerIdentify(landlord, screenshotModel);
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
+            if (LandlordManager.leftPlayerIdentify == "landlord" || LandlordManager.rightPlayerIdentify == "landlord") {
+              await Future.delayed(const Duration(milliseconds: 3000));
+            }
           }
         } else {
           return;

@@ -52,7 +52,8 @@ class WeileScreenshot extends ScreenShotManager {
       if (GameStatusMgrWeile.curGameStatus == GameStatusWeile.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
-        if (landlord != null) {
+        List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
+        if (landlord != null && handCards != null) {
           GameStatusWeile status = GameStatusMgrWeile.initGameStatus(landlord, screenshotModel, detectList);
           if (status == GameStatusWeile.gamePreparing) {
             return;
@@ -79,6 +80,14 @@ class WeileScreenshot extends ScreenShotManager {
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
+      if (myHandCards?.isEmpty ?? true) {
+        XLog.i(LOG_TAG, "GameOver");
+        screenShotCount = 0;
+        GameStatusMgrWeile.destroy();
+        LandlordManager.destroy();
+        StrategyManager.destroy();
+        LandlordRecorder.destroy();
+      }
       XLog.i(LOG_TAG, 'show myHandCards ${LandlordManager.getCardsSorted(myHandCards)}');
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 

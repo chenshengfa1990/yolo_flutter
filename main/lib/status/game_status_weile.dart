@@ -2,9 +2,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
-import 'package:yolo_flutter/landlord/landlord_type.dart';
 import 'package:yolo_flutter/region/region_manager.dart';
-import 'package:yolo_flutter/strategy_manager.dart';
 
 import '../landlord/landlord_manager.dart';
 import '../landlord_recorder.dart';
@@ -46,12 +44,15 @@ class GameStatusMgrWeile {
   static bool leftBuChu = false;
   static bool rightBuChu = false;
   static int myOutCardBuffLength = 0;
+  static int myEmptyBuffLength = 0;
 
   ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
   static int leftOutCardBuffLength = 0;
+  static int leftEmptyBuffLength = 0;
 
   ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
   static int rightOutCardBuffLength = 0;
+  static int rightEmptyBuffLength = 0;
 
   ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
 
@@ -103,10 +104,13 @@ class GameStatusMgrWeile {
 
     var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
     if ((rightOutCard?.isNotEmpty ?? false)) {
+      rightEmptyBuffLength = 0;
       nextStatus = cacheRightOutCard(rightOutCard!);
     } else {
-      if (lastRightOutCard != null) {
+      rightEmptyBuffLength++;
+      if (rightEmptyBuffLength == 3) {
         lastRightOutCard = null;
+        rightEmptyBuffLength = 0;
       }
       rightOutCardBuff = null;
       rightOutCardBuffLength = 0;
@@ -114,10 +118,12 @@ class GameStatusMgrWeile {
 
     var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
     if ((leftOutCard?.isNotEmpty ?? false)) {
+      leftEmptyBuffLength = 0;
       nextStatus = cacheLeftOutCard(leftOutCard!);
     } else {
-      if (lastLeftOutCard != null) {
+      if (leftEmptyBuffLength == 3) {
         lastLeftOutCard = null;
+        leftEmptyBuffLength = 0;
       }
       leftOutCardBuffLength = 0;
       leftOutCardBuff = null;
@@ -125,10 +131,13 @@ class GameStatusMgrWeile {
 
     var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
     if ((myOutCard?.isNotEmpty ?? false)) {
+      myEmptyBuffLength = 0;
       nextStatus = cacheMyOutCard(myOutCard!);
     } else {
-      if (lastMyOutCard != null) {
+      myEmptyBuffLength++;
+      if (myEmptyBuffLength == 3) {
         lastMyOutCard = null;
+        myEmptyBuffLength = 0;
       }
       myOutCardBuffLength = 0;
       myOutCardBuff = null;
@@ -144,9 +153,9 @@ class GameStatusMgrWeile {
     XLog.i(LOG_TAG, 'myOutCardBuffLength: $myOutCardBuffLength, cache myOutCards ${LandlordManager.getCardsSorted(myOutCard)}');
     if (lastMyOutCard != null) {
       if (compareList(myOutCard, lastMyOutCard) == true) {
+        myOutCardBuff = null;
+        myOutCardBuffLength = 0;
         return nextStatus;
-      } else {
-        lastMyOutCard = null;
       }
     }
     if (myOutCardBuff == null) {
@@ -178,9 +187,9 @@ class GameStatusMgrWeile {
     XLog.i(LOG_TAG, 'rightOutCardBuffLength: $rightOutCardBuffLength, cache rightOutCards ${LandlordManager.getCardsSorted(rightOutCard)}');
     if (lastRightOutCard != null) {
       if (compareList(rightOutCard, lastRightOutCard) == true) {
+        rightOutCardBuff = null;
+        rightOutCardBuffLength = 0;
         return nextStatus;
-      } else {
-        lastRightOutCard = null;
       }
     }
     if (rightOutCardBuff == null) {
@@ -213,9 +222,9 @@ class GameStatusMgrWeile {
     XLog.i(LOG_TAG, 'leftOutCardBuffLength: $leftOutCardBuffLength, cache leftOutCards ${LandlordManager.getCardsSorted(leftOutCard)}');
     if (lastLeftOutCard != null) {
       if (compareList(leftOutCard, lastLeftOutCard) == true) {
+        leftOutCardBuff = null;
+        leftOutCardBuffLength = 0;
         return nextStatus;
-      } else {
-        lastLeftOutCard = null;
       }
     }
     if (leftOutCardBuff == null) {
@@ -252,6 +261,9 @@ class GameStatusMgrWeile {
     myOutCardBuffLength = 0;
     leftOutCardBuffLength = 0;
     rightOutCardBuffLength = 0;
+    myEmptyBuffLength = 0;
+    leftEmptyBuffLength = 0;
+    rightEmptyBuffLength = 0;
     myBuChu = false;
     leftBuChu = false;
     rightBuChu = false;

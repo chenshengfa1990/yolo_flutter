@@ -31,13 +31,13 @@ class WeileRegion {
   static Rect getRightPlayerOutCardRegion() {
     double xLeftTop = 590.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
     double yLeftTop = 60.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
-    double xRightBottom = ScreenShotManager.width; //右下角x坐标
+    double xRightBottom = 995.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
     double yRightBottom = 160.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
     return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
   }
 
   static Rect getLeftPlayerOutCardRegion() {
-    double xLeftTop = 0; //左上角x坐标
+    double xLeftTop = 165.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
     double yLeftTop = 60.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
     double xRightBottom = 590.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
     double yRightBottom = 160.0 / 540.0 * ScreenShotManager.height; //右下角y坐标

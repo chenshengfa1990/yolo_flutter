@@ -8,7 +8,7 @@ import 'package:yolo_flutter/strategy_manager.dart';
 import '../landlord/landlord_manager.dart';
 import '../overlay_window_widget.dart';
 
-enum GameStatus {
+enum StatusHuanle {
   gamePreparing, // 游戏准备中
   gameReady, //游戏准备好, 地主已分配
 
@@ -29,9 +29,9 @@ enum GameStatus {
 
 
 ///状态管理
-class GameStatusManager {
+class GameStatusHuanle {
   static String LOG_TAG = 'GameStatusManager';
-  static GameStatus curGameStatus = GameStatus.gamePreparing;
+  static StatusHuanle curGameStatus = StatusHuanle.gamePreparing;
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
   static List<NcnnDetectModel>? myOutCardBuff;
   static List<NcnnDetectModel>? leftOutCardBuff;
@@ -51,27 +51,27 @@ class GameStatusManager {
 
   ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
 
-  static GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel) {
-    curGameStatus = GameStatus.gamePreparing;
+  static StatusHuanle initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel) {
+    curGameStatus = StatusHuanle.gamePreparing;
     if (RegionManager.inMyLandlordRegion(landlord, screenshotModel)) {
-      curGameStatus = GameStatus.myTurn;
+      curGameStatus = StatusHuanle.myTurn;
       StrategyManager.currentTurn = RequestTurn.myTurn;
     } else if (RegionManager.inLeftPlayerLandlordRegion(landlord, screenshotModel)) {
-      curGameStatus = GameStatus.leftTurn;
+      curGameStatus = StatusHuanle.leftTurn;
       StrategyManager.currentTurn = RequestTurn.leftTurn;
     } else if (RegionManager.inRightPlayerLandlordRegion(landlord, screenshotModel)) {
-      curGameStatus = GameStatus.rightTurn;
+      curGameStatus = StatusHuanle.rightTurn;
       StrategyManager.currentTurn = RequestTurn.rightTurn;
     }
     return curGameStatus;
   }
 
-  static String getGameStatusStr(GameStatus status) {
+  static String getGameStatusStr(StatusHuanle status) {
     return gameStatusStr[status.index];
   }
 
-  static GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
-    GameStatus nextStatus = curGameStatus;
+  static StatusHuanle calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
+    StatusHuanle nextStatus = curGameStatus;
     if (myOutCardBuff != null) {
       var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
       cacheMyOutCard(myOutCard);
@@ -85,68 +85,68 @@ class GameStatusManager {
       cacheLeftOutCard(leftOutCard);
     }
     switch (curGameStatus) {
-      case GameStatus.myTurn:
+      case StatusHuanle.myTurn:
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inMyBuchuRegion(buchu, screenshotModel)) {
           myBuChu = true;
-          nextStatus = GameStatus.iSkip;
+          nextStatus = StatusHuanle.iSkip;
           XLog.i(LOG_TAG, 'iSkip, triggerNext');
           StrategyManager.triggerNext();
         } else {
           var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
           if (myOutCard?.isNotEmpty ?? false) {
-            nextStatus = GameStatus.iDone;
+            nextStatus = StatusHuanle.iDone;
             cacheMyOutCard(myOutCard);
           }
         }
         break;
-      case GameStatus.iSkip:
-        nextStatus = GameStatus.rightTurn;
+      case StatusHuanle.iSkip:
+        nextStatus = StatusHuanle.rightTurn;
         break;
-      case GameStatus.iDone:
-        nextStatus = GameStatus.rightTurn;
+      case StatusHuanle.iDone:
+        nextStatus = StatusHuanle.rightTurn;
         break;
-      case GameStatus.rightTurn:
+      case StatusHuanle.rightTurn:
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inRightBuchuRegion(buchu, screenshotModel)) {
-          nextStatus = GameStatus.rightSkip;
+          nextStatus = StatusHuanle.rightSkip;
           rightBuChu = true;
           XLog.i(LOG_TAG, 'rightSkip, triggerNext');
           StrategyManager.triggerNext();
         } else {
           var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
           if ((rightOutCard?.isNotEmpty ?? false)) {
-            nextStatus = GameStatus.rightDone;
+            nextStatus = StatusHuanle.rightDone;
             cacheRightOutCard(rightOutCard);
           }
         }
         break;
-      case GameStatus.rightSkip:
-        nextStatus = GameStatus.leftTurn;
+      case StatusHuanle.rightSkip:
+        nextStatus = StatusHuanle.leftTurn;
         break;
-      case GameStatus.rightDone:
-        nextStatus = GameStatus.leftTurn;
+      case StatusHuanle.rightDone:
+        nextStatus = StatusHuanle.leftTurn;
         break;
-      case GameStatus.leftTurn:
+      case StatusHuanle.leftTurn:
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inLeftBuchuRegion(buchu, screenshotModel)) {
-          nextStatus = GameStatus.leftSkip;
+          nextStatus = StatusHuanle.leftSkip;
           leftBuChu = true;
           XLog.i(LOG_TAG, 'leftSkip, triggerNext');
           StrategyManager.triggerNext();
         } else {
           var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
           if (leftOutCard?.isNotEmpty ?? false) {
-            nextStatus = GameStatus.leftDone;
+            nextStatus = StatusHuanle.leftDone;
             cacheLeftOutCard(leftOutCard);
           }
         }
         break;
-      case GameStatus.leftSkip:
-        nextStatus = GameStatus.myTurn;
+      case StatusHuanle.leftSkip:
+        nextStatus = StatusHuanle.myTurn;
         break;
-      case GameStatus.leftDone:
-        nextStatus = GameStatus.myTurn;
+      case StatusHuanle.leftDone:
+        nextStatus = StatusHuanle.myTurn;
         break;
     }
     return nextStatus;
@@ -212,7 +212,7 @@ class GameStatusManager {
   }
 
   static void destroy() {
-    curGameStatus = GameStatus.gamePreparing;
+    curGameStatus = StatusHuanle.gamePreparing;
     myOutCardBuff = null;
     leftOutCardBuff = null;
     rightOutCardBuff = null;
@@ -222,6 +222,6 @@ class GameStatusManager {
     myBuChu = false;
     leftBuChu = false;
     rightBuChu = false;
-    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatus.gameOver)]);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(StatusHuanle.gameOver)]);
   }
 }

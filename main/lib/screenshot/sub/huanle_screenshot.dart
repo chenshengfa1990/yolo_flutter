@@ -7,7 +7,7 @@ import 'package:screenshot_plugin/screenshot_model.dart';
 import '../../landlord/landlord_manager.dart';
 import '../../landlord_recorder.dart';
 import '../../overlay_window_widget.dart';
-import '../../status/game_status_manager.dart';
+import '../../status/game_status_huanle.dart';
 import '../../strategy_manager.dart';
 import '../../util/FileUtil.dart';
 import '../screen_shot_manager.dart';
@@ -34,27 +34,27 @@ class HuanleScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (GameStatusManager.curGameStatus != GameStatus.gamePreparing) {
+        if (GameStatusHuanle.curGameStatus != StatusHuanle.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusManager.destroy();
+          GameStatusHuanle.destroy();
           LandlordManager.destroy();
           StrategyManager.destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing)]);
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusHuanle.getGameStatusStr(StatusHuanle.gamePreparing)]);
         }
         return;
       }
 
-      if (GameStatusManager.curGameStatus == GameStatus.gamePreparing) {
+      if (GameStatusHuanle.curGameStatus == StatusHuanle.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         if (landlord != null) {
-          GameStatus status = GameStatusManager.initGameStatus(landlord, screenshotModel);
-          if (status == GameStatus.gamePreparing) {
+          StatusHuanle status = GameStatusHuanle.initGameStatus(landlord, screenshotModel);
+          if (status == StatusHuanle.gamePreparing) {
             return;
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
@@ -74,7 +74,7 @@ class HuanleScreenshot extends ScreenShotManager {
           return;
         }
       }
-      XLog.i(LOG_TAG, 'Current game status is ${GameStatusManager.curGameStatus}');
+      XLog.i(LOG_TAG, 'Current game status is ${GameStatusHuanle.curGameStatus}');
       if (LandlordManager.threeCards?.length != 3) {
         List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
         if (threeCard?.length == 3) {
@@ -89,42 +89,42 @@ class HuanleScreenshot extends ScreenShotManager {
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 
       ///计算下一个状态
-      var nextStatus = GameStatusManager.calculateNextGameStatus(detectList, screenshotModel);
+      var nextStatus = GameStatusHuanle.calculateNextGameStatus(detectList, screenshotModel);
       XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
 
       ///刷新游戏状态
-      notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+      notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusHuanle.getGameStatusStr(nextStatus));
 
-      GameStatusManager.curGameStatus = nextStatus;
+      GameStatusHuanle.curGameStatus = nextStatus;
 
       ///轮到我出牌时，暂停一下，等牌面动画完成后再截图，否则可能出现错误状态
-      if (nextStatus == GameStatus.myTurn || nextStatus == GameStatus.leftTurn || nextStatus == GameStatus.rightTurn) {
-        if (nextStatus == GameStatus.myTurn) {
+      if (nextStatus == StatusHuanle.myTurn || nextStatus == StatusHuanle.leftTurn || nextStatus == StatusHuanle.rightTurn) {
+        if (nextStatus == StatusHuanle.myTurn) {
           notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "");
-        } else if (nextStatus == GameStatus.leftTurn) {
+        } else if (nextStatus == StatusHuanle.leftTurn) {
           notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "");
-        } else if (nextStatus == GameStatus.rightTurn) {
+        } else if (nextStatus == StatusHuanle.rightTurn) {
           notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "");
         }
 
         if (firstCheck) {
-          if (nextStatus == GameStatus.myTurn) {
+          if (nextStatus == StatusHuanle.myTurn) {
             XLog.i(LOG_TAG, 'myTurn, sleep 1200ms');
-          } else if (nextStatus == GameStatus.rightTurn) {
+          } else if (nextStatus == StatusHuanle.rightTurn) {
             XLog.i(LOG_TAG, 'rightTurn, sleep 1200ms');
-          } else if (nextStatus == GameStatus.leftTurn) {
+          } else if (nextStatus == StatusHuanle.leftTurn) {
             XLog.i(LOG_TAG, 'leftTurn, sleep 1200ms');
           }
           firstCheck = false;
           await Future.delayed(const Duration(milliseconds: 1200));
         }
       }
-      if (nextStatus == GameStatus.iDone ||
-          nextStatus == GameStatus.iSkip ||
-          nextStatus == GameStatus.leftSkip ||
-          nextStatus == GameStatus.leftDone ||
-          nextStatus == GameStatus.rightSkip ||
-          nextStatus == GameStatus.rightDone) {
+      if (nextStatus == StatusHuanle.iDone ||
+          nextStatus == StatusHuanle.iSkip ||
+          nextStatus == StatusHuanle.leftSkip ||
+          nextStatus == StatusHuanle.leftDone ||
+          nextStatus == StatusHuanle.rightSkip ||
+          nextStatus == StatusHuanle.rightDone) {
         firstCheck = true;
       }
     }

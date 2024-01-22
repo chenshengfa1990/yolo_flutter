@@ -8,7 +8,7 @@ import '../landlord/landlord_manager.dart';
 import '../landlord_recorder.dart';
 import '../overlay_window_widget.dart';
 
-enum GameStatusWeile {
+enum StatusWeile {
   gamePreparing, // 游戏准备中
   gameReady, //游戏准备好, 地主已分配
 
@@ -28,9 +28,9 @@ enum GameStatusWeile {
 }
 
 ///状态管理
-class GameStatusMgrWeile {
+class GameStatusWeile {
   static String LOG_TAG = 'GameStatusWeile';
-  static GameStatusWeile curGameStatus = GameStatusWeile.gamePreparing;
+  static StatusWeile curGameStatus = StatusWeile.gamePreparing;
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
   static List<NcnnDetectModel>? myOutCardBuff;
   static List<NcnnDetectModel>? leftOutCardBuff;
@@ -56,23 +56,23 @@ class GameStatusMgrWeile {
 
   ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
 
-  static GameStatusWeile initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, detectList) {
-    curGameStatus = GameStatusWeile.gamePreparing;
+  static StatusWeile initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, detectList) {
+    curGameStatus = StatusWeile.gamePreparing;
     if (RegionManager.inMyLandlordRegion(landlord, screenshotModel)) {
       var list = LandlordManager.getMyHandCard(detectList, screenshotModel);
       XLog.i(LOG_TAG, 'myHandCard length: ${list?.length}');
       if (list?.length == 20) {
-        curGameStatus = GameStatusWeile.myTurn;
+        curGameStatus = StatusWeile.myTurn;
       }
     } else if (RegionManager.inLeftPlayerLandlordRegion(landlord, screenshotModel)) {
-      curGameStatus = GameStatusWeile.leftTurn;
+      curGameStatus = StatusWeile.leftTurn;
     } else if (RegionManager.inRightPlayerLandlordRegion(landlord, screenshotModel)) {
-      curGameStatus = GameStatusWeile.rightTurn;
+      curGameStatus = StatusWeile.rightTurn;
     }
     return curGameStatus;
   }
 
-  static String getGameStatusStr(GameStatusWeile status) {
+  static String getGameStatusStr(StatusWeile status) {
     return gameStatusStr[status.index];
   }
 
@@ -99,8 +99,8 @@ class GameStatusMgrWeile {
     FlutterOverlayWindow.shareData([updateType.index, showStr]);
   }
 
-  static GameStatusWeile calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
-    GameStatusWeile nextStatus = curGameStatus;
+  static StatusWeile calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
+    StatusWeile nextStatus = curGameStatus;
 
     var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
     if ((rightOutCard?.isNotEmpty ?? false)) {
@@ -146,8 +146,8 @@ class GameStatusMgrWeile {
     return nextStatus;
   }
 
-  static GameStatusWeile cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
-    GameStatusWeile nextStatus = curGameStatus;
+  static StatusWeile cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
+    StatusWeile nextStatus = curGameStatus;
     XLog.i(LOG_TAG, 'lastMyOutCard: ${LandlordManager.getCardsSorted(lastMyOutCard)}');
     XLog.i(LOG_TAG, 'myOutCardBuff: ${LandlordManager.getCardsSorted(myOutCardBuff)}');
     XLog.i(LOG_TAG, 'myOutCardBuffLength: $myOutCardBuffLength, cache myOutCards ${LandlordManager.getCardsSorted(myOutCard)}');
@@ -171,8 +171,8 @@ class GameStatusMgrWeile {
           myOutCardBuffLength = 0;
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
-          nextStatus = GameStatusWeile.iDone;
-          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
+          nextStatus = StatusWeile.iDone;
+          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusWeile.getGameStatusStr(nextStatus));
           notifyOverlayWindow(OverlayUpdateType.myOutCard, models: lastMyOutCard);
         }
       }
@@ -180,8 +180,8 @@ class GameStatusMgrWeile {
     return nextStatus;
   }
 
-  static GameStatusWeile cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
-    GameStatusWeile nextStatus = curGameStatus;
+  static StatusWeile cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
+    StatusWeile nextStatus = curGameStatus;
     XLog.i(LOG_TAG, 'lastRightOutCard: ${LandlordManager.getCardsSorted(lastRightOutCard)}');
     XLog.i(LOG_TAG, 'rightOutCardBuff: ${LandlordManager.getCardsSorted(rightOutCardBuff)}');
     XLog.i(LOG_TAG, 'rightOutCardBuffLength: $rightOutCardBuffLength, cache rightOutCards ${LandlordManager.getCardsSorted(rightOutCard)}');
@@ -205,8 +205,8 @@ class GameStatusMgrWeile {
           rightOutCardBuffLength = 0;
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
-          nextStatus = GameStatusWeile.rightDone;
-          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
+          nextStatus = StatusWeile.rightDone;
+          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusWeile.getGameStatusStr(nextStatus));
           notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: lastRightOutCard);
           LandlordRecorder.updateRecorder(lastRightOutCard);
         }
@@ -215,8 +215,8 @@ class GameStatusMgrWeile {
     return nextStatus;
   }
 
-  static GameStatusWeile cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
-    GameStatusWeile nextStatus = curGameStatus;
+  static StatusWeile cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
+    StatusWeile nextStatus = curGameStatus;
     XLog.i(LOG_TAG, 'lastLeftOutCard: ${LandlordManager.getCardsSorted(lastLeftOutCard)}');
     XLog.i(LOG_TAG, 'leftOutCardBuff: ${LandlordManager.getCardsSorted(leftOutCardBuff)}');
     XLog.i(LOG_TAG, 'leftOutCardBuffLength: $leftOutCardBuffLength, cache leftOutCards ${LandlordManager.getCardsSorted(leftOutCard)}');
@@ -240,8 +240,8 @@ class GameStatusMgrWeile {
           leftOutCardBuffLength = 0;
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;
-          nextStatus = GameStatusWeile.leftDone;
-          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
+          nextStatus = StatusWeile.leftDone;
+          notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusWeile.getGameStatusStr(nextStatus));
           notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: lastLeftOutCard);
           LandlordRecorder.updateRecorder(lastLeftOutCard);
         }
@@ -251,7 +251,7 @@ class GameStatusMgrWeile {
   }
 
   static void destroy() {
-    curGameStatus = GameStatusWeile.gamePreparing;
+    curGameStatus = StatusWeile.gamePreparing;
     lastLeftOutCard = null;
     lastRightOutCard = null;
     lastMyOutCard = null;
@@ -267,6 +267,6 @@ class GameStatusMgrWeile {
     myBuChu = false;
     leftBuChu = false;
     rightBuChu = false;
-    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatusWeile.gameOver)]);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(StatusWeile.gameOver)]);
   }
 }

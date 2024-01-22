@@ -7,7 +7,7 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'status/game_status_manager.dart';
+import 'status/game_status_huanle.dart';
 import 'http/httpUtils.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
@@ -46,61 +46,61 @@ class StrategyManager {
   static void triggerNext() {
     XLog.i(LOG_TAG, 'currentRequestTurn: $currentTurn');
     if (currentTurn == RequestTurn.myTurn) {
-      if (GameStatusManager.myBuChu == true) {
+      if (GameStatusHuanle.myBuChu == true) {
         tellServerISkip();
-        GameStatusManager.myBuChu = false;
+        GameStatusHuanle.myBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
         notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       } else {
-        if (GameStatusManager.myOutCardBuffLength != 3) {
+        if (GameStatusHuanle.myOutCardBuffLength != 3) {
           return;
         }
         tellServerIDone();
-        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(GameStatusManager.myOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.myOutCard, models: GameStatusManager.myOutCardBuff);
-        GameStatusManager.myOutCardBuff = null;
+        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.myOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.myOutCard, models: GameStatusHuanle.myOutCardBuff);
+        GameStatusHuanle.myOutCardBuff = null;
         notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       }
       currentTurn = RequestTurn.rightTurn;
       XLog.i(LOG_TAG, 'myTurn request, triggerNext');
       triggerNext();
     } else if (currentTurn == RequestTurn.rightTurn) {
-      if (GameStatusManager.rightBuChu == true) {
+      if (GameStatusHuanle.rightBuChu == true) {
         tellServerRightPlayerSkip();
-        GameStatusManager.rightBuChu = false;
+        GameStatusHuanle.rightBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
       } else {
-        if (GameStatusManager.rightOutCardBuffLength != 4) {
+        if (GameStatusHuanle.rightOutCardBuffLength != 4) {
           return;
         }
         tellServerRightPlayerDone();
-        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(GameStatusManager.rightOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: GameStatusManager.rightOutCardBuff);
+        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.rightOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: GameStatusHuanle.rightOutCardBuff);
 
         XLog.i(LOG_TAG, 'rightPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(GameStatusManager.rightOutCardBuff);
-        GameStatusManager.rightOutCardBuff = null;
+        LandlordRecorder.updateRecorder(GameStatusHuanle.rightOutCardBuff);
+        GameStatusHuanle.rightOutCardBuff = null;
       }
       currentTurn = RequestTurn.leftTurn;
       XLog.i(LOG_TAG, 'rightTurn request, triggerNext');
       triggerNext();
     } else if (currentTurn == RequestTurn.leftTurn) {
-      if (GameStatusManager.leftBuChu == true) {
+      if (GameStatusHuanle.leftBuChu == true) {
         tellServerLeftPlayerSkip();
-        GameStatusManager.leftBuChu = false;
+        GameStatusHuanle.leftBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
         getServerSuggestion();
       } else {
-        if (GameStatusManager.leftOutCardBuffLength != 4) {
+        if (GameStatusHuanle.leftOutCardBuffLength != 4) {
           return;
         }
         tellServerLeftPlayerDone();
-        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(GameStatusManager.leftOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: GameStatusManager.leftOutCardBuff);
+        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.leftOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: GameStatusHuanle.leftOutCardBuff);
 
         XLog.i(LOG_TAG, 'leftPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(GameStatusManager.leftOutCardBuff);
-        GameStatusManager.leftOutCardBuff = null;
+        LandlordRecorder.updateRecorder(GameStatusHuanle.leftOutCardBuff);
+        GameStatusHuanle.leftOutCardBuff = null;
         getServerSuggestion();
       }
       currentTurn = RequestTurn.myTurn;
@@ -147,7 +147,7 @@ class StrategyManager {
   }
 
   static tellServerIDone() async {
-    List<int>? myOutCards = LandlordManager.getServerCardFormat(GameStatusManager.myOutCardBuff);
+    List<int>? myOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.myOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": myOutCards, "need_play_card": false};
@@ -190,7 +190,7 @@ class StrategyManager {
   }
 
   static tellServerRightPlayerDone() async {
-    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.rightOutCardBuff);
+    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.rightOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": rightPlayerOutCards, "need_play_card": false};
@@ -233,7 +233,7 @@ class StrategyManager {
   }
 
   static tellServerLeftPlayerDone() async {
-    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusManager.leftOutCardBuff);
+    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.leftOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": leftPlayerOutCards, "need_play_card": false};

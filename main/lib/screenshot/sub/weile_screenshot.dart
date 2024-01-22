@@ -34,28 +34,28 @@ class WeileScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (GameStatusMgrWeile.curGameStatus != GameStatusWeile.gamePreparing) {
+        if (GameStatusWeile.curGameStatus != StatusWeile.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusMgrWeile.destroy();
+          GameStatusWeile.destroy();
           LandlordManager.destroy();
           StrategyManager.destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusMgrWeile.getGameStatusStr(GameStatusWeile.gamePreparing)]);
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusWeile.getGameStatusStr(StatusWeile.gamePreparing)]);
         }
         return;
       }
 
-      if (GameStatusMgrWeile.curGameStatus == GameStatusWeile.gamePreparing) {
+      if (GameStatusWeile.curGameStatus == StatusWeile.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
         if (landlord != null && handCards != null) {
-          GameStatusWeile status = GameStatusMgrWeile.initGameStatus(landlord, screenshotModel, detectList);
-          if (status == GameStatusWeile.gamePreparing) {
+          StatusWeile status = GameStatusWeile.initGameStatus(landlord, screenshotModel, detectList);
+          if (status == StatusWeile.gamePreparing) {
             return;
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
@@ -69,7 +69,7 @@ class WeileScreenshot extends ScreenShotManager {
           return;
         }
       }
-      XLog.i(LOG_TAG, 'Current game status is ${GameStatusMgrWeile.curGameStatus}');
+      XLog.i(LOG_TAG, 'Current game status is ${GameStatusWeile.curGameStatus}');
       // if (LandlordManager.threeCards?.length != 3) {
       //   List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
       //   if (threeCard?.length == 3) {
@@ -83,7 +83,7 @@ class WeileScreenshot extends ScreenShotManager {
       if (myHandCards?.isEmpty ?? true) {
         XLog.i(LOG_TAG, "GameOver");
         screenShotCount = 0;
-        GameStatusMgrWeile.destroy();
+        GameStatusWeile.destroy();
         LandlordManager.destroy();
         StrategyManager.destroy();
         LandlordRecorder.destroy();
@@ -92,13 +92,13 @@ class WeileScreenshot extends ScreenShotManager {
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 
       ///计算下一个状态
-      var nextStatus = GameStatusMgrWeile.calculateNextGameStatus(detectList, screenshotModel);
+      var nextStatus = GameStatusWeile.calculateNextGameStatus(detectList, screenshotModel);
       // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
 
       ///刷新游戏状态
       // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
 
-      GameStatusMgrWeile.curGameStatus = nextStatus;
+      GameStatusWeile.curGameStatus = nextStatus;
     }
   }
 }

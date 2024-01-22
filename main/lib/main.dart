@@ -24,10 +24,11 @@ import 'package:yolo_flutter/region/region_type.dart';
 // import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
 import 'package:yolo_flutter/screenshot/screenshot_factory.dart';
+import 'package:yolo_flutter/status/game_status_weile.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'status/game_status_manager.dart';
+import 'status/game_status_huanle.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
@@ -232,7 +233,8 @@ class _MyHomePageState extends State<MyHomePage> {
       hasDeleteScreenshot = 0;
     });
     iScreenShotManager?.destroy();
-    GameStatusManager.destroy();
+    GameStatusHuanle.destroy();
+    GameStatusWeile.destroy();
     LandlordManager.destroy();
     StrategyManager.destroy();
     LandlordRecorder.destroy();

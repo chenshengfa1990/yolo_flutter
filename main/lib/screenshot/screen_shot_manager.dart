@@ -11,7 +11,7 @@ import 'package:yolo_flutter/status/game_status_weile.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
-import '../status/game_status_manager.dart';
+import '../status/game_status_huanle.dart';
 import '../landlord/landlord_manager.dart';
 import '../overlay_window_widget.dart';
 

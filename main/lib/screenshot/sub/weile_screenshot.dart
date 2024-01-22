@@ -14,6 +14,7 @@ import 'package:yolo_flutter/util/FileUtil.dart';
 
 class WeileScreenshot extends ScreenShotManager {
   static const String LOG_TAG = 'WeileScreenshot';
+  int emptyHandCardCount = 0;
 
   WeileScreenshot(super.ncnnPlugin);
 
@@ -81,12 +82,18 @@ class WeileScreenshot extends ScreenShotManager {
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
       if (myHandCards?.isEmpty ?? true) {
-        XLog.i(LOG_TAG, "GameOver");
-        screenShotCount = 0;
-        GameStatusWeile.destroy();
-        LandlordManager.destroy();
-        StrategyManager.destroy();
-        LandlordRecorder.destroy();
+        emptyHandCardCount++;
+        if (emptyHandCardCount == 4) {
+          XLog.i(LOG_TAG, "GameOver");
+          screenShotCount = 0;
+          GameStatusWeile.destroy();
+          LandlordManager.destroy();
+          StrategyManager.destroy();
+          LandlordRecorder.destroy();
+          return;
+        }
+      } else {
+        emptyHandCardCount = 0;
       }
       XLog.i(LOG_TAG, 'show myHandCards ${LandlordManager.getCardsSorted(myHandCards)}');
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:yolo_flutter/region/region_type.dart';
 import 'package:yolo_flutter/region/sub/jj_region.dart';
+import 'package:yolo_flutter/region/sub/tuyou_region.dart';
 import 'package:yolo_flutter/region/sub/weile_region.dart';
 
 import '../landlord/landlord_manager.dart';
@@ -23,6 +24,8 @@ class RegionFactory {
         return HuanleRegion.getMyHandCardRegion();
       case LandlordType.weile:
         return WeileRegion.getMyHandCardRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getMyHandCardRegion();
     }
     return Rect.zero;
   }
@@ -33,6 +36,8 @@ class RegionFactory {
         return HuanleRegion.getMyOutCardRegion();
       case LandlordType.weile:
         return WeileRegion.getMyOutCardRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getMyOutCardRegion();
     }
     return Rect.zero;
   }
@@ -43,6 +48,8 @@ class RegionFactory {
         return HuanleRegion.getRightPlayerOutCardRegion();
       case LandlordType.weile:
         return WeileRegion.getRightPlayerOutCardRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getRightPlayerOutCardRegion();
     }
     return Rect.zero;
   }
@@ -53,6 +60,8 @@ class RegionFactory {
         return HuanleRegion.getLeftPlayerOutCardRegion();
       case LandlordType.weile:
         return WeileRegion.getLeftPlayerOutCardRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getLeftPlayerOutCardRegion();
     }
     return Rect.zero;
   }
@@ -87,6 +96,8 @@ class RegionFactory {
         return HuanleRegion.getMyLandlordRegion();
       case LandlordType.weile:
         return WeileRegion.getMyLandlordRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getMyLandlordRegion();
     }
     return Rect.zero;
   }
@@ -97,6 +108,8 @@ class RegionFactory {
         return HuanleRegion.getLeftLandlordRegion();
       case LandlordType.weile:
         return WeileRegion.getLeftLandlordRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getLeftLandlordRegion();
     }
     return Rect.zero;
   }
@@ -107,6 +120,8 @@ class RegionFactory {
         return HuanleRegion.getRightLandlordRegion();
       case LandlordType.weile:
         return WeileRegion.getRightLandlordRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getRightLandlordRegion();
     }
     return Rect.zero;
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/ncnn_detect_model.dart';
@@ -69,7 +68,11 @@ class LandlordManager {
     3: "3"
   };
 
-  static Map<LandlordType, String> landlordLabel = {LandlordType.huanle: 'dizhu', LandlordType.weile: 'weile_dizhu'};
+  static Map<LandlordType, String> landlordLabel = {
+    LandlordType.huanle: 'dizhu',
+    LandlordType.weile: 'weile_dizhu',
+    LandlordType.tuyou: 'tuyou_dizhu',
+  };
 
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
@@ -108,7 +111,6 @@ class LandlordManager {
     FlutterOverlayWindow.shareData([OverlayUpdateType.myOutCard.index, '']);
     FlutterOverlayWindow.shareData([OverlayUpdateType.handCard.index, '']);
     FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '']);
-
   }
 
   ///对牌进行排列
@@ -285,11 +287,11 @@ class LandlordManager {
   static updateRightPlayerLeftCards(List<NcnnDetectModel>? rightPlayerOutCards) {
     rightPlayerLeftCards = rightPlayerLeftCards - (rightPlayerOutCards?.length ?? 0);
   }
-  
+
   ///获取是否检测到地主，地主出现表示准备好
   static NcnnDetectModel? getLandlord(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     try {
-      return detectList?.firstWhere((element) => element.label == landlordLabel[curLandlordType]);
+      return detectList?.firstWhere((element) => (element.label == landlordLabel[curLandlordType] || element.label == "dizhu"));
     } catch (e) {
       return null;
     }

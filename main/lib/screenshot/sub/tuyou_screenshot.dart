@@ -8,12 +8,13 @@ import 'package:yolo_flutter/landlord/landlord_manager.dart';
 import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/overlay_window_widget.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
-import 'package:yolo_flutter/status/game_status_weile.dart';
+import 'package:yolo_flutter/status/game_status_tuyou.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
 class TuyouScreenshot extends ScreenShotManager {
   static const String LOG_TAG = 'TuyouScreenshot';
+  int emptyHandCardCount = 0;
 
   TuyouScreenshot(super.ncnnPlugin);
 
@@ -34,28 +35,28 @@ class TuyouScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (GameStatusWeile.curGameStatus != StatusWeile.gamePreparing) {
+        if (GameStatusTuyou.curGameStatus != StatusTuyou.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusWeile.destroy();
+          GameStatusTuyou.destroy();
           LandlordManager.destroy();
           StrategyManager.destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusWeile.getGameStatusStr(StatusWeile.gamePreparing)]);
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusTuyou.getGameStatusStr(StatusTuyou.gamePreparing)]);
         }
         return;
       }
 
-      if (GameStatusWeile.curGameStatus == StatusWeile.gamePreparing) {
+      if (GameStatusTuyou.curGameStatus == StatusTuyou.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
         if (landlord != null && handCards != null) {
-          StatusWeile status = GameStatusWeile.initGameStatus(landlord, screenshotModel, detectList);
-          if (status == StatusWeile.gamePreparing) {
+          StatusTuyou status = GameStatusTuyou.initGameStatus(landlord, screenshotModel, detectList);
+          if (status == StatusTuyou.gamePreparing) {
             return;
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
@@ -69,36 +70,35 @@ class TuyouScreenshot extends ScreenShotManager {
           return;
         }
       }
-      XLog.i(LOG_TAG, 'Current game status is ${GameStatusWeile.curGameStatus}');
-      // if (LandlordManager.threeCards?.length != 3) {
-      //   List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
-      //   if (threeCard?.length == 3) {
-      //     XLog.i(LOG_TAG, 'Three card is ${LandlordManager.getCardsSorted(threeCard)}');
-      //     notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
-      //   }
-      // }
+      XLog.i(LOG_TAG, 'Current game status is ${GameStatusTuyou.curGameStatus}');
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
       if (myHandCards?.isEmpty ?? true) {
-        XLog.i(LOG_TAG, "GameOver");
-        screenShotCount = 0;
-        GameStatusWeile.destroy();
-        LandlordManager.destroy();
-        StrategyManager.destroy();
-        LandlordRecorder.destroy();
+        emptyHandCardCount++;
+        if (emptyHandCardCount == 4) {
+          XLog.i(LOG_TAG, "GameOver");
+          screenShotCount = 0;
+          GameStatusTuyou.destroy();
+          LandlordManager.destroy();
+          StrategyManager.destroy();
+          LandlordRecorder.destroy();
+          return;
+        }
+      } else {
+        emptyHandCardCount = 0;
       }
       XLog.i(LOG_TAG, 'show myHandCards ${LandlordManager.getCardsSorted(myHandCards)}');
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 
       ///计算下一个状态
-      var nextStatus = GameStatusWeile.calculateNextGameStatus(detectList, screenshotModel);
+      var nextStatus = GameStatusTuyou.calculateNextGameStatus(detectList, screenshotModel);
       // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
 
       ///刷新游戏状态
       // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
 
-      GameStatusWeile.curGameStatus = nextStatus;
+      GameStatusTuyou.curGameStatus = nextStatus;
     }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:yolo_flutter/region/region_type.dart';
 
-import '../../screen_shot_manager.dart';
+import '../../screenshot/screen_shot_manager.dart';
 
 class HuanleRegion {
   static Rect getThreeCardRegion() {

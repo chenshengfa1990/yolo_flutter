@@ -11,11 +11,11 @@ import 'package:yolo_flutter/status/game_status_weile.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
-import 'status/game_status_manager.dart';
-import 'landlord/landlord_manager.dart';
-import 'overlay_window_widget.dart';
+import '../status/game_status_manager.dart';
+import '../landlord/landlord_manager.dart';
+import '../overlay_window_widget.dart';
 
-class ScreenShotManager {
+abstract class ScreenShotManager {
   static const String LOG_TAG = 'ScreenShotManager';
   late ScreenshotPlugin screenshotPlugin;
   late NcnnPlugin ncnnPlugin;
@@ -34,21 +34,13 @@ class ScreenShotManager {
     return await screenshotPlugin.requestPermission();
   }
 
+  Future<void> startScreenShot();
+
   void startScreenshotRepeat() async {
     isGameRunning = true;
-    if (LandlordManager.curLandlordType == LandlordType.huanle) {
-      while (isGameRunning) {
-        await screenshotRepeat();
-      }
-    } else if (LandlordManager.curLandlordType == LandlordType.weile) {
-      while (isGameRunning) {
-        await screenshotWeile();
-      }
+    while (isGameRunning) {
+      await startScreenShot();
     }
-  }
-
-  void stopScreenshotRepeat() {
-    isGameRunning = false;
   }
 
   Future<void> screenshotRepeat() async {
@@ -244,6 +236,7 @@ class ScreenShotManager {
   }
 
   void destroy() {
+    isGameRunning = false;
     screenshotPlugin.stopScreenshot();
     screenShotCount = 0;
     detectCount = 0;

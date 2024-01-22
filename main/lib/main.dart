@@ -22,7 +22,8 @@ import 'package:yolo_flutter/region/region_factory.dart';
 import 'package:yolo_flutter/region/region_type.dart';
 
 // import 'package:tensorflow_plugin/export.dart';
-import 'package:yolo_flutter/screen_shot_manager.dart';
+import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
+import 'package:yolo_flutter/screenshot/screenshot_factory.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
   late OpencvPlugin opencvPlugin;
-  late ScreenShotManager screenShotManager;
+  ScreenShotManager? iScreenShotManager;
   late LandlordManager landlordManager;
   late TextEditingController editTextController;
   late FocusNode focusNode;
@@ -109,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
     opencvPlugin = OpencvPlugin();
-    screenShotManager = ScreenShotManager(ncnnPlugin);
+    // screenShotManager = ScreenShotManager(ncnnPlugin);
     initTextField();
     getSharePreference();
     XLog.i(LOG_TAG, "app init, isDebugMode:$kDebugMode");
@@ -176,6 +177,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startGame() async {
     XLog.i(LOG_TAG, "_startGame");
+    if (iScreenShotManager?.isGameRunning == true) {
+      XLog.i(LOG_TAG, "game running, cannot start again!!!!!");
+      Fluttertoast.showToast(msg: "牌局进行中");
+      return;
+    }
     focusNode.unfocus();
     // bool loginResult = await UserManager.userLogin(editTextController.text);
     // if (loginResult == false) {
@@ -204,10 +210,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // enableDrag: true,
       // positionGravity: PositionGravity.left,
     );
-
-    await screenShotManager.requestPermission();
+    iScreenShotManager = ScreenshotFactory.getScreenshotManager(LandlordManager.curLandlordType, ncnnPlugin);
+    await iScreenShotManager?.requestPermission();
     XLog.i(LOG_TAG, "start screenshot, LandlordType: ${LandlordManager.curLandlordType}");
-    screenShotManager.startScreenshotRepeat();
+    iScreenShotManager?.startScreenshotRepeat();
   }
 
   Future<bool> checkStoragePermission() async {
@@ -225,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       hasDeleteScreenshot = 0;
     });
-    screenShotManager.destroy();
+    iScreenShotManager?.destroy();
     GameStatusManager.destroy();
     LandlordManager.destroy();
     StrategyManager.destroy();
@@ -312,12 +318,13 @@ class _MyHomePageState extends State<MyHomePage> {
       items: const [
         DropdownMenuItem(value: LandlordType.huanle, child: Text('欢乐斗地主')),
         DropdownMenuItem(value: LandlordType.weile, child: Text('微乐斗地主')),
-        // DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
+        DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
       ],
       onChanged: (value) {
         setState(() {
           _prefs.then((preference) => preference.setInt('landlordType', (value as LandlordType).index));
           LandlordManager.curLandlordType = value as LandlordType;
+          XLog.i(LOG_TAG, "select landlordType:  ${LandlordManager.curLandlordType}");
         });
       },
     );

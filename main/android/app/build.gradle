@@ -93,4 +93,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "ai.eye2you:opencv-android:4.5.2"
+//    implementation("com.tencent.shiply:upgrade:2.0.0-RC01")
+    implementation("com.tencent.shiply:upgrade-ui:2.1.1-RC01")
 }

@@ -3,14 +3,15 @@ package com.flutter.yolo
 import android.content.Intent
 import android.os.Bundle
 import com.flutter.yolo.screenshot_plugin.ScreenshotPlugin
+import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
+import com.tencent.upgrade.core.UpgradeManager
 import io.flutter.embedding.android.FlutterActivity
-import org.opencv.android.BaseLoaderCallback
-import org.opencv.android.OpenCVLoader
-import org.opencv.core.Core
+
 
 class MainActivity: FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        UpgradeManager.getInstance().checkUpgrade(false, null, DefaultUpgradeStrategyRequestCallback())
 //        App.init(this);
 //        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, object : BaseLoaderCallback(this) {
 //            override fun onManagerConnected(status: Int) {

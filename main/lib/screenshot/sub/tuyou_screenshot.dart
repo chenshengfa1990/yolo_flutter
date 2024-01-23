@@ -76,7 +76,7 @@ class TuyouScreenshot extends ScreenShotManager {
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
       if (myHandCards?.isEmpty ?? true) {
         emptyHandCardCount++;
-        if (emptyHandCardCount == 4) {
+        if (emptyHandCardCount == 10) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
           GameStatusTuyou.destroy();

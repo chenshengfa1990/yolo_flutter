@@ -13,10 +13,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
-import 'package:opencv_plugin/opencv_plugin.dart';
+// import 'package:opencv_plugin/opencv_plugin.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upload_plugin/upload_plugin.dart';
 import 'package:yolo_flutter/landlord/landlord_type.dart';
 import 'package:yolo_flutter/region/region_factory.dart';
 import 'package:yolo_flutter/region/region_type.dart';
@@ -28,6 +29,7 @@ import 'package:yolo_flutter/status/game_status_tuyou.dart';
 import 'package:yolo_flutter/status/game_status_weile.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
+import 'package:yolo_flutter/util/upload_util.dart';
 
 import 'status/game_status_huanle.dart';
 import 'landlord/landlord_manager.dart';
@@ -90,7 +92,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
-  late OpencvPlugin opencvPlugin;
+  late UploadPlugin uploadPlugin;
+
+  // late OpencvPlugin opencvPlugin;
   ScreenShotManager? iScreenShotManager;
   late LandlordManager landlordManager;
   late TextEditingController editTextController;
@@ -111,7 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     // tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
-    opencvPlugin = OpencvPlugin();
+    uploadPlugin = UploadPlugin();
+    // opencvPlugin = OpencvPlugin();
     // screenShotManager = ScreenShotManager(ncnnPlugin);
     initTextField();
     getSharePreference();
@@ -168,12 +173,21 @@ class _MyHomePageState extends State<MyHomePage> {
     XLog.i(LOG_TAG, "test detectAverage is ${detectAverage}ms");
   }
 
-  void _opencvDetect() async {
+  // void _opencvDetect() async {
+  //   final ImagePicker picker = ImagePicker();
+  //   var selectImage = await picker.getImage(source: ImageSource.gallery);
+  //   if (selectImage?.path.isNotEmpty ?? false) {
+  //     // opencvPlugin.startDetectImage(selectImage!.path, LandlordType.tx.index, RegionType.handCard.index);
+  //     opencvPlugin.cropTemplate(selectImage!.path, "/weile_buchu.png", RegionFactory.getRegion(LandlordType.weile, RegionType.leftSkip));
+  //   }
+  // }
+
+  void _uploadLog() async {
+    String? token = await uploadPlugin.getQiqiuUploadToken();
     final ImagePicker picker = ImagePicker();
     var selectImage = await picker.getImage(source: ImageSource.gallery);
-    if (selectImage?.path.isNotEmpty ?? false) {
-      // opencvPlugin.startDetectImage(selectImage!.path, LandlordType.tx.index, RegionType.handCard.index);
-      opencvPlugin.cropTemplate(selectImage!.path, "/weile_buchu.png", RegionFactory.getRegion(LandlordType.weile, RegionType.leftSkip));
+    if ((selectImage?.path.isNotEmpty ?? false) && (token?.isNotEmpty ?? false)) {
+      UploadUtil.uploadFile((selectImage?.path)!, token!);
     }
   }
 
@@ -185,10 +199,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
     focusNode.unfocus();
-    // bool loginResult = await UserManager.userLogin(editTextController.text);
-    // if (loginResult == false) {
-    //   return;
-    // }
+    bool loginResult = await UserManager.userLogin(editTextController.text);
+    if (loginResult == false) {
+      return;
+    }
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
     if (!status) {
       bool? result = await FlutterOverlayWindow.requestPermission();
@@ -492,16 +506,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: GestureDetector(
-                    onTap: _opencvDetect,
+                    onTap: _uploadLog,
                     child: Row(
                       children: [
                         Text(
-                          'openCv性能测试: ',
+                          '问题反馈: ',
                           style: Theme.of(context).textTheme.headline5,
-                        ),
-                        Text(
-                          '$opencvDetectNum识别',
-                          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18.sp),
                         ),
                       ],
                     ),

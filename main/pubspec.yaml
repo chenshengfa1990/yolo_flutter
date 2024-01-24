@@ -53,7 +53,7 @@ dependencies:
   flutter_bug_logger: 1.0.0
 
   # 悬浮窗, 横屏有bug
-#  flutter_overlay_window: ^0.4.3
+  #  flutter_overlay_window: ^0.4.3
 
   # layer方式截图，暂不使用
   flutter_native_screenshot: ^1.1.2
@@ -89,6 +89,8 @@ dependencies:
 
   fluttertoast: ^8.0.8
 
+  qiniu_flutter_sdk: 0.4.0
+
 
   ####################### 以下为自定义插件 #######################
 
@@ -107,8 +109,11 @@ dependencies:
   flutter_xlog:
     path: ../plugin/flutter_xlog
 
-  opencv_plugin:
-    path: ../plugin/opencv_plugin
+  #  opencv_plugin:
+  #    path: ../plugin/opencv_plugin
+
+  upload_plugin:
+    path: ../plugin/upload_plugin
 
 dev_dependencies:
   flutter_test:

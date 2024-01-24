@@ -33,6 +33,12 @@
       <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/build" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/plugin/flutter_xlog/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/plugin/upload_plugin/example/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

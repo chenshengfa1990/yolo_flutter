@@ -7,17 +7,20 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/landlord/landlord_type.dart';
 import 'package:yolo_flutter/landlord_recorder.dart';
-import 'package:yolo_flutter/status/game_status_weile.dart';
+import 'package:yolo_flutter/status/game_status_factory.dart';
+import 'package:yolo_flutter/status/game_status_manager.dart';
+import 'package:yolo_flutter/status/sub/game_status_weile.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
-import '../status/game_status_huanle.dart';
+import '../status/sub/game_status_huanle.dart';
 import '../landlord/landlord_manager.dart';
 import '../overlay_window_widget.dart';
 
 abstract class ScreenShotManager {
   static const String LOG_TAG = 'ScreenShotManager';
   late ScreenshotPlugin screenshotPlugin;
+  late GameStatusManager statusManager;
   late NcnnPlugin ncnnPlugin;
   static double width = 0;
   static double height = 0;
@@ -28,6 +31,7 @@ abstract class ScreenShotManager {
 
   ScreenShotManager(this.ncnnPlugin) {
     screenshotPlugin = ScreenshotPlugin();
+    statusManager = GameStatusFactory.getStatusManager();
   }
 
   Future<bool?> requestPermission() async {

@@ -8,12 +8,63 @@ import 'overlay_window_widget.dart';
 ///记牌器
 class LandlordRecorder {
   static String LOG_TAG = 'LandlordRecorder';
-  static Map<String, int> leftCardMap = {"dw": 1, "xw": 1, "2": 4, "A": 4, "K": 4, "Q": 4, "J": 4, "10": 4, "9": 4, "8": 4, "7": 4, "6": 4, "5": 4, "4": 4, "3": 4};
+  static Map<String, int> leftCardMap = {
+    "dw": 1,
+    "xw": 1,
+    "2": 4,
+    "A": 4,
+    "K": 4,
+    "Q": 4,
+    "J": 4,
+    "10": 4,
+    "9": 4,
+    "8": 4,
+    "7": 4,
+    "6": 4,
+    "5": 4,
+    "4": 4,
+    "3": 4
+  };
+
+  ///预测剩余牌在谁手上，0: 都不在, 1: 左边玩家, 2: 右边玩家
+  static Map<String, int> leftCardInWho = {
+    "dw": 0,
+    "xw": 0,
+    "2": 0,
+    "A": 0,
+    "K": 0,
+    "Q": 0,
+    "J": 0,
+    "10": 0,
+    "9": 0,
+    "8": 0,
+    "7": 0,
+    "6": 0,
+    "5": 0,
+    "4": 0,
+    "3": 0
+  };
 
   static void destroy() {
     leftCardMap = {"dw": 1, "xw": 1, "2": 4, "A": 4, "K": 4, "Q": 4, "J": 4, "10": 4, "9": 4, "8": 4, "7": 4, "6": 4, "5": 4, "4": 4, "3": 4};
 
-    var resetCardNum = {"dw": '', "xw": '', "2": '', "A": '', "K": '', "Q": '', "J": '', "10": '', "9": '', "8": '', "7": '', "6": '', "5": '', "4": '', "3": ''};
+    var resetCardNum = {
+      "dw": '',
+      "xw": '',
+      "2": '',
+      "A": '',
+      "K": '',
+      "Q": '',
+      "J": '',
+      "10": '',
+      "9": '',
+      "8": '',
+      "7": '',
+      "6": '',
+      "5": '',
+      "4": '',
+      "3": ''
+    };
     FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, resetCardNum]);
   }
 

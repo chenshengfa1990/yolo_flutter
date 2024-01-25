@@ -8,7 +8,8 @@ import 'package:yolo_flutter/landlord/landlord_manager.dart';
 import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/overlay_window_widget.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
-import 'package:yolo_flutter/status/game_status_tuyou.dart';
+import 'package:yolo_flutter/status/game_status_factory.dart';
+import 'package:yolo_flutter/status/game_status_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
@@ -35,28 +36,28 @@ class TuyouScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (GameStatusTuyou.curGameStatus != StatusTuyou.gamePreparing) {
+        if (statusManager.curGameStatus != GameStatus.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusTuyou.destroy();
+          statusManager.destroy();
           LandlordManager.destroy();
-          StrategyManager.destroy();
+          StrategyManager().destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusTuyou.getGameStatusStr(StatusTuyou.gamePreparing)]);
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing)]);
         }
         return;
       }
 
-      if (GameStatusTuyou.curGameStatus == StatusTuyou.gamePreparing) {
+      if (statusManager.curGameStatus == GameStatus.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
         if (landlord != null && handCards != null) {
-          StatusTuyou status = GameStatusTuyou.initGameStatus(landlord, screenshotModel, detectList);
-          if (status == StatusTuyou.gamePreparing) {
+          GameStatus status = statusManager.initGameStatus(landlord, screenshotModel, detectList: detectList);
+          if (status == GameStatus.gamePreparing) {
             return;
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
@@ -70,7 +71,7 @@ class TuyouScreenshot extends ScreenShotManager {
           return;
         }
       }
-      XLog.i(LOG_TAG, 'Current game status is ${GameStatusTuyou.curGameStatus}');
+      XLog.i(LOG_TAG, 'Current game status is ${statusManager.curGameStatus}');
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
@@ -79,9 +80,9 @@ class TuyouScreenshot extends ScreenShotManager {
         if (emptyHandCardCount == 10) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusTuyou.destroy();
+          statusManager.destroy();
           LandlordManager.destroy();
-          StrategyManager.destroy();
+          StrategyManager().destroy();
           LandlordRecorder.destroy();
           return;
         }
@@ -92,13 +93,13 @@ class TuyouScreenshot extends ScreenShotManager {
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 
       ///计算下一个状态
-      var nextStatus = GameStatusTuyou.calculateNextGameStatus(detectList, screenshotModel);
+      var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
       // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
 
       ///刷新游戏状态
       // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
 
-      GameStatusTuyou.curGameStatus = nextStatus;
+      statusManager.curGameStatus = nextStatus;
     }
   }
 }

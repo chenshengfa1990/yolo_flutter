@@ -7,11 +7,13 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'status/game_status_huanle.dart';
+import 'status/game_status_factory.dart';
+import 'status/sub/game_status_huanle.dart';
 import 'http/httpUtils.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
+import 'status/game_status_manager.dart';
 
 enum RequestTurn {
   myTurn,
@@ -29,78 +31,88 @@ class StrategyManager {
   // static String userInfoUrl = 'https://ead8-14-145-204-91.ngrok-free.app/self';//用户信息
   static String serverUrl = 'http://alidouapi.xxrz.top/data'; //公网
   static String userInfoUrl = 'http://alidouapi.xxrz.top/self'; //用户信息
-
   static int round = 0;
   static RequestTurn? currentTurn;
+  late GameStatusManager statusManager;
 
-  static void destroy() {
+  static final StrategyManager _singleton = StrategyManager._internal();
+
+  factory StrategyManager() {
+    return _singleton;
+  }
+
+  StrategyManager._internal() {
+    statusManager = GameStatusFactory.getStatusManager();
+  }
+
+  void destroy() {
     round = 0;
     currentTurn = null;
   }
 
-  static void notifyOverlayWindow(OverlayUpdateType updateType, {List<NcnnDetectModel>? models, String? showString}) {
+  void notifyOverlayWindow(OverlayUpdateType updateType, {List<NcnnDetectModel>? models, String? showString}) {
     String showStr = (models != null ? LandlordManager.getCardsSorted(models) : showString) ?? '';
     FlutterOverlayWindow.shareData([updateType.index, showStr]);
   }
 
-  static void triggerNext() {
+  void triggerNext() {
     XLog.i(LOG_TAG, 'currentRequestTurn: $currentTurn');
     if (currentTurn == RequestTurn.myTurn) {
-      if (GameStatusHuanle.myBuChu == true) {
+      if (statusManager.myBuChu == true) {
         tellServerISkip();
-        GameStatusHuanle.myBuChu = false;
+        statusManager.myBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
         notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       } else {
-        if (GameStatusHuanle.myOutCardBuffLength != 3) {
+        if (statusManager.myOutCardBuffLength != 3) {
           return;
         }
         tellServerIDone();
-        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.myOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.myOutCard, models: GameStatusHuanle.myOutCardBuff);
-        GameStatusHuanle.myOutCardBuff = null;
+        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(statusManager.myOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.myOutCard, models: statusManager.myOutCardBuff);
+        statusManager.myOutCardBuff = null;
         notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       }
       currentTurn = RequestTurn.rightTurn;
       XLog.i(LOG_TAG, 'myTurn request, triggerNext');
       triggerNext();
     } else if (currentTurn == RequestTurn.rightTurn) {
-      if (GameStatusHuanle.rightBuChu == true) {
+      if (statusManager.rightBuChu == true) {
         tellServerRightPlayerSkip();
-        GameStatusHuanle.rightBuChu = false;
+        statusManager.rightBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
       } else {
-        if (GameStatusHuanle.rightOutCardBuffLength != 4) {
+        if (statusManager.rightOutCardBuffLength != 4) {
           return;
         }
         tellServerRightPlayerDone();
-        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.rightOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: GameStatusHuanle.rightOutCardBuff);
+        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(statusManager.rightOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: statusManager.rightOutCardBuff);
 
         XLog.i(LOG_TAG, 'rightPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(GameStatusHuanle.rightOutCardBuff);
-        GameStatusHuanle.rightOutCardBuff = null;
+        LandlordRecorder.updateRecorder(statusManager.rightOutCardBuff);
+        statusManager.rightOutCardBuff = null;
       }
       currentTurn = RequestTurn.leftTurn;
       XLog.i(LOG_TAG, 'rightTurn request, triggerNext');
       triggerNext();
     } else if (currentTurn == RequestTurn.leftTurn) {
-      if (GameStatusHuanle.leftBuChu == true) {
+      if (statusManager.leftBuChu == true) {
         tellServerLeftPlayerSkip();
-        GameStatusHuanle.leftBuChu = false;
+        statusManager.leftBuChu = false;
         notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
         getServerSuggestion();
       } else {
-        if (GameStatusHuanle.leftOutCardBuffLength != 4) {
+        if (statusManager.leftOutCardBuffLength != 4) {
           return;
         }
         tellServerLeftPlayerDone();
-        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(GameStatusHuanle.leftOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: GameStatusHuanle.leftOutCardBuff);
+        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(statusManager.leftOutCardBuff)}');
+        notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: statusManager.leftOutCardBuff);
 
         XLog.i(LOG_TAG, 'leftPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(GameStatusHuanle.leftOutCardBuff);
-        GameStatusHuanle.leftOutCardBuff = null;
+        LandlordRecorder.updateRecorder(statusManager.leftOutCardBuff);
+        statusManager.leftOutCardBuff = null;
         getServerSuggestion();
       }
       currentTurn = RequestTurn.myTurn;
@@ -109,9 +121,7 @@ class StrategyManager {
     }
   }
 
-  static getPublicHeader() {}
-
-  static getServerSuggestion() async {
+  Future<void> getServerSuggestion() async {
     try {
       Map<String, dynamic> httpParams = {};
       httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
@@ -146,8 +156,8 @@ class StrategyManager {
     }
   }
 
-  static tellServerIDone() async {
-    List<int>? myOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.myOutCardBuff);
+  Future<void> tellServerIDone() async {
+    List<int>? myOutCards = LandlordManager.getServerCardFormat(statusManager.myOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": myOutCards, "need_play_card": false};
@@ -168,7 +178,7 @@ class StrategyManager {
     XLog.i(LOG_TAG, 'tellServerIDone res=$res');
   }
 
-  static tellServerISkip() async {
+  Future<void> tellServerISkip() async {
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.myIdentify, "play_card": [], "need_play_card": false};
@@ -189,8 +199,8 @@ class StrategyManager {
     XLog.i(LOG_TAG, 'tellServerISkip res=$res');
   }
 
-  static tellServerRightPlayerDone() async {
-    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.rightOutCardBuff);
+  Future<void> tellServerRightPlayerDone() async {
+    List<int>? rightPlayerOutCards = LandlordManager.getServerCardFormat(statusManager.rightOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": rightPlayerOutCards, "need_play_card": false};
@@ -211,7 +221,7 @@ class StrategyManager {
     XLog.i(LOG_TAG, 'tellServerRightPlayerDone res=$res');
   }
 
-  static tellServerRightPlayerSkip() async {
+  Future<void> tellServerRightPlayerSkip() async {
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.rightPlayerIdentify, "play_card": [], "need_play_card": false};
@@ -232,8 +242,8 @@ class StrategyManager {
     XLog.i(LOG_TAG, 'tellServerRightPlayerSkip res=$res');
   }
 
-  static tellServerLeftPlayerDone() async {
-    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(GameStatusHuanle.leftOutCardBuff);
+  Future<void> tellServerLeftPlayerDone() async {
+    List<int>? leftPlayerOutCards = LandlordManager.getServerCardFormat(statusManager.leftOutCardBuff);
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": leftPlayerOutCards, "need_play_card": false};
@@ -254,7 +264,7 @@ class StrategyManager {
     XLog.i(LOG_TAG, 'tellServerLeftPlayerDone res=$res');
   }
 
-  static tellServerLeftPlayerSkip() async {
+  Future<void> tellServerLeftPlayerSkip() async {
     Map<String, dynamic> httpParams = {};
     httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
     httpParams['action'] = {"position": LandlordManager.leftPlayerIdentify, "play_card": [], "need_play_card": false};

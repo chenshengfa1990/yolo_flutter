@@ -8,7 +8,8 @@ import 'package:yolo_flutter/landlord/landlord_manager.dart';
 import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/overlay_window_widget.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
-import 'package:yolo_flutter/status/game_status_weile.dart';
+import 'package:yolo_flutter/status/game_status_factory.dart';
+import 'package:yolo_flutter/status/game_status_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
@@ -35,28 +36,28 @@ class WeileScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (GameStatusWeile.curGameStatus != StatusWeile.gamePreparing) {
+        if (statusManager.curGameStatus != GameStatus.gamePreparing) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusWeile.destroy();
+          statusManager.destroy();
           LandlordManager.destroy();
-          StrategyManager.destroy();
+          StrategyManager().destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusWeile.getGameStatusStr(StatusWeile.gamePreparing)]);
+          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing)]);
         }
         return;
       }
 
-      if (GameStatusWeile.curGameStatus == StatusWeile.gamePreparing) {
+      if (statusManager.curGameStatus == GameStatus.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
         if (landlord != null && handCards != null) {
-          StatusWeile status = GameStatusWeile.initGameStatus(landlord, screenshotModel, detectList);
-          if (status == StatusWeile.gamePreparing) {
+          GameStatus status = statusManager.initGameStatus(landlord, screenshotModel, detectList: detectList);
+          if (status == GameStatus.gamePreparing) {
             return;
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
@@ -70,7 +71,7 @@ class WeileScreenshot extends ScreenShotManager {
           return;
         }
       }
-      XLog.i(LOG_TAG, 'Current game status is ${GameStatusWeile.curGameStatus}');
+      XLog.i(LOG_TAG, 'Current game status is ${statusManager.curGameStatus}');
       // if (LandlordManager.threeCards?.length != 3) {
       //   List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
       //   if (threeCard?.length == 3) {
@@ -86,9 +87,9 @@ class WeileScreenshot extends ScreenShotManager {
         if (emptyHandCardCount == 4) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;
-          GameStatusWeile.destroy();
+          statusManager.destroy();
           LandlordManager.destroy();
-          StrategyManager.destroy();
+          StrategyManager().destroy();
           LandlordRecorder.destroy();
           return;
         }
@@ -99,13 +100,13 @@ class WeileScreenshot extends ScreenShotManager {
       notifyOverlayWindow(OverlayUpdateType.handCard, models: myHandCards);
 
       ///计算下一个状态
-      var nextStatus = GameStatusWeile.calculateNextGameStatus(detectList, screenshotModel);
+      var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
       // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
 
       ///刷新游戏状态
       // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
 
-      GameStatusWeile.curGameStatus = nextStatus;
+      statusManager.curGameStatus = nextStatus;
     }
   }
 }

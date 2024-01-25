@@ -13,25 +13,22 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
+
 // import 'package:opencv_plugin/opencv_plugin.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upload_plugin/upload_plugin.dart';
 import 'package:yolo_flutter/landlord/landlord_type.dart';
-import 'package:yolo_flutter/region/region_factory.dart';
-import 'package:yolo_flutter/region/region_type.dart';
 
 // import 'package:tensorflow_plugin/export.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
 import 'package:yolo_flutter/screenshot/screenshot_factory.dart';
-import 'package:yolo_flutter/status/game_status_tuyou.dart';
-import 'package:yolo_flutter/status/game_status_weile.dart';
+import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/user_manager.dart';
 import 'package:yolo_flutter/util/upload_util.dart';
 
-import 'status/game_status_huanle.dart';
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
@@ -248,11 +245,9 @@ class _MyHomePageState extends State<MyHomePage> {
       hasDeleteScreenshot = 0;
     });
     iScreenShotManager?.destroy();
-    GameStatusHuanle.destroy();
-    GameStatusWeile.destroy();
-    GameStatusTuyou.destroy();
+    GameStatusFactory.getStatusManager().destroy();
     LandlordManager.destroy();
-    StrategyManager.destroy();
+    StrategyManager().destroy();
     LandlordRecorder.destroy();
     FlutterOverlayWindow.closeOverlay();
     XLog.flush();

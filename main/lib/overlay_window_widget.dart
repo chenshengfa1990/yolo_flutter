@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
-import 'landlord_recorder.dart';
-
 class OverlayWindowWidget extends StatefulWidget {
   const OverlayWindowWidget({Key? key}) : super(key: key);
 
@@ -146,11 +144,33 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'W',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'W',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: Container(
+                                decoration: const BoxDecoration(color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(4))),
+                                width: 4,
+                                height: 4,
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: Container(
+                                decoration: const BoxDecoration(color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(4))),
+                                width: 4,
+                                height: 4,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(

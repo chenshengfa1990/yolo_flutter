@@ -123,6 +123,7 @@ class GameStatusTuyou extends GameStatusManager {
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
           nextStatus = GameStatus.iDone;
+          myHistoryOutCard.addAll(lastMyOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, models: lastMyOutCard);
         }
@@ -157,6 +158,7 @@ class GameStatusTuyou extends GameStatusManager {
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
           nextStatus = GameStatus.rightDone;
+          rightHistoryOutCard.addAll(lastRightOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: lastRightOutCard);
           LandlordRecorder.updateRecorder(lastRightOutCard);
@@ -192,6 +194,7 @@ class GameStatusTuyou extends GameStatusManager {
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;
           nextStatus = GameStatus.leftDone;
+          leftHistoryOutCard.addAll(lastLeftOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: lastLeftOutCard);
           LandlordRecorder.updateRecorder(lastLeftOutCard);

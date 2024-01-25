@@ -135,6 +135,7 @@ class GameStatusHuanle extends GameStatusManager {
       myOutCardBuffLength++;
       if (myOutCardBuffLength == 3) {
         XLog.i(LOG_TAG, 'iDone, triggerNext');
+        myHistoryOutCard.addAll(myOutCardBuff!);
         StrategyManager().triggerNext();
         myOutCardBuffLength = 0;
       }
@@ -154,6 +155,7 @@ class GameStatusHuanle extends GameStatusManager {
       rightOutCardBuffLength++;
       if (rightOutCardBuffLength == 4) {
         XLog.i(LOG_TAG, 'rightDone, triggerNext');
+        rightHistoryOutCard.addAll(rightOutCardBuff!);
         StrategyManager().triggerNext();
         rightOutCardBuffLength = 0;
       }
@@ -173,6 +175,7 @@ class GameStatusHuanle extends GameStatusManager {
       leftOutCardBuffLength++;
       if (leftOutCardBuffLength == 4) {
         XLog.i(LOG_TAG, 'leftDone, triggerNext');
+        leftHistoryOutCard.addAll(leftOutCardBuff!);
         StrategyManager().triggerNext();
         leftOutCardBuffLength = 0;
       }

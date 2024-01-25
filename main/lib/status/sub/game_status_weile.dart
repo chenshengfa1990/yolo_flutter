@@ -120,6 +120,7 @@ class GameStatusWeile extends GameStatusManager {
           myOutCardBuffLength = 0;
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
+          myHistoryOutCard.addAll(lastMyOutCard!);
           nextStatus = GameStatus.iDone;
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, models: lastMyOutCard);
@@ -154,6 +155,7 @@ class GameStatusWeile extends GameStatusManager {
           rightOutCardBuffLength = 0;
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
+          rightHistoryOutCard.addAll(lastRightOutCard!);
           nextStatus = GameStatus.rightDone;
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: lastRightOutCard);
@@ -189,6 +191,7 @@ class GameStatusWeile extends GameStatusManager {
           leftOutCardBuffLength = 0;
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;
+          leftHistoryOutCard.addAll(lastLeftOutCard!);
           nextStatus = GameStatus.leftDone;
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: lastLeftOutCard);

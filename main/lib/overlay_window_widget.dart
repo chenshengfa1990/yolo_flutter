@@ -55,20 +55,35 @@ class _DraggableContentState extends State<DraggableContent> {
   ValueNotifier<String> rightPlayerCardNotifier = ValueNotifier('');
   ValueNotifier<String> suggestionOutCardNotifier = ValueNotifier('');
   ValueNotifier<String> cardDWNumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardDWInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> cardXWNumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardXWInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card2NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card2InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> cardANumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardAInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> cardKNumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardKInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> cardQNumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardQInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> cardJNumNotifier = ValueNotifier('');
+  ValueNotifier<int> cardJInWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card10NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card10InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card9NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card9InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card8NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card8InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card7NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card7InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card6NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card6InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card5NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card5InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card4NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card4InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> card3NumNotifier = ValueNotifier('');
+  ValueNotifier<int> card3InWhoNotifier = ValueNotifier(0);
   ValueNotifier<String> speedNotifier = ValueNotifier('0');
   Color speedColor = Colors.green;
 
@@ -95,21 +110,37 @@ class _DraggableContentState extends State<DraggableContent> {
           suggestionOutCardNotifier.value = showData[1];
         } else if (showType == OverlayUpdateType.cardRecorder.index) {
           var leftCardMap = showData[1];
+          var leftCardMapInWho = showData[2];
           cardDWNumNotifier.value = leftCardMap['dw'].toString();
+          cardDWInWhoNotifier.value = leftCardMapInWho['dw'];
           cardXWNumNotifier.value = leftCardMap['xw'].toString();
+          cardXWInWhoNotifier.value = leftCardMapInWho['xw'];
           card2NumNotifier.value = leftCardMap['2'].toString();
+          card2InWhoNotifier.value = leftCardMapInWho['2'];
           cardANumNotifier.value = leftCardMap['A'].toString();
+          cardAInWhoNotifier.value = leftCardMapInWho['A'];
           cardKNumNotifier.value = leftCardMap['K'].toString();
+          cardKInWhoNotifier.value = leftCardMapInWho['K'];
           cardQNumNotifier.value = leftCardMap['Q'].toString();
+          cardQInWhoNotifier.value = leftCardMapInWho['Q'];
           cardJNumNotifier.value = leftCardMap['J'].toString();
+          cardJInWhoNotifier.value = leftCardMapInWho['J'];
           card10NumNotifier.value = leftCardMap['10'].toString();
+          card10InWhoNotifier.value = leftCardMapInWho['10'];
           card9NumNotifier.value = leftCardMap['9'].toString();
+          card9InWhoNotifier.value = leftCardMapInWho['9'];
           card8NumNotifier.value = leftCardMap['8'].toString();
+          card8InWhoNotifier.value = leftCardMapInWho['8'];
           card7NumNotifier.value = leftCardMap['7'].toString();
+          card7InWhoNotifier.value = leftCardMapInWho['7'];
           card6NumNotifier.value = leftCardMap['6'].toString();
+          card6InWhoNotifier.value = leftCardMapInWho['6'];
           card5NumNotifier.value = leftCardMap['5'].toString();
+          card5InWhoNotifier.value = leftCardMapInWho['5'];
           card4NumNotifier.value = leftCardMap['4'].toString();
+          card4InWhoNotifier.value = leftCardMapInWho['4'];
           card3NumNotifier.value = leftCardMap['3'].toString();
+          card3InWhoNotifier.value = leftCardMapInWho['3'];
         } else if (showType == OverlayUpdateType.speed.index) {
           int speed = showData[1];
           if (speed < 400) {
@@ -155,19 +186,33 @@ class _DraggableContentState extends State<DraggableContent> {
                             Positioned(
                               top: -1,
                               left: 2,
-                              child: Container(
-                                decoration: const BoxDecoration(color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(4))),
-                                width: 4,
-                                height: 4,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardDWInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
                               ),
                             ),
                             Positioned(
                               top: -1,
                               right: 2,
-                              child: Container(
-                                decoration: const BoxDecoration(color: Colors.red, borderRadius: BorderRadius.all(Radius.circular(4))),
-                                width: 4,
-                                height: 4,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardDWInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
                               ),
                             )
                           ],
@@ -195,11 +240,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         height: 18,
                         decoration: const BoxDecoration(
                             border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white))),
-                        child: const Center(
-                          child: Text(
-                            'w',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'w',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardXWInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardXWInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -225,11 +306,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '2',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '2',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card2InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card2InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -255,11 +372,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'A',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'A',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardAInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardAInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -285,11 +438,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'K',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'K',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardKInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardKInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -315,11 +504,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'Q',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Q',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardQInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardQInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -345,11 +570,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            'J',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'J',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardJInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: cardJInWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -375,11 +636,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '10',
-                            style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '10',
+                                style: TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card10InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card10InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -405,11 +702,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '9',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '9',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card9InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card9InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -435,11 +768,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '8',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '8',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card8InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card8InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -465,11 +834,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '7',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '7',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card7InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card7InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -495,11 +900,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '6',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '6',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card6InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card6InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -525,11 +966,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '5',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '5',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card5InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card5InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -555,11 +1032,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '4',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '4',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card4InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card4InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(
@@ -585,11 +1098,47 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '3',
-                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
+                        child: Stack(
+                          children: [
+                            const Center(
+                              child: Text(
+                                '3',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              left: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card3InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              top: -1,
+                              right: 2,
+                              child: ValueListenableBuilder(
+                                valueListenable: card3InWhoNotifier,
+                                builder: (BuildContext context, value, Widget? child) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
+                                    width: 4,
+                                    height: 4,
+                                  );
+                                },
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       Container(

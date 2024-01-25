@@ -2,6 +2,7 @@
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
+import 'package:yolo_flutter/status/game_status_factory.dart';
 
 import 'overlay_window_widget.dart';
 
@@ -65,20 +66,52 @@ class LandlordRecorder {
       "4": '',
       "3": ''
     };
-    FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, resetCardNum]);
+    for (String key in leftCardInWho.keys) {
+      leftCardInWho[key] = 0;
+    }
+    FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, resetCardNum, leftCardInWho]);
+  }
+
+  ///预测剩余牌在谁手里
+  static int predictLeftCardInWho(String label) {
+    List<NcnnDetectModel>? leftHistoryOutCards = GameStatusFactory.getStatusManager().leftHistoryOutCard;
+    List<NcnnDetectModel>? rightHistoryOutCards = GameStatusFactory.getStatusManager().rightHistoryOutCard;
+    int leftOutNum = 0; //左边玩家打过这张牌的数量
+    int rightOutNum = 0; //右边玩家打过这张牌的数量
+    for (var model in leftHistoryOutCards) {
+      if (model.label == label) {
+        leftOutNum++;
+      }
+    }
+    for (var model in rightHistoryOutCards) {
+      if (model.label == label) {
+        rightOutNum++;
+      }
+    }
+    if (leftOutNum > rightOutNum) {
+      return 2;
+    } else if (rightOutNum > leftOutNum) {
+      return 1;
+    }
+    return 0;
   }
 
   static void updateRecorder(List<NcnnDetectModel>? detectModels) {
     if (detectModels == null) {
       return;
     }
-    for(var model in detectModels) {
+    for (var model in detectModels) {
       if (leftCardMap.containsKey(model.label)) {
         int leftNum = leftCardMap[model.label]! - 1;
         leftCardMap[model.label!] = leftNum;
+        if (leftNum == 1) {
+          leftCardInWho[model.label!] = predictLeftCardInWho(model.label!);
+        } else {
+          leftCardInWho[model.label!] = 0;
+        }
       }
     }
     XLog.i(LOG_TAG, 'Latest card recorder: $leftCardMap');
-    FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, leftCardMap]);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.cardRecorder.index, leftCardMap, leftCardInWho]);
   }
 }

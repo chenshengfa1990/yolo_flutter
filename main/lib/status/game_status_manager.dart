@@ -40,9 +40,9 @@ abstract class GameStatusManager {
   List<NcnnDetectModel>? lastLeftOutCard;
   List<NcnnDetectModel>? lastMyOutCard;
 
-  List<NcnnDetectModel>? myHistoryOutCard;
-  List<NcnnDetectModel>? leftHistoryOutCard;
-  List<NcnnDetectModel>? rightHistoryOutCard;
+  List<NcnnDetectModel> myHistoryOutCard = <NcnnDetectModel>[];
+  List<NcnnDetectModel> leftHistoryOutCard = [];
+  List<NcnnDetectModel> rightHistoryOutCard = [];
 
   bool myBuChu = false;
 
@@ -81,6 +81,9 @@ abstract class GameStatusManager {
     myOutCardBuff = null;
     leftOutCardBuff = null;
     rightOutCardBuff = null;
+    myHistoryOutCard.clear();
+    leftHistoryOutCard.clear();
+    rightHistoryOutCard.clear();
     myOutCardBuffLength = 0;
     leftOutCardBuffLength = 0;
     rightOutCardBuffLength = 0;

@@ -3,6 +3,7 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/region/region_manager.dart';
 import 'package:yolo_flutter/status/game_status_manager.dart';
+import 'package:yolo_flutter/strategy_manager.dart';
 
 import '../../landlord/landlord_manager.dart';
 import '../../landlord_recorder.dart';
@@ -126,6 +127,7 @@ class GameStatusWeile extends GameStatusManager {
         myOutCardBuffLength++;
         if (myOutCardBuffLength == 3) {
           myOutCardBuffLength = 0;
+          StrategyManager().tellServerIDone();
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
           myHistoryOutCard.addAll(lastMyOutCard!);
@@ -161,6 +163,7 @@ class GameStatusWeile extends GameStatusManager {
         rightOutCardBuffLength++;
         if (rightOutCardBuffLength == 3) {
           rightOutCardBuffLength = 0;
+          StrategyManager().tellServerRightPlayerDone();
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
           rightHistoryOutCard.addAll(lastRightOutCard!);
@@ -197,6 +200,7 @@ class GameStatusWeile extends GameStatusManager {
         leftOutCardBuffLength++;
         if (leftOutCardBuffLength == 3) {
           leftOutCardBuffLength = 0;
+          StrategyManager().tellServerLeftPlayerDone();
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;
           leftHistoryOutCard.addAll(lastLeftOutCard!);

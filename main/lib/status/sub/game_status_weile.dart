@@ -12,6 +12,14 @@ import '../../overlay_window_widget.dart';
 class GameStatusWeile extends GameStatusManager {
   static String LOG_TAG = 'GameStatusWeile';
 
+  static final GameStatusWeile _singleton = GameStatusWeile._internal();
+
+  factory GameStatusWeile() {
+    return _singleton;
+  }
+
+  GameStatusWeile._internal();
+
   @override
   GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, {List<NcnnDetectModel>? detectList}) {
     curGameStatus = GameStatus.gamePreparing;

@@ -13,6 +13,14 @@ import '../../overlay_window_widget.dart';
 class GameStatusTuyou extends GameStatusManager {
   static String LOG_TAG = 'GameStatusWeile';
 
+  static final GameStatusTuyou _singleton = GameStatusTuyou._internal();
+
+  factory GameStatusTuyou() {
+    return _singleton;
+  }
+
+  GameStatusTuyou._internal();
+
   @override
   GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, {List<NcnnDetectModel>? detectList}) {
     curGameStatus = GameStatus.gamePreparing;

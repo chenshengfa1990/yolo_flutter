@@ -479,40 +479,40 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: _onDetectImage,
-                    child: Row(
-                      children: [
-                        Text(
-                          'yolo性能测试: ',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        Text(
-                          '$detectAverage ms/张图',
-                          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18.sp),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: _uploadLog,
-                    child: Row(
-                      children: [
-                        Text(
-                          '问题反馈: ',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
+                // Container(
+                //   padding: const EdgeInsets.only(left: 10),
+                //   child: GestureDetector(
+                //     onTap: _onDetectImage,
+                //     child: Row(
+                //       children: [
+                //         Text(
+                //           'yolo性能测试: ',
+                //           style: Theme.of(context).textTheme.headline5,
+                //         ),
+                //         Text(
+                //           '$detectAverage ms/张图',
+                //           style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18.sp),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 10),
+                // Container(
+                //   padding: const EdgeInsets.only(left: 10),
+                //   child: GestureDetector(
+                //     onTap: _uploadLog,
+                //     child: Row(
+                //       children: [
+                //         Text(
+                //           '问题反馈: ',
+                //           style: Theme.of(context).textTheme.headline5,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 10),
               ],
             ),
           ),

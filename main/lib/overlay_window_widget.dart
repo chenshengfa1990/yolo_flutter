@@ -191,7 +191,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -207,7 +207,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -256,7 +256,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -272,7 +272,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -322,7 +322,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -338,7 +338,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -388,7 +388,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -404,7 +404,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -454,7 +454,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -470,7 +470,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -520,7 +520,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -536,7 +536,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -586,7 +586,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -602,7 +602,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -652,7 +652,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -668,7 +668,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -718,7 +718,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -734,7 +734,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -784,7 +784,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -800,7 +800,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -850,7 +850,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -866,7 +866,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -916,7 +916,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -932,7 +932,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -982,7 +982,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -998,7 +998,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -1048,7 +1048,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -1064,7 +1064,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -1114,7 +1114,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.red : Colors.transparent),
+                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,
@@ -1130,7 +1130,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                 builder: (BuildContext context, value, Widget? child) {
                                   return Container(
                                     decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.red : Colors.transparent),
+                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
                                         borderRadius: const BorderRadius.all(Radius.circular(4))),
                                     width: 4,
                                     height: 4,

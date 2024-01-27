@@ -252,7 +252,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -307,7 +307,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -360,7 +360,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -413,7 +413,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -466,7 +466,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -519,7 +519,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -572,7 +572,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -625,7 +625,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -678,7 +678,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -731,7 +731,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -784,7 +784,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -837,7 +837,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );
@@ -890,7 +890,7 @@ class _DraggableContentState extends State<DraggableContent> {
                                     quarterTurns: value == 1 ? 2 : 0,
                                     child: Icon(
                                       Icons.double_arrow,
-                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.green),
                                       size: 8,
                                     ),
                                   );

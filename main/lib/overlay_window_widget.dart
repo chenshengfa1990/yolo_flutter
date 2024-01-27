@@ -175,47 +175,11 @@ class _DraggableContentState extends State<DraggableContent> {
                         decoration: const BoxDecoration(
                           border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white)),
                         ),
-                        child: Stack(
-                          children: [
-                            const Center(
-                              child: Text(
-                                'W',
-                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Positioned(
-                              top: -1,
-                              left: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardDWInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardDWInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
-                          ],
+                        child: const Center(
+                          child: Text(
+                            'W',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       Container(
@@ -240,47 +204,11 @@ class _DraggableContentState extends State<DraggableContent> {
                         height: 18,
                         decoration: const BoxDecoration(
                             border: Border(right: BorderSide(width: 1, color: Colors.white), bottom: BorderSide(width: 1, color: Colors.white))),
-                        child: Stack(
-                          children: [
-                            const Center(
-                              child: Text(
-                                'w',
-                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Positioned(
-                              top: -1,
-                              left: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardXWInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardXWInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
-                          ],
+                        child: const Center(
+                          child: Text(
+                            'w',
+                            style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       Container(
@@ -315,37 +243,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card2InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card2InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -381,37 +294,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: cardAInWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardAInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -447,37 +345,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: cardKInWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardKInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -513,37 +396,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: cardQInWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardQInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -579,37 +447,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: cardJInWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: cardJInWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -645,37 +498,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card10InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card10InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -711,37 +549,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card9InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card9InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -777,37 +600,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card8InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card8InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -843,37 +651,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card7InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card7InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -909,37 +702,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card6InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card6InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -975,37 +753,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card5InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card5InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -1041,37 +804,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card4InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card4InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -1107,37 +855,22 @@ class _DraggableContentState extends State<DraggableContent> {
                               ),
                             ),
                             Positioned(
-                              top: -1,
-                              left: 2,
+                              left: 3,
+                              top: -2,
                               child: ValueListenableBuilder(
                                 valueListenable: card3InWhoNotifier,
                                 builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 1 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
+                                  return RotatedBox(
+                                    quarterTurns: value == 1 ? 2 : 0,
+                                    child: Icon(
+                                      Icons.double_arrow,
+                                      color: value == 0 ? Colors.transparent : (value == 1 ? Colors.yellow : Colors.blue),
+                                      size: 8,
+                                    ),
                                   );
                                 },
                               ),
                             ),
-                            Positioned(
-                              top: -1,
-                              right: 2,
-                              child: ValueListenableBuilder(
-                                valueListenable: card3InWhoNotifier,
-                                builder: (BuildContext context, value, Widget? child) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                        color: (value == 2 ? Colors.yellow : Colors.transparent),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4))),
-                                    width: 4,
-                                    height: 4,
-                                  );
-                                },
-                              ),
-                            )
                           ],
                         ),
                       ),

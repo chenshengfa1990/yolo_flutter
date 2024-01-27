@@ -271,7 +271,11 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card2NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return Center(
+                              child: value == '4'
+                                  ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                  : Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))),
+                            );
                           },
                         ),
                       )
@@ -322,7 +326,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: cardANumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -373,7 +379,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: cardKNumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       ),
@@ -424,7 +432,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: cardQNumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       ),
@@ -475,7 +485,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: cardJNumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       ),
@@ -526,7 +538,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card10NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -577,7 +591,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card9NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -628,7 +644,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card8NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -679,7 +697,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card7NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -730,7 +750,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card6NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -781,7 +803,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card5NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -832,7 +856,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card4NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )
@@ -883,7 +909,9 @@ class _DraggableContentState extends State<DraggableContent> {
                         child: ValueListenableBuilder(
                           valueListenable: card3NumNotifier,
                           builder: (BuildContext context, value, Widget? child) {
-                            return Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
+                            return value == '4'
+                                ? Image.asset('assets/bomb.png', width: 13, height: 17.5)
+                                : Center(child: Text(value, style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8))));
                           },
                         ),
                       )

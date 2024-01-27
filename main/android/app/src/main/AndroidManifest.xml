@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.flutter.yolo">
    <application
-        android:label="yolo_flutter"
+        android:label="AI万能记牌器"
        android:name=".YoloApp"
        android:icon="@mipmap/ic_launcher"
         android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

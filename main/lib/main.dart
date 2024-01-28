@@ -66,11 +66,11 @@ class MyApp extends StatelessWidget {
         designSize: const Size(375, 812),
         builder: (context, child) {
           return MaterialApp(
-            title: 'Flutter Yolo',
+            title: 'AI万能记牌器',
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: const MyHomePage(title: '智能记牌器'),
+            home: const MyHomePage(title: 'AI万能记牌器'),
             builder: EasyLoading.init(),
           );
         });

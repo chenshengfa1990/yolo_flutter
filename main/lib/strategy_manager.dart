@@ -50,11 +50,6 @@ class StrategyManager {
     currentTurn = null;
   }
 
-  void notifyOverlayWindow(OverlayUpdateType updateType, {List<NcnnDetectModel>? models, String? showString}) {
-    String showStr = (models != null ? LandlordManager.getCardsSorted(models) : showString) ?? '';
-    FlutterOverlayWindow.shareData([updateType.index, showStr]);
-  }
-
   Future<void> triggerNext() async {
     XLog.i(LOG_TAG, 'currentRequestTurn: $currentTurn');
     if (currentTurn == RequestTurn.myTurn) {
@@ -62,7 +57,7 @@ class StrategyManager {
         statusManager.myBuChu = false;
         await tellServerISkip();
       } else {
-        if (statusManager.myOutCardBuffLength != 3) {
+        if (statusManager.myOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.my)) {
           return;
         }
         await tellServerIDone();
@@ -75,7 +70,7 @@ class StrategyManager {
         statusManager.rightBuChu = false;
         await tellServerRightPlayerSkip();
       } else {
-        if (statusManager.rightOutCardBuffLength != 4) {
+        if (statusManager.rightOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.right)) {
           return;
         }
         await tellServerRightPlayerDone();
@@ -89,7 +84,7 @@ class StrategyManager {
         await tellServerLeftPlayerSkip();
         await getServerSuggestion();
       } else {
-        if (statusManager.leftOutCardBuffLength != 4) {
+        if (statusManager.leftOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.left)) {
           return;
         }
         await tellServerLeftPlayerDone();

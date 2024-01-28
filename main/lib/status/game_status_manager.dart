@@ -27,6 +27,12 @@ enum GameStatus {
   gameOver, //游戏结束
 }
 
+enum BuffWho {
+  my,
+  left,
+  right,
+}
+
 ///状态管理
 abstract class GameStatusManager {
   static String LOG_TAG = 'GameStatusManager';
@@ -63,6 +69,8 @@ abstract class GameStatusManager {
   GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, {List<NcnnDetectModel>? detectList});
 
   GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel);
+
+  int getOutCardBuffLength(BuffWho who);
 
   static String getGameStatusStr(GameStatus status) {
     return gameStatusStr[status.index];

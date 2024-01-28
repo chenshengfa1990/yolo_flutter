@@ -62,9 +62,18 @@ class TuyouScreenshot extends ScreenShotManager {
           } else {
             XLog.i(LOG_TAG, 'landLord appear');
             LandlordManager.initPlayerIdentify(landlord, screenshotModel);
+            List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel);
+            if (threeCard?.length == 3) {
+              XLog.i(LOG_TAG, 'Three card is ${LandlordManager.getCardsSorted(threeCard)}');
+              notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
+            }
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
             if (LandlordManager.leftPlayerIdentify == "landlord" || LandlordManager.rightPlayerIdentify == "landlord") {
               await Future.delayed(const Duration(milliseconds: 3000));
+            } else if (LandlordManager.myIdentify == 'landlord') {
+              ///首次告知信息，需要await，第二次请求策略，为了减少时间，不必await
+              await StrategyManager().getServerSuggestion();
+              StrategyManager().getServerSuggestion();
             }
           }
         } else {
@@ -72,6 +81,14 @@ class TuyouScreenshot extends ScreenShotManager {
         }
       }
       XLog.i(LOG_TAG, 'Current game status is ${statusManager.curGameStatus}');
+
+      if (LandlordManager.threeCards?.length != 3) {
+        List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
+        if (threeCard?.length == 3) {
+          XLog.i(LOG_TAG, 'Three card is ${LandlordManager.getCardsSorted(threeCard)}');
+          notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
+        }
+      }
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
@@ -94,10 +111,18 @@ class TuyouScreenshot extends ScreenShotManager {
 
       ///计算下一个状态
       var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
-      // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
+      XLog.i(LOG_TAG, 'nextGameStatus is $nextStatus');
+
+      if (nextStatus == GameStatus.myTurn) {
+        notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "");
+      } else if (nextStatus == GameStatus.leftTurn) {
+        notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "");
+      } else if (nextStatus == GameStatus.rightTurn) {
+        notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "");
+      }
 
       ///刷新游戏状态
-      // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
+      notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
 
       statusManager.curGameStatus = nextStatus;
     }

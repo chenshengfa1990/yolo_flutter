@@ -74,6 +74,12 @@ class LandlordManager {
     LandlordType.tuyou: 'tuyou_dizhu',
   };
 
+  static Map<LandlordType, String> buChuLabel = {
+    LandlordType.huanle: 'buchu',
+    LandlordType.weile: 'weile_buchu',
+    LandlordType.tuyou: 'tuyou_buchu',
+  };
+
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
 
@@ -318,7 +324,7 @@ class LandlordManager {
   static List<NcnnDetectModel>? getBuChu(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     List<NcnnDetectModel> buchuRes = [];
     for (int i = 0; i < (detectList?.length ?? 0); i++) {
-      if (detectList![i].label == 'buchu') {
+      if (detectList![i].label == buChuLabel[curLandlordType]) {
         buchuRes.add(detectList[i]);
       }
     }

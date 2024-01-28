@@ -42,6 +42,17 @@ class GameStatusHuanle extends GameStatusManager {
   }
 
   @override
+  int getOutCardBuffLength(BuffWho who) {
+    if (who == BuffWho.my) {
+      return 3;
+    } else if (who == BuffWho.left) {
+      return 4;
+    } else {
+      return 4;
+    }
+  }
+
+  @override
   GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     GameStatus nextStatus = curGameStatus;
     if (myOutCardBuff != null) {
@@ -142,7 +153,7 @@ class GameStatusHuanle extends GameStatusManager {
         myOutCardBuff = myOutCard;
       }
       myOutCardBuffLength++;
-      if (myOutCardBuffLength == 3) {
+      if (myOutCardBuffLength == getOutCardBuffLength(BuffWho.my)) {
         XLog.i(LOG_TAG, 'myOutCardBuff cache Done');
         myHistoryOutCard.addAll(myOutCardBuff!);
         XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(myOutCardBuff)}');
@@ -167,7 +178,7 @@ class GameStatusHuanle extends GameStatusManager {
         rightOutCardBuff = rightOutCard;
       }
       rightOutCardBuffLength++;
-      if (rightOutCardBuffLength == 4) {
+      if (rightOutCardBuffLength == getOutCardBuffLength(BuffWho.right)) {
         XLog.i(LOG_TAG, 'rightOutCardBuff cache done');
         rightHistoryOutCard.addAll(rightOutCardBuff!);
         XLog.i(LOG_TAG, 'updateRecorder');
@@ -195,7 +206,7 @@ class GameStatusHuanle extends GameStatusManager {
         leftOutCardBuff = leftOutCard;
       }
       leftOutCardBuffLength++;
-      if (leftOutCardBuffLength == 4) {
+      if (leftOutCardBuffLength == getOutCardBuffLength(BuffWho.left)) {
         XLog.i(LOG_TAG, 'leftOutCardBuff cache done');
         leftHistoryOutCard.addAll(leftOutCardBuff!);
         XLog.i(LOG_TAG, 'updateRecorder');

@@ -57,6 +57,17 @@ class GameStatusWeile extends GameStatusManager {
   }
 
   @override
+  int getOutCardBuffLength(BuffWho who) {
+    if (who == BuffWho.my) {
+      return 3;
+    } else if (who == BuffWho.left) {
+      return 3;
+    } else {
+      return 3;
+    }
+  }
+
+  @override
   GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     GameStatus nextStatus = curGameStatus;
 

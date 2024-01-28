@@ -5,12 +5,6 @@ import 'package:yolo_flutter/region/region_type.dart';
 import '../../screenshot/screen_shot_manager.dart';
 
 class WeileRegion {
-  static Rect getRegion(RegionType regionType) {
-    // if (regionType == RegionType.leftSkip) {
-    //   return getLeftSkipRegion();
-    // }
-    return Rect.zero;
-  }
 
   static Rect getMyHandCardRegion() {
     double xLeftTop = 0; //左上角x坐标

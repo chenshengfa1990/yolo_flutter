@@ -5,6 +5,14 @@ import 'package:yolo_flutter/region/region_type.dart';
 import '../../screenshot/screen_shot_manager.dart';
 
 class TuyouRegion {
+  static Rect getThreeCardRegion() {
+    double xLeftTop = 525.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
+    double yLeftTop = 0; //左上角y坐标
+    double xRightBottom = 720.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
+    double yRightBottom = 60.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
+    return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
+  }
+
   static Rect getMyHandCardRegion() {
     double xLeftTop = 0; //左上角x坐标
     double yLeftTop = 300.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
@@ -58,6 +66,30 @@ class TuyouRegion {
     double yLeftTop = 80.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
     double xRightBottom = 1040.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
     double yRightBottom = 175.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
+    return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
+  }
+
+  static Rect getRightPlayerBuchuRegion() {
+    double xLeftTop = 825.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
+    double yLeftTop = 117.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
+    double xRightBottom = 960.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
+    double yRightBottom = 220.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
+    return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
+  }
+
+  static Rect getLeftPlayerBuchuRegion() {
+    double xLeftTop = 210.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
+    double yLeftTop = 117.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
+    double xRightBottom = 350.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
+    double yRightBottom = 220.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
+    return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
+  }
+
+  static Rect getMyBuchuRegion() {
+    double xLeftTop = 510.0 / 1184.0 * ScreenShotManager.width; //左上角x坐标
+    double yLeftTop = 225.0 / 540.0 * ScreenShotManager.height; //左上角y坐标
+    double xRightBottom = 670.0 / 1184.0 * ScreenShotManager.width; //右下角x坐标
+    double yRightBottom = 310.0 / 540.0 * ScreenShotManager.height; //右下角y坐标
     return Rect.fromLTRB(xLeftTop, yLeftTop, xRightBottom, yRightBottom);
   }
 }

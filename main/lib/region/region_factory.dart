@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:yolo_flutter/region/region_type.dart';
-import 'package:yolo_flutter/region/sub/jj_region.dart';
 import 'package:yolo_flutter/region/sub/tuyou_region.dart';
 import 'package:yolo_flutter/region/sub/weile_region.dart';
 
@@ -14,6 +13,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getThreeCardRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getThreeCardRegion();
     }
     return Rect.zero;
   }
@@ -70,6 +71,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getRightPlayerBuchuRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getRightPlayerBuchuRegion();
     }
     return Rect.zero;
   }
@@ -78,6 +81,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getLeftPlayerBuchuRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getLeftPlayerBuchuRegion();
     }
     return Rect.zero;
   }
@@ -86,6 +91,8 @@ class RegionFactory {
     switch (LandlordManager.curLandlordType) {
       case LandlordType.huanle:
         return HuanleRegion.getMyBuchuRegion();
+      case LandlordType.tuyou:
+        return TuyouRegion.getMyBuchuRegion();
     }
     return Rect.zero;
   }
@@ -126,13 +133,4 @@ class RegionFactory {
     return Rect.zero;
   }
 
-  static Rect getRegion(LandlordType landlordType, RegionType regionType) {
-    switch (landlordType) {
-      case LandlordType.weile:
-        return WeileRegion.getRegion(regionType);
-      case LandlordType.jj:
-        return JJRegion.getRegion(regionType);
-    }
-    return Rect.zero;
-  }
 }

@@ -239,6 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _endGame() async {
     XLog.i(LOG_TAG, "_endGame");
+    updateOutDate();
     focusNode.unfocus();
     iScreenShotManager?.destroy();
     GameStatusFactory.getStatusManager().destroy();

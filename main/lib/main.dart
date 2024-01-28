@@ -101,7 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int notice = 0;
   int screenWidth = 0;
   int screenHeight = 0;
-  int hasDeleteScreenshot = 0;
   bool useGPU = true;
   int detectAverage = 0;
   int opencvDetectNum = 0;
@@ -241,9 +240,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _endGame() async {
     XLog.i(LOG_TAG, "_endGame");
     focusNode.unfocus();
-    setState(() {
-      hasDeleteScreenshot = 0;
-    });
     iScreenShotManager?.destroy();
     GameStatusFactory.getStatusManager().destroy();
     LandlordManager.destroy();
@@ -285,17 +281,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _test() async {
-    setState(() {
-      hasDeleteScreenshot = 0;
-    });
-
     Directory? cacheDir = await getExternalStorageDirectory();
     deleteCacheScreenshot('${cacheDir?.path}/Pictures');
 
-    setState(() {
-      hasDeleteScreenshot = 1;
-    });
     XLog.i(LOG_TAG, "deleteCacheScreenshot cache");
+    Fluttertoast.showToast(msg: '删除成功');
   }
 
   void deleteCacheScreenshot(String path) {
@@ -473,7 +463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: GestureDetector(
                     onTap: _test,
                     child: Text(
-                      '删除截图缓存 $hasDeleteScreenshot',
+                      '删除截图缓存',
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ),

@@ -12,7 +12,7 @@ import '../../overlay_window_widget.dart';
 
 ///状态管理
 class GameStatusTuyou extends GameStatusManager {
-  static String LOG_TAG = 'GameStatusWeile';
+  static String LOG_TAG = 'GameStatusTuyou';
 
   static final GameStatusTuyou _singleton = GameStatusTuyou._internal();
 

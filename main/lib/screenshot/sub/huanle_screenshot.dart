@@ -67,7 +67,8 @@ class HuanleScreenshot extends ScreenShotManager {
             }
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
             if (LandlordManager.myIdentify == 'landlord') {
-              StrategyManager().getServerSuggestion();
+              ///首次告知信息，需要await，第二次请求策略，为了减少时间，不必await
+              await StrategyManager().getServerSuggestion();
               StrategyManager().getServerSuggestion();
             }
           }
@@ -91,7 +92,7 @@ class HuanleScreenshot extends ScreenShotManager {
 
       ///计算下一个状态
       var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
-      XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
+      XLog.i(LOG_TAG, 'nextGameStatus is $nextStatus');
 
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));

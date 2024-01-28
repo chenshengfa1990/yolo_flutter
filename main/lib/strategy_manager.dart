@@ -55,69 +55,49 @@ class StrategyManager {
     FlutterOverlayWindow.shareData([updateType.index, showStr]);
   }
 
-  void triggerNext() {
+  Future<void> triggerNext() async {
     XLog.i(LOG_TAG, 'currentRequestTurn: $currentTurn');
     if (currentTurn == RequestTurn.myTurn) {
       if (statusManager.myBuChu == true) {
-        tellServerISkip();
         statusManager.myBuChu = false;
-        notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
-        notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
+        await tellServerISkip();
       } else {
         if (statusManager.myOutCardBuffLength != 3) {
           return;
         }
-        tellServerIDone();
-        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(statusManager.myOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.myOutCard, models: statusManager.myOutCardBuff);
-        statusManager.myOutCardBuff = null;
-        notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
+        await tellServerIDone();
       }
       currentTurn = RequestTurn.rightTurn;
       XLog.i(LOG_TAG, 'myTurn request, triggerNext');
-      triggerNext();
+      await triggerNext();
     } else if (currentTurn == RequestTurn.rightTurn) {
       if (statusManager.rightBuChu == true) {
-        tellServerRightPlayerSkip();
         statusManager.rightBuChu = false;
-        notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
+        await tellServerRightPlayerSkip();
       } else {
         if (statusManager.rightOutCardBuffLength != 4) {
           return;
         }
-        tellServerRightPlayerDone();
-        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(statusManager.rightOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: statusManager.rightOutCardBuff);
-
-        XLog.i(LOG_TAG, 'rightPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(statusManager.rightOutCardBuff);
-        statusManager.rightOutCardBuff = null;
+        await tellServerRightPlayerDone();
       }
       currentTurn = RequestTurn.leftTurn;
       XLog.i(LOG_TAG, 'rightTurn request, triggerNext');
-      triggerNext();
+      await triggerNext();
     } else if (currentTurn == RequestTurn.leftTurn) {
       if (statusManager.leftBuChu == true) {
-        tellServerLeftPlayerSkip();
         statusManager.leftBuChu = false;
-        notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
-        getServerSuggestion();
+        await tellServerLeftPlayerSkip();
+        await getServerSuggestion();
       } else {
         if (statusManager.leftOutCardBuffLength != 4) {
           return;
         }
-        tellServerLeftPlayerDone();
-        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(statusManager.leftOutCardBuff)}');
-        notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: statusManager.leftOutCardBuff);
-
-        XLog.i(LOG_TAG, 'leftPlayerDone, updateRecorder');
-        LandlordRecorder.updateRecorder(statusManager.leftOutCardBuff);
-        statusManager.leftOutCardBuff = null;
-        getServerSuggestion();
+        await tellServerLeftPlayerDone();
+        await getServerSuggestion();
       }
       currentTurn = RequestTurn.myTurn;
       XLog.i(LOG_TAG, 'leftTurn request, triggerNext');
-      triggerNext();
+      await triggerNext();
     }
   }
 
@@ -140,9 +120,8 @@ class StrategyManager {
       options.headers = {'userid': userId, 'hash': hash};
 
       var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
-      Map<String, dynamic> resMap = json.decode(res);
-      if (resMap.containsKey('action') && resMap['action'] != null && resMap['action'].isNotEmpty) {
-        List<int> serverSuggestion = resMap['action'].cast<int>().toList();
+      if (res.containsKey('action') && res['action'] != null && res['action'].isNotEmpty) {
+        List<int> serverSuggestion = res['action'].cast<int>().toList();
         LandlordManager.updateServerSuggestion(serverSuggestion);
       } else {
         if (round > 1) {
@@ -174,7 +153,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerIDone res=$res');
   }
 
@@ -195,7 +174,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerISkip res=$res');
   }
 
@@ -217,7 +196,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerRightPlayerDone res=$res');
   }
 
@@ -238,7 +217,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr);
     XLog.i(LOG_TAG, 'tellServerRightPlayerSkip res=$res');
   }
 
@@ -260,7 +239,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerDone res=$res');
   }
 
@@ -281,7 +260,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = HttpUtils.post(serverUrl, data: jsonStr, options: options);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerLeftPlayerSkip $res');
   }
 }

@@ -50,7 +50,7 @@ dependencies:
   flutter_screenutil: ^5.6.0
 
   # 日志
-  flutter_bug_logger: 1.0.0
+#  flutter_bug_logger: 1.0.0
 
   # 悬浮窗, 横屏有bug
   #  flutter_overlay_window: ^0.4.3

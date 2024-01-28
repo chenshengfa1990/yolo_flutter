@@ -2,6 +2,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
 import 'package:screenshot_plugin/export.dart';
+import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/region/region_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 
@@ -11,7 +12,7 @@ import '../game_status_manager.dart';
 
 ///状态管理
 class GameStatusHuanle extends GameStatusManager {
-  static String LOG_TAG = 'GameStatusManager';
+  static String LOG_TAG = 'GameStatusHuanle';
 
   static final GameStatusHuanle _singleton = GameStatusHuanle._internal();
 
@@ -27,12 +28,15 @@ class GameStatusHuanle extends GameStatusManager {
     if (RegionManager.inMyLandlordRegion(landlord, screenshotModel)) {
       curGameStatus = GameStatus.myTurn;
       StrategyManager.currentTurn = RequestTurn.myTurn;
+      XLog.i(LOG_TAG, 'I am landlord');
     } else if (RegionManager.inLeftPlayerLandlordRegion(landlord, screenshotModel)) {
       curGameStatus = GameStatus.leftTurn;
       StrategyManager.currentTurn = RequestTurn.leftTurn;
+      XLog.i(LOG_TAG, 'leftPlayer is landlord');
     } else if (RegionManager.inRightPlayerLandlordRegion(landlord, screenshotModel)) {
       curGameStatus = GameStatus.rightTurn;
       StrategyManager.currentTurn = RequestTurn.rightTurn;
+      XLog.i(LOG_TAG, 'rightPlayer is landlord');
     }
     return curGameStatus;
   }
@@ -58,12 +62,15 @@ class GameStatusHuanle extends GameStatusManager {
         if (RegionManager.inMyBuchuRegion(buchu, screenshotModel)) {
           myBuChu = true;
           nextStatus = GameStatus.iSkip;
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
           XLog.i(LOG_TAG, 'iSkip, triggerNext');
           StrategyManager().triggerNext();
         } else {
           var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
           if (myOutCard?.isNotEmpty ?? false) {
             nextStatus = GameStatus.iDone;
+            XLog.i(LOG_TAG, 'startCacheMyOutCard');
             cacheMyOutCard(myOutCard);
           }
         }
@@ -79,6 +86,7 @@ class GameStatusHuanle extends GameStatusManager {
         if (RegionManager.inRightBuchuRegion(buchu, screenshotModel)) {
           nextStatus = GameStatus.rightSkip;
           rightBuChu = true;
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
           XLog.i(LOG_TAG, 'rightSkip, triggerNext');
           StrategyManager().triggerNext();
         } else {
@@ -100,6 +108,7 @@ class GameStatusHuanle extends GameStatusManager {
         if (RegionManager.inLeftBuchuRegion(buchu, screenshotModel)) {
           nextStatus = GameStatus.leftSkip;
           leftBuChu = true;
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
           XLog.i(LOG_TAG, 'leftSkip, triggerNext');
           StrategyManager().triggerNext();
         } else {
@@ -134,10 +143,15 @@ class GameStatusHuanle extends GameStatusManager {
       }
       myOutCardBuffLength++;
       if (myOutCardBuffLength == 3) {
-        XLog.i(LOG_TAG, 'iDone, triggerNext');
+        XLog.i(LOG_TAG, 'myOutCardBuff cache Done');
         myHistoryOutCard.addAll(myOutCardBuff!);
+        XLog.i(LOG_TAG, 'show myOutCards ${LandlordManager.getCardsSorted(myOutCardBuff)}');
+        GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, models: myOutCardBuff);
+        GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
+        XLog.i(LOG_TAG, 'myOutCardBuff, triggerNext');
         StrategyManager().triggerNext();
         myOutCardBuffLength = 0;
+        myOutCardBuff = null;
       }
     }
   }
@@ -154,10 +168,18 @@ class GameStatusHuanle extends GameStatusManager {
       }
       rightOutCardBuffLength++;
       if (rightOutCardBuffLength == 4) {
-        XLog.i(LOG_TAG, 'rightDone, triggerNext');
+        XLog.i(LOG_TAG, 'rightOutCardBuff cache done');
         rightHistoryOutCard.addAll(rightOutCardBuff!);
+        XLog.i(LOG_TAG, 'updateRecorder');
+        LandlordRecorder.updateRecorder(rightOutCardBuff);
+
+        XLog.i(LOG_TAG, 'show rightOutCards ${LandlordManager.getCardsSorted(rightOutCardBuff)}');
+        GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: rightOutCardBuff);
+
+        XLog.i(LOG_TAG, 'rightOutCardBuff, triggerNext');
         StrategyManager().triggerNext();
         rightOutCardBuffLength = 0;
+        rightOutCardBuff = null;
       }
     }
   }
@@ -174,10 +196,18 @@ class GameStatusHuanle extends GameStatusManager {
       }
       leftOutCardBuffLength++;
       if (leftOutCardBuffLength == 4) {
-        XLog.i(LOG_TAG, 'leftDone, triggerNext');
+        XLog.i(LOG_TAG, 'leftOutCardBuff cache done');
         leftHistoryOutCard.addAll(leftOutCardBuff!);
+        XLog.i(LOG_TAG, 'updateRecorder');
+        LandlordRecorder.updateRecorder(leftOutCardBuff);
+
+        XLog.i(LOG_TAG, 'show leftOutCards ${LandlordManager.getCardsSorted(leftOutCardBuff)}');
+        GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: leftOutCardBuff);
+
+        XLog.i(LOG_TAG, 'leftOutCardBuff, triggerNext');
         StrategyManager().triggerNext();
         leftOutCardBuffLength = 0;
+        leftOutCardBuff = null;
       }
     }
   }

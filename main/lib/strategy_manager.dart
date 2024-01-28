@@ -217,7 +217,7 @@ class StrategyManager {
     Options options = Options();
     options.headers = {'userid': userId, 'hash': hash};
 
-    var res = await HttpUtils.post(serverUrl, data: jsonStr);
+    var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
     XLog.i(LOG_TAG, 'tellServerRightPlayerSkip res=$res');
   }
 

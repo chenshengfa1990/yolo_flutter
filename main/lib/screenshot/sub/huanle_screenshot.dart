@@ -66,9 +66,8 @@ class HuanleScreenshot extends ScreenShotManager {
               notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
             }
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
+            await StrategyManager().tellServerInitialInfo();
             if (LandlordManager.myIdentify == 'landlord') {
-              ///首次告知信息，需要await，第二次请求策略，为了减少时间，不必await
-              await StrategyManager().getServerSuggestion();
               StrategyManager().getServerSuggestion();
             }
           }

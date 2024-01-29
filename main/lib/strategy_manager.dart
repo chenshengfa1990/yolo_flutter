@@ -96,11 +96,36 @@ class StrategyManager {
     }
   }
 
+  Future<void> tellServerInitialInfo() async {
+    try {
+      Map<String, dynamic> httpParams = {};
+      httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
+      httpParams['action'] = {};
+      httpParams['user_id'] = UserManager.deviceId;
+      httpParams['round'] = ++round;
+      httpParams["player_position"] = LandlordManager.myIdentify;
+      httpParams['player_hand_cards'] = LandlordManager.myHandCardServerFormat;
+      httpParams['three_landlord_cards'] = LandlordManager.threeCardInt;
+      var jsonStr = json.encode(httpParams);
+
+      String userId = UserManager.getUserId();
+      String hash = UserManager.getHash(jsonStr);
+      Options options = Options();
+      options.headers = {'userid': userId, 'hash': hash};
+
+      XLog.i(LOG_TAG, 'tellServerInitInfo param=$jsonStr');
+      var res = await HttpUtils.post(serverUrl, data: jsonStr, options: options);
+      XLog.i(LOG_TAG, 'tellServerInitInfo res=$res');
+    } catch (e) {
+      XLog.e(LOG_TAG, 'tellServerInitInfo error ${e.toString()}');
+    }
+  }
+
   Future<void> getServerSuggestion() async {
     try {
       Map<String, dynamic> httpParams = {};
       httpParams['num_cards_left_dict'] = {"landlord": 20, "landlord_down": 17, "landlord_up": 17};
-      httpParams['action'] = {"position": LandlordManager.myIdentify, "need_play_card": round == 0 ? false : true};
+      httpParams['action'] = {"position": LandlordManager.myIdentify, "need_play_card": true};
       httpParams['user_id'] = UserManager.deviceId;
       httpParams['round'] = ++round;
       httpParams["player_position"] = LandlordManager.myIdentify;

@@ -68,11 +68,10 @@ class TuyouScreenshot extends ScreenShotManager {
               notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
             }
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
+            await StrategyManager().tellServerInitialInfo();
             if (LandlordManager.leftPlayerIdentify == "landlord" || LandlordManager.rightPlayerIdentify == "landlord") {
               await Future.delayed(const Duration(milliseconds: 3000));
             } else if (LandlordManager.myIdentify == 'landlord') {
-              ///首次告知信息，需要await，第二次请求策略，为了减少时间，不必await
-              await StrategyManager().getServerSuggestion();
               StrategyManager().getServerSuggestion();
             }
           }

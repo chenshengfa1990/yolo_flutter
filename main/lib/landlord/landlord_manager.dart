@@ -324,7 +324,7 @@ class LandlordManager {
   static List<NcnnDetectModel>? getBuChu(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     List<NcnnDetectModel> buchuRes = [];
     for (int i = 0; i < (detectList?.length ?? 0); i++) {
-      if (detectList![i].label == buChuLabel[curLandlordType]) {
+      if ((detectList![i].label == buChuLabel[curLandlordType]) || (detectList[i].label == 'buchu')) {
         buchuRes.add(detectList[i]);
       }
     }

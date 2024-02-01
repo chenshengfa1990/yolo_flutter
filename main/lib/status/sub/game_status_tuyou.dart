@@ -198,6 +198,7 @@ class GameStatusTuyou extends GameStatusManager {
       if (compareList(myOutCard, lastMyOutCard) == true) {
         myOutCardBuff = null;
         myOutCardBuffLength = 0;
+        return;
       }
     }
     if (myOutCardBuff == null) {

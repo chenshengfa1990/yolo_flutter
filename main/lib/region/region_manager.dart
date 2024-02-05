@@ -38,7 +38,7 @@ class RegionManager {
   ///右边玩家出牌区域
   static bool inRightPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
     Rect region = RegionFactory.getRightPlayerOutCardRegion();
-    if (model.x! > region.left) {
+    if (model.x! > region.left && model.x! < region.right) {
       if (model.y! > region.top && model.y! < region.bottom) {
         return true;
       }
@@ -49,7 +49,7 @@ class RegionManager {
   ///左边玩家出牌区域
   static bool inLeftPlayerOutCardRegion(NcnnDetectModel model, ScreenshotModel screenshotModel) {
     Rect region = RegionFactory.getLeftPlayerOutCardRegion();
-    if (model.x! < region.right) {
+    if (model.x! < region.right && model.x! > region.left) {
       if (model.y! > region.top && model.y! < region.bottom) {
         return true;
       }

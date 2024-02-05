@@ -70,12 +70,51 @@ class GameStatusWeile extends GameStatusManager {
   @override
   GameStatus calculateNextGameStatus(List<NcnnDetectModel>? detectList, ScreenshotModel screenshotModel) {
     GameStatus nextStatus = curGameStatus;
+    XLog.i(LOG_TAG, "startCalculateNextGameStatus, curGameStatus: $curGameStatus");
+    switch (curGameStatus) {
+      case GameStatus.myTurn:
+        break;
+      case GameStatus.iSkip:
+        nextStatus = GameStatus.rightTurn;
+        break;
+      case GameStatus.iDone:
+        nextStatus = GameStatus.rightTurn;
+        break;
+      case GameStatus.leftTurn:
+        break;
+      case GameStatus.leftSkip:
+        nextStatus = GameStatus.myTurn;
+        break;
+      case GameStatus.leftDone:
+        nextStatus = GameStatus.myTurn;
+        break;
+      case GameStatus.rightTurn:
+        break;
+      case GameStatus.rightSkip:
+        nextStatus = GameStatus.leftTurn;
+        break;
+      case GameStatus.rightDone:
+        nextStatus = GameStatus.leftTurn;
+        break;
+    }
 
     var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
     if ((rightOutCard?.isNotEmpty ?? false)) {
       rightEmptyBuffLength = 0;
-      nextStatus = cacheRightOutCard(rightOutCard!);
+      cacheRightOutCard(rightOutCard!);
+      if (nextStatus == GameStatus.rightTurn) {
+        nextStatus = GameStatus.rightDone;
+      }
     } else {
+      if (nextStatus == GameStatus.rightTurn) {
+        var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
+        if (RegionManager.inRightBuchuRegion(buchu, screenshotModel)) {
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
+          XLog.i(LOG_TAG, 'rightSkip');
+          StrategyManager().calculateNextAction(GameStatus.rightSkip, null);
+          nextStatus = GameStatus.rightSkip;
+        }
+      }
       rightEmptyBuffLength++;
       if (rightEmptyBuffLength == 3) {
         lastRightOutCard = null;
@@ -88,8 +127,21 @@ class GameStatusWeile extends GameStatusManager {
     var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
     if ((leftOutCard?.isNotEmpty ?? false)) {
       leftEmptyBuffLength = 0;
-      nextStatus = cacheLeftOutCard(leftOutCard!);
+      cacheLeftOutCard(leftOutCard!);
+      if (nextStatus == GameStatus.leftTurn) {
+        nextStatus = GameStatus.leftDone;
+      }
     } else {
+      if (nextStatus == GameStatus.leftTurn) {
+        var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
+        if (RegionManager.inLeftBuchuRegion(buchu, screenshotModel)) {
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
+          XLog.i(LOG_TAG, 'leftSkip');
+          StrategyManager().calculateNextAction(GameStatus.leftSkip, null);
+          nextStatus = GameStatus.leftSkip;
+        }
+      }
+      leftEmptyBuffLength++;
       if (leftEmptyBuffLength == 3) {
         lastLeftOutCard = null;
         leftEmptyBuffLength = 0;
@@ -101,8 +153,20 @@ class GameStatusWeile extends GameStatusManager {
     var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
     if ((myOutCard?.isNotEmpty ?? false)) {
       myEmptyBuffLength = 0;
-      nextStatus = cacheMyOutCard(myOutCard!);
+      cacheMyOutCard(myOutCard!);
+      if (nextStatus == GameStatus.myTurn) {
+        nextStatus = GameStatus.iDone;
+      }
     } else {
+      if (nextStatus == GameStatus.myTurn) {
+        var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
+        if (RegionManager.inMyBuchuRegion(buchu, screenshotModel)) {
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
+          XLog.i(LOG_TAG, 'iSkip');
+          StrategyManager().calculateNextAction(GameStatus.iSkip, null);
+          nextStatus = GameStatus.iSkip;
+        }
+      }
       myEmptyBuffLength++;
       if (myEmptyBuffLength == 3) {
         lastMyOutCard = null;
@@ -115,16 +179,16 @@ class GameStatusWeile extends GameStatusManager {
     return nextStatus;
   }
 
-  GameStatus cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
-    GameStatus nextStatus = curGameStatus;
+  void cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
     XLog.i(LOG_TAG, 'lastMyOutCard: ${LandlordManager.getCardsSorted(lastMyOutCard)}');
     XLog.i(LOG_TAG, 'myOutCardBuff: ${LandlordManager.getCardsSorted(myOutCardBuff)}');
     XLog.i(LOG_TAG, 'myOutCardBuffLength: $myOutCardBuffLength, cache myOutCards ${LandlordManager.getCardsSorted(myOutCard)}');
     if (lastMyOutCard != null) {
       if (compareList(myOutCard, lastMyOutCard) == true) {
+        XLog.i(LOG_TAG, 'same as lastMyOutCard');
         myOutCardBuff = null;
         myOutCardBuffLength = 0;
-        return nextStatus;
+        return;
       }
     }
     if (myOutCardBuff == null) {
@@ -138,29 +202,29 @@ class GameStatusWeile extends GameStatusManager {
         myOutCardBuffLength++;
         if (myOutCardBuffLength == 3) {
           myOutCardBuffLength = 0;
-          StrategyManager().tellServerIDone();
+          myHistoryOutCardCount++;
+          StrategyManager().calculateNextAction(GameStatus.iDone, myOutCardBuff);
           lastMyOutCard = myOutCardBuff;
           myOutCardBuff = null;
           myHistoryOutCard.addAll(lastMyOutCard!);
-          nextStatus = GameStatus.iDone;
-          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+          // GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, models: lastMyOutCard);
+          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
         }
       }
     }
-    return nextStatus;
   }
 
-  GameStatus cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
-    GameStatus nextStatus = curGameStatus;
+  void cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
     XLog.i(LOG_TAG, 'lastRightOutCard: ${LandlordManager.getCardsSorted(lastRightOutCard)}');
     XLog.i(LOG_TAG, 'rightOutCardBuff: ${LandlordManager.getCardsSorted(rightOutCardBuff)}');
     XLog.i(LOG_TAG, 'rightOutCardBuffLength: $rightOutCardBuffLength, cache rightOutCards ${LandlordManager.getCardsSorted(rightOutCard)}');
     if (lastRightOutCard != null) {
       if (compareList(rightOutCard, lastRightOutCard) == true) {
+        XLog.i(LOG_TAG, 'same as lastRightOutCard');
         rightOutCardBuff = null;
         rightOutCardBuffLength = 0;
-        return nextStatus;
+        return;
       }
     }
     if (rightOutCardBuff == null) {
@@ -174,30 +238,29 @@ class GameStatusWeile extends GameStatusManager {
         rightOutCardBuffLength++;
         if (rightOutCardBuffLength == 3) {
           rightOutCardBuffLength = 0;
-          StrategyManager().tellServerRightPlayerDone();
+          rightHistoryOutCardCount++;
+          StrategyManager().calculateNextAction(GameStatus.rightDone, rightOutCardBuff);
           lastRightOutCard = rightOutCardBuff;
           rightOutCardBuff = null;
           rightHistoryOutCard.addAll(lastRightOutCard!);
-          nextStatus = GameStatus.rightDone;
-          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+          // GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: lastRightOutCard);
           LandlordRecorder.updateRecorder(lastRightOutCard);
         }
       }
     }
-    return nextStatus;
   }
 
-  GameStatus cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
-    GameStatus nextStatus = curGameStatus;
+  void cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
     XLog.i(LOG_TAG, 'lastLeftOutCard: ${LandlordManager.getCardsSorted(lastLeftOutCard)}');
     XLog.i(LOG_TAG, 'leftOutCardBuff: ${LandlordManager.getCardsSorted(leftOutCardBuff)}');
     XLog.i(LOG_TAG, 'leftOutCardBuffLength: $leftOutCardBuffLength, cache leftOutCards ${LandlordManager.getCardsSorted(leftOutCard)}');
     if (lastLeftOutCard != null) {
       if (compareList(leftOutCard, lastLeftOutCard) == true) {
+        XLog.i(LOG_TAG, 'same as lastLeftOutCard');
         leftOutCardBuff = null;
         leftOutCardBuffLength = 0;
-        return nextStatus;
+        return;
       }
     }
     if (leftOutCardBuff == null) {
@@ -211,17 +274,16 @@ class GameStatusWeile extends GameStatusManager {
         leftOutCardBuffLength++;
         if (leftOutCardBuffLength == 3) {
           leftOutCardBuffLength = 0;
-          StrategyManager().tellServerLeftPlayerDone();
+          leftHistoryOutCardCount++;
+          StrategyManager().calculateNextAction(GameStatus.leftDone, leftOutCardBuff);
           lastLeftOutCard = leftOutCardBuff;
           leftOutCardBuff = null;
           leftHistoryOutCard.addAll(lastLeftOutCard!);
-          nextStatus = GameStatus.leftDone;
-          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+          // GameStatusManager.notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: lastLeftOutCard);
           LandlordRecorder.updateRecorder(lastLeftOutCard);
         }
       }
     }
-    return nextStatus;
   }
 }

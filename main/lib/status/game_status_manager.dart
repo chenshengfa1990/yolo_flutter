@@ -36,34 +36,48 @@ enum BuffWho {
 ///状态管理
 abstract class GameStatusManager {
   static String LOG_TAG = 'GameStatusManager';
+
+  ///当前状态
   GameStatus curGameStatus = GameStatus.gamePreparing;
+
+  ///跳过设置状态
+  bool notSetStatus = false;
+
   static List<String> gameStatusStr = ['准备中', '地主已分配', '我出牌中', '我不出', '我已出牌', '下家出牌中', '下家不出', '下家已出牌', '上家出牌中', '上家不出', '上家已出牌', '游戏结束'];
+
+  ///出牌缓冲区
   List<NcnnDetectModel>? myOutCardBuff;
   List<NcnnDetectModel>? leftOutCardBuff;
   List<NcnnDetectModel>? rightOutCardBuff;
 
+  ///上一次出牌
   List<NcnnDetectModel>? lastRightOutCard;
   List<NcnnDetectModel>? lastLeftOutCard;
   List<NcnnDetectModel>? lastMyOutCard;
 
+  ///历史出牌
   List<NcnnDetectModel> myHistoryOutCard = <NcnnDetectModel>[];
   List<NcnnDetectModel> leftHistoryOutCard = [];
   List<NcnnDetectModel> rightHistoryOutCard = [];
 
-  bool myBuChu = false;
+  ///历史出牌次数
+  int myHistoryOutCardCount = 0;
+  int leftHistoryOutCardCount = 0;
+  int rightHistoryOutCardCount = 0;
 
   ///是否打了不出
+  bool myBuChu = false;
   bool leftBuChu = false;
   bool rightBuChu = false;
+
+  ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
   int myOutCardBuffLength = 0;
-  int myEmptyBuffLength = 0;
-
-  ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
   int leftOutCardBuffLength = 0;
-  int leftEmptyBuffLength = 0;
-
-  ///出牌缓冲区长度，长度越长，准确率越高，相应的，实时性降低
   int rightOutCardBuffLength = 0;
+
+  ///空缓冲区长度
+  int myEmptyBuffLength = 0;
+  int leftEmptyBuffLength = 0;
   int rightEmptyBuffLength = 0;
 
   GameStatus initGameStatus(NcnnDetectModel landlord, ScreenshotModel screenshotModel, {List<NcnnDetectModel>? detectList});
@@ -101,6 +115,10 @@ abstract class GameStatusManager {
     myBuChu = false;
     leftBuChu = false;
     rightBuChu = false;
+    myHistoryOutCardCount = 0;
+    leftHistoryOutCardCount = 0;
+    rightHistoryOutCardCount = 0;
+    notSetStatus = false;
     FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatus.gameOver)]);
   }
 }

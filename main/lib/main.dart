@@ -26,6 +26,7 @@ import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
 import 'package:yolo_flutter/screenshot/screenshot_factory.dart';
 import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
+import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/user_manager.dart';
 import 'package:yolo_flutter/util/upload_util.dart';
 
@@ -245,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
     GameStatusFactory.getStatusManager().destroy();
     LandlordManager.destroy();
     StrategyManager().destroy();
+    StrategyQueue().destroy();
     LandlordRecorder.destroy();
     FlutterOverlayWindow.closeOverlay();
     XLog.flush();
@@ -282,6 +284,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _test() async {
+    if (iScreenShotManager?.isGameRunning == true) {
+      Fluttertoast.showToast(msg: "牌局进行中");
+      return;
+    }
     Directory? cacheDir = await getExternalStorageDirectory();
     deleteCacheScreenshot('${cacheDir?.path}/Pictures');
 
@@ -326,6 +332,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
       onChanged: (value) {
         setState(() {
+          if (iScreenShotManager?.isGameRunning == true) {
+            Fluttertoast.showToast(msg: "牌局进行中");
+            return;
+          }
           _prefs.then((preference) => preference.setInt('landlordType', (value as LandlordType).index));
           LandlordManager.curLandlordType = value as LandlordType;
           XLog.i(LOG_TAG, "select landlordType:  ${LandlordManager.curLandlordType}");

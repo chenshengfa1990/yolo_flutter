@@ -11,6 +11,7 @@ import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
 import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/status/game_status_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
+import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
 class WeileScreenshot extends ScreenShotManager {
@@ -42,6 +43,7 @@ class WeileScreenshot extends ScreenShotManager {
           statusManager.destroy();
           LandlordManager.destroy();
           StrategyManager().destroy();
+          StrategyQueue().destroy();
           LandlordRecorder.destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
@@ -63,8 +65,12 @@ class WeileScreenshot extends ScreenShotManager {
             XLog.i(LOG_TAG, 'landLord appear');
             LandlordManager.initPlayerIdentify(landlord, screenshotModel);
             LandlordRecorder.updateRecorder(LandlordManager.getMyHandCard(detectList, screenshotModel));
+            StrategyQueue().enqueue(RequestEvent(RequestType.init));
             if (LandlordManager.leftPlayerIdentify == "landlord" || LandlordManager.rightPlayerIdentify == "landlord") {
               await Future.delayed(const Duration(milliseconds: 3000));
+              return;
+            } else if (LandlordManager.myIdentify == 'landlord') {
+              StrategyQueue().enqueue(RequestEvent(RequestType.suggestion));
             }
           }
         } else {
@@ -72,13 +78,13 @@ class WeileScreenshot extends ScreenShotManager {
         }
       }
       XLog.i(LOG_TAG, 'Current game status is ${statusManager.curGameStatus}');
-      // if (LandlordManager.threeCards?.length != 3) {
-      //   List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
-      //   if (threeCard?.length == 3) {
-      //     XLog.i(LOG_TAG, 'Three card is ${LandlordManager.getCardsSorted(threeCard)}');
-      //     notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
-      //   }
-      // }
+      if (LandlordManager.threeCards?.length != 3) {
+        List<NcnnDetectModel>? threeCard = LandlordManager.getThreeCard(detectList, screenshotModel!);
+        if (threeCard?.length == 3) {
+          XLog.i(LOG_TAG, 'Three card is ${LandlordManager.getCardsSorted(threeCard)}');
+          notifyOverlayWindow(OverlayUpdateType.threeCard, models: threeCard);
+        }
+      }
 
       ///刷新手牌
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
@@ -101,12 +107,17 @@ class WeileScreenshot extends ScreenShotManager {
 
       ///计算下一个状态
       var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
-      // XLog.i(LOG_TAG, 'nextStatus is $nextStatus');
+
+      XLog.i(LOG_TAG, 'notSetStatus is ${statusManager.notSetStatus}');
+      if (statusManager.notSetStatus) {
+        statusManager.notSetStatus = false;
+      } else {
+        statusManager.curGameStatus = nextStatus;
+      }
+      XLog.i(LOG_TAG, 'nextStatus is ${statusManager.curGameStatus}');
 
       ///刷新游戏状态
-      // notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusMgrWeile.getGameStatusStr(nextStatus));
-
-      statusManager.curGameStatus = nextStatus;
+      notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(statusManager.curGameStatus));
     }
   }
 }

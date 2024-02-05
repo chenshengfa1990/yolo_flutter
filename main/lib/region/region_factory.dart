@@ -15,6 +15,8 @@ class RegionFactory {
         return HuanleRegion.getThreeCardRegion();
       case LandlordType.tuyou:
         return TuyouRegion.getThreeCardRegion();
+      case LandlordType.weile:
+        return WeileRegion.getThreeCardRegion();
     }
     return Rect.zero;
   }
@@ -73,6 +75,8 @@ class RegionFactory {
         return HuanleRegion.getRightPlayerBuchuRegion();
       case LandlordType.tuyou:
         return TuyouRegion.getRightPlayerBuchuRegion();
+      case LandlordType.weile:
+        return WeileRegion.getRightPlayerBuchuRegion();
     }
     return Rect.zero;
   }
@@ -83,6 +87,8 @@ class RegionFactory {
         return HuanleRegion.getLeftPlayerBuchuRegion();
       case LandlordType.tuyou:
         return TuyouRegion.getLeftPlayerBuchuRegion();
+      case LandlordType.weile:
+        return WeileRegion.getLeftPlayerBuchuRegion();
     }
     return Rect.zero;
   }
@@ -93,6 +99,8 @@ class RegionFactory {
         return HuanleRegion.getMyBuchuRegion();
       case LandlordType.tuyou:
         return TuyouRegion.getMyBuchuRegion();
+      case LandlordType.weile:
+        return WeileRegion.getMyBuchuRegion();
     }
     return Rect.zero;
   }

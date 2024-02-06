@@ -65,13 +65,16 @@ dependencies:
   path_provider: ^2.0.9
 
   #解压缩
-  archive: ^3.3.5
+  archive: ^3.4.10
 
   #日期
   intl: 0.17.0
 
   #设备信息
-  device_info: ^2.0.0
+  device_info_plus: ^9.1.2
+
+  #包信息
+  package_info: ^2.0.0
 
   flutter_easyloading: 3.0.5
 

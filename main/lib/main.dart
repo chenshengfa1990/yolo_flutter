@@ -4,13 +4,11 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ncnn_plugin/export.dart';
 
@@ -18,7 +16,6 @@ import 'package:ncnn_plugin/export.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upload_plugin/upload_plugin.dart';
 import 'package:yolo_flutter/landlord/landlord_type.dart';
 
 // import 'package:tensorflow_plugin/export.dart';
@@ -28,7 +25,9 @@ import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/user_manager.dart';
-import 'package:yolo_flutter/util/upload_util.dart';
+import 'package:yolo_flutter/util/common_util.dart';
+import 'package:yolo_flutter/util/dialog_util.dart';
+import 'package:yolo_flutter/view/feed_back.dart';
 
 import 'landlord/landlord_manager.dart';
 import 'landlord_recorder.dart';
@@ -90,7 +89,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // late TensorflowPlugin tensorflowPlugin;
   late NcnnPlugin ncnnPlugin;
-  late UploadPlugin uploadPlugin;
 
   // late OpencvPlugin opencvPlugin;
   ScreenShotManager? iScreenShotManager;
@@ -112,11 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     // tensorflowPlugin = TensorflowPlugin();
     ncnnPlugin = NcnnPlugin();
-    uploadPlugin = UploadPlugin();
     // opencvPlugin = OpencvPlugin();
     // screenShotManager = ScreenShotManager(ncnnPlugin);
     initTextField();
     getSharePreference();
+    CommonUtil.init();
     XLog.i(LOG_TAG, "app init, isDebugMode:$kDebugMode");
   }
 
@@ -179,13 +177,13 @@ class _MyHomePageState extends State<MyHomePage> {
   //   }
   // }
 
-  void _uploadLog() async {
-    String? token = await uploadPlugin.getQiqiuUploadToken();
-    final ImagePicker picker = ImagePicker();
-    var selectImage = await picker.getImage(source: ImageSource.gallery);
-    if ((selectImage?.path.isNotEmpty ?? false) && (token?.isNotEmpty ?? false)) {
-      UploadUtil.uploadFile((selectImage?.path)!, token!);
-    }
+  void showFeedbackDialog() {
+    DialogUtil.showCustomDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return const FeedbackPage();
+        });
   }
 
   void _startGame() async {
@@ -200,6 +198,12 @@ class _MyHomePageState extends State<MyHomePage> {
     if (loginResult == false) {
       return;
     }
+    bool storagePermission = await checkStoragePermission();
+    if (!storagePermission) {
+      XLog.i(LOG_TAG, "storagePermission deny");
+      return;
+    }
+
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
     if (!status) {
       bool? result = await FlutterOverlayWindow.requestPermission();
@@ -207,11 +211,6 @@ class _MyHomePageState extends State<MyHomePage> {
         XLog.i(LOG_TAG, "FlutterOverlayWindow permission deny");
         return;
       }
-    }
-    bool storagePermission = await checkStoragePermission();
-    if (!storagePermission) {
-      XLog.i(LOG_TAG, "storagePermission deny");
-      return;
     }
 
     await FlutterOverlayWindow.showOverlay(
@@ -350,6 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
       ),
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Center(
@@ -479,7 +479,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 // Container(
                 //   padding: const EdgeInsets.only(left: 10),
                 //   child: GestureDetector(
@@ -499,20 +499,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 //   ),
                 // ),
                 // const SizedBox(height: 10),
-                // Container(
-                //   padding: const EdgeInsets.only(left: 10),
-                //   child: GestureDetector(
-                //     onTap: _uploadLog,
-                //     child: Row(
-                //       children: [
-                //         Text(
-                //           '问题反馈: ',
-                //           style: Theme.of(context).textTheme.headline5,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: showFeedbackDialog,
+                    child: Row(
+                      children: [
+                        Text(
+                          '问题反馈',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 // const SizedBox(height: 10),
               ],
             ),
@@ -525,20 +525,34 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: _startGame,
-                  child: Text(
-                    '开始牌局',
-                    style: Theme.of(context).textTheme.headline4,
+                  onTap: _endGame,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.08),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Text(
+                      '结束牌局',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ),
                 ),
                 const SizedBox(
-                  width: 50,
+                  width: 20,
                 ),
                 GestureDetector(
-                  onTap: _endGame,
-                  child: Text(
-                    '结束牌局',
-                    style: Theme.of(context).textTheme.headline4,
+                  onTap: _startGame,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.08),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Text(
+                      '开始牌局',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
                   ),
                 ),
               ],

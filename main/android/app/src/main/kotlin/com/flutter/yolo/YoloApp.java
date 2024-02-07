@@ -2,6 +2,7 @@ package com.flutter.yolo;
 
 import android.app.Application;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mars.xlog.Log;
 import com.tencent.upgrade.bean.UpgradeConfig;
 import com.tencent.upgrade.core.UpgradeManager;
@@ -46,7 +47,7 @@ public class YoloApp extends Application{
         UpgradeManager.getInstance().init(this, config);
 
 //        UpgradeManager.getInstance().checkUpgrade(false, null, new YoloUpgradeStrategyRequestCallback());
-
+        CrashReport.initCrashReport(getApplicationContext(), "132f0b4958", false);
     }
 
 }

@@ -78,8 +78,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       autofocus: true,
                       controller: editTextController,
                       textAlign: TextAlign.left,
-                      maxLength: 30,
-                      maxLines: 3,
+                      maxLength: 100,
+                      maxLines: 5,
                       cursorColor: const Color(0xFF4186FF),
                       style: TextStyle(
                         fontSize: 13,

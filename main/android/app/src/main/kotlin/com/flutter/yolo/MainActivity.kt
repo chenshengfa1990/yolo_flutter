@@ -3,6 +3,7 @@ package com.flutter.yolo
 import android.content.Intent
 import android.os.Bundle
 import com.flutter.yolo.screenshot_plugin.ScreenshotPlugin
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.upgrade.core.DefaultUpgradeStrategyRequestCallback
 import com.tencent.upgrade.core.UpgradeManager
 import io.flutter.embedding.android.FlutterActivity
@@ -22,6 +23,7 @@ class MainActivity: FlutterActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+//        CrashReport.testJavaCrash();
         if (requestCode == ScreenshotPlugin.REQUEST_CODE_CAPTURE_SCREEN && resultCode == RESULT_OK) {
             ScreenshotPlugin.screenShotIntent = data
             ScreenshotPlugin.screenshotPermissionResultCode = resultCode

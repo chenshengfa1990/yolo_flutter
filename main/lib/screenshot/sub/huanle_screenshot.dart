@@ -45,7 +45,8 @@ class HuanleScreenshot extends ScreenShotManager {
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing)]);
+          FlutterOverlayWindow.shareData(
+              [OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing), LandlordManager.getLandlordName()]);
         }
         return;
       }

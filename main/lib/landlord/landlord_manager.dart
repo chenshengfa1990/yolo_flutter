@@ -80,6 +80,12 @@ class LandlordManager {
     LandlordType.tuyou: 'tuyou_buchu',
   };
 
+  static Map<LandlordType, String> landlordName = {
+    LandlordType.huanle: '欢乐斗地主',
+    LandlordType.tuyou: '途游斗地主',
+    LandlordType.weile: '微乐斗地主',
+  };
+
   ///W表示大王，w表示小王
   static List<String> showName = ["W", "w", "2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"];
 
@@ -117,6 +123,10 @@ class LandlordManager {
     FlutterOverlayWindow.shareData([OverlayUpdateType.myOutCard.index, '']);
     FlutterOverlayWindow.shareData([OverlayUpdateType.handCard.index, '']);
     FlutterOverlayWindow.shareData([OverlayUpdateType.suggestion.index, '']);
+  }
+
+  static String getLandlordName() {
+    return landlordName[curLandlordType]!.substring(0, 2);
   }
 
   ///对牌进行排列

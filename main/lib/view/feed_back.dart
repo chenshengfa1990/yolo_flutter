@@ -204,14 +204,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
     var zipFileName = '${DateFormat('yyyyMMdd-HHmmss-SSS').format(now)}.zip';
     var zipPath = '${(await getExternalStorageDirectory())?.path}/$zipFileName';
 
-    await ZipFileEncoder().zipDirectoryAsync(Directory(logDir), filename: zipPath);
+    ZipFileEncoder().zipDirectory(Directory(logDir), filename: zipPath);
+    await Future.delayed(const Duration(milliseconds: 1500));
     _uploadLog(zipPath, zipFileName);
   }
 
   void _uploadLog(String? filePath, String? zipFileName) async {
     UploadPlugin uploadPlugin = UploadPlugin();
     String? token = await uploadPlugin.getQiqiuUploadToken();
-    if ((filePath?.isNotEmpty ?? false) && (token?.isNotEmpty ?? false)) {
+    if ((filePath?.isNotEmpty ?? false) && (token?.isNotEmpty ?? false) && File(filePath!).existsSync()) {
       PutOptions options = PutOptions(key: zipFileName);
       bool result = await UploadUtil.uploadFile(filePath!, token!, options: options);
       EasyLoading.dismiss();
@@ -219,6 +220,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
         Fluttertoast.showToast(msg: "反馈成功");
         Navigator.of(context).pop();
       }
+    } else {
+      Fluttertoast.showToast(msg: "反馈失败");
     }
   }
 

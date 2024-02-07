@@ -188,6 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startGame() async {
     XLog.i(LOG_TAG, "_startGame");
+    // Fluttertoast.showToast(msg: "去体验${LandlordManager.landlordName[LandlordManager.curLandlordType]}吧",gravity: ToastGravity.CENTER, toastLength: Toast.LENGTH_LONG);
+
     if (iScreenShotManager?.isGameRunning == true) {
       XLog.i(LOG_TAG, "game running, cannot start again!!!!!");
       Fluttertoast.showToast(msg: "牌局进行中");
@@ -324,10 +326,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildDropdownButton() {
     return DropdownButton(
       value: LandlordManager.curLandlordType,
-      items: const [
-        DropdownMenuItem(value: LandlordType.huanle, child: Text('欢乐斗地主')),
-        DropdownMenuItem(value: LandlordType.weile, child: Text('微乐斗地主')),
-        DropdownMenuItem(value: LandlordType.tuyou, child: Text('途游斗地主')),
+      items: [
+        DropdownMenuItem(value: LandlordType.huanle, child: Text(LandlordManager.landlordName[LandlordType.huanle]!)),
+        DropdownMenuItem(value: LandlordType.weile, child: Text(LandlordManager.landlordName[LandlordType.weile]!)),
+        DropdownMenuItem(value: LandlordType.tuyou, child: Text(LandlordManager.landlordName[LandlordType.tuyou]!)),
       ],
       onChanged: (value) {
         setState(() {

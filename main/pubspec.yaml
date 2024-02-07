@@ -65,7 +65,7 @@ dependencies:
   path_provider: ^2.0.9
 
   #解压缩
-  archive: ^3.4.10
+  archive: ^3.3.5
 
   #日期
   intl: 0.17.0

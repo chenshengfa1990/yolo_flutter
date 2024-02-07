@@ -206,11 +206,13 @@ class GameStatusTuyou extends GameStatusManager {
       myOutCardBuffLength++;
     } else {
       if (compareList(myOutCard, myOutCardBuff) == false) {
+        XLog.i(LOG_TAG, 'myOutCard not same as before, replace');
         myOutCardBuff = myOutCard;
         myOutCardBuffLength = 1;
       } else {
         myOutCardBuffLength++;
         if (myOutCardBuffLength == getOutCardBuffLength(BuffWho.my)) {
+          XLog.i(LOG_TAG, 'cache myOutCard done, myOutCardBuffLength: $myOutCardBuffLength');
           lastMyOutCard = myOutCardBuff;
           myHistoryOutCard.addAll(lastMyOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, models: lastMyOutCard);
@@ -238,11 +240,13 @@ class GameStatusTuyou extends GameStatusManager {
       rightOutCardBuffLength++;
     } else {
       if (compareList(rightOutCard, rightOutCardBuff) == false) {
+        XLog.i(LOG_TAG, 'rightOutCard not same as before, replace');
         rightOutCardBuff = rightOutCard;
         rightOutCardBuffLength = 1;
       } else {
         rightOutCardBuffLength++;
         if (rightOutCardBuffLength == getOutCardBuffLength(BuffWho.right)) {
+          XLog.i(LOG_TAG, 'cache rightOutCard done, rightOutCardBuffLength: $rightOutCardBuffLength');
           lastRightOutCard = rightOutCardBuff;
           rightHistoryOutCard.addAll(lastRightOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, models: lastRightOutCard);
@@ -271,11 +275,13 @@ class GameStatusTuyou extends GameStatusManager {
       leftOutCardBuffLength++;
     } else {
       if (compareList(leftOutCard, leftOutCardBuff) == false) {
+        XLog.i(LOG_TAG, 'leftOutCard not same as before, replace');
         leftOutCardBuff = leftOutCard;
         leftOutCardBuffLength = 1;
       } else {
         leftOutCardBuffLength++;
         if (leftOutCardBuffLength == getOutCardBuffLength(BuffWho.left)) {
+          XLog.i(LOG_TAG, 'cache leftOutCard done, leftOutCardBuffLength: $leftOutCardBuffLength');
           lastLeftOutCard = leftOutCardBuff;
           leftHistoryOutCard.addAll(lastLeftOutCard!);
           GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, models: lastLeftOutCard);

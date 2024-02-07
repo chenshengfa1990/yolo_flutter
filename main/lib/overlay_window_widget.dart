@@ -47,6 +47,7 @@ class DraggableContent extends StatefulWidget {
 
 class _DraggableContentState extends State<DraggableContent> {
   Offset position = const Offset(0.0, 0.0);
+  ValueNotifier<String> landLordTypeNotifier = ValueNotifier('');
   ValueNotifier<String> gameStatusNotifier = ValueNotifier('准备中');
   ValueNotifier<String> threeCardNotifier = ValueNotifier('');
   ValueNotifier<String> handCardsNotifier = ValueNotifier('');
@@ -96,6 +97,9 @@ class _DraggableContentState extends State<DraggableContent> {
         int showType = showData[0];
         if (showType == OverlayUpdateType.gameStatus.index) {
           gameStatusNotifier.value = showData[1];
+          if (showData.length > 2) {
+            landLordTypeNotifier.value = showData[2];
+          }
         } else if (showType == OverlayUpdateType.threeCard.index) {
           threeCardNotifier.value = showData[1];
         } else if (showType == OverlayUpdateType.handCard.index) {
@@ -961,18 +965,23 @@ class _DraggableContentState extends State<DraggableContent> {
             children: [
               Row(
                 children: [
-                  const Text('状态:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  ValueListenableBuilder(
+                    valueListenable: landLordTypeNotifier,
+                    builder: (BuildContext context, value, Widget? child) {
+                      return Text('$value状态:', style: const TextStyle(fontSize: 7.5, color: Colors.white));
+                    },
+                  ),
                   ValueListenableBuilder(
                     valueListenable: gameStatusNotifier,
                     builder: (BuildContext context, value, Widget? child) {
-                      return Text(value, style: const TextStyle(fontSize: 8, color: Colors.white));
+                      return Text(value, style: const TextStyle(fontSize: 7.5, color: Colors.white));
                     },
                   ),
                 ],
               ),
               Row(
                 children: [
-                  const Text('3张牌:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  const Text('3张牌:', style: TextStyle(fontSize: 8.5, color: Colors.white)),
                   ValueListenableBuilder(
                     valueListenable: threeCardNotifier,
                     builder: (BuildContext context, value, Widget? child) {
@@ -983,7 +992,7 @@ class _DraggableContentState extends State<DraggableContent> {
               ),
               Row(
                 children: [
-                  const Text('上家:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  const Text('上家:', style: TextStyle(fontSize: 8.5, color: Colors.white)),
                   ValueListenableBuilder(
                     valueListenable: leftPlayerCardNotifier,
                     builder: (BuildContext context, value, Widget? child) {
@@ -994,7 +1003,7 @@ class _DraggableContentState extends State<DraggableContent> {
               ),
               Row(
                 children: [
-                  const Text('下家:', style: TextStyle(fontSize: 9, color: Colors.white)),
+                  const Text('下家:', style: TextStyle(fontSize: 8.5, color: Colors.white)),
                   ValueListenableBuilder(
                     valueListenable: rightPlayerCardNotifier,
                     builder: (BuildContext context, value, Widget? child) {

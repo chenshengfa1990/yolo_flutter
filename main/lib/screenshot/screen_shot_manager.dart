@@ -49,7 +49,11 @@ abstract class ScreenShotManager {
 
   void notifyOverlayWindow(OverlayUpdateType updateType, {List<NcnnDetectModel>? models, String? showString}) {
     String showStr = (models != null ? LandlordManager.getCardsSorted(models) : showString) ?? '';
-    FlutterOverlayWindow.shareData([updateType.index, showStr]);
+    String? landlordName;
+    if (updateType == OverlayUpdateType.gameStatus) {
+      landlordName = LandlordManager.getLandlordName();
+    }
+    FlutterOverlayWindow.shareData([updateType.index, showStr, landlordName]);
   }
 
   void destroy() {

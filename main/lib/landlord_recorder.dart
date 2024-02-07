@@ -1,4 +1,4 @@
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
@@ -103,6 +103,9 @@ class LandlordRecorder {
     for (var model in detectModels) {
       if (leftCardMap.containsKey(model.label)) {
         int leftNum = leftCardMap[model.label]! - 1;
+        if (kReleaseMode && leftNum < 0) {
+          leftNum = 0;
+        }
         leftCardMap[model.label!] = leftNum;
         if (leftNum == 1) {
           leftCardInWho[model.label!] = predictLeftCardInWho(model.label!);

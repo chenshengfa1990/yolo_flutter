@@ -89,6 +89,8 @@ class StrategyManager {
         await tellServerISkip();
       } else {
         if (statusManager.myOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.my)) {
+          XLog.i(LOG_TAG,
+              'myOutCardBuffLength: ${statusManager.myOutCardBuffLength}, not equal ${statusManager.getOutCardBuffLength(BuffWho.my)}, return back');
           return;
         }
         await tellServerIDone();
@@ -102,6 +104,8 @@ class StrategyManager {
         await tellServerRightPlayerSkip();
       } else {
         if (statusManager.rightOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.right)) {
+          XLog.i(LOG_TAG,
+              'rightOutCardBuffLength: ${statusManager.rightOutCardBuffLength}, not equal ${statusManager.getOutCardBuffLength(BuffWho.right)}, return back');
           return;
         }
         await tellServerRightPlayerDone();
@@ -116,6 +120,8 @@ class StrategyManager {
         await getServerSuggestion();
       } else {
         if (statusManager.leftOutCardBuffLength != statusManager.getOutCardBuffLength(BuffWho.left)) {
+          XLog.i(LOG_TAG,
+              'leftOutCardBuffLength: ${statusManager.leftOutCardBuffLength}, not equal ${statusManager.getOutCardBuffLength(BuffWho.left)}, return back');
           return;
         }
         await tellServerLeftPlayerDone();

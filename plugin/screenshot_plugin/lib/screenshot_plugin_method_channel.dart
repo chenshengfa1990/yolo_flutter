@@ -29,8 +29,8 @@ class MethodChannelScreenshotPlugin extends ScreenshotPluginPlatform {
   }
 
   @override
-  Future<bool?> requestPermission() async {
-    return await methodChannel.invokeMethod('requestPermission');
+  Future<bool> requestPermission() async {
+    return await methodChannel.invokeMethod('requestPermission') ?? false;
   }
 
   @override

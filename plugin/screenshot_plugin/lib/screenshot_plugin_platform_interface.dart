@@ -30,5 +30,6 @@ abstract class ScreenshotPluginPlatform extends PlatformInterface {
 
   Future<ScreenshotModel?> takeScreenshot();
   Future<void> stopScreenshot();
-  Future<bool?> requestPermission();
+
+  Future<bool> requestPermission();
 }

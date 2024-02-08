@@ -188,7 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startGame() async {
     XLog.i(LOG_TAG, "_startGame");
-    // Fluttertoast.showToast(msg: "去体验${LandlordManager.landlordName[LandlordManager.curLandlordType]}吧",gravity: ToastGravity.CENTER, toastLength: Toast.LENGTH_LONG);
 
     if (iScreenShotManager?.isGameRunning == true) {
       XLog.i(LOG_TAG, "game running, cannot start again!!!!!");
@@ -203,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
     bool storagePermission = await checkStoragePermission();
     if (!storagePermission) {
       XLog.i(LOG_TAG, "storagePermission deny");
+      Fluttertoast.showToast(msg: "请开启存储权限");
       return;
     }
 
@@ -211,10 +211,18 @@ class _MyHomePageState extends State<MyHomePage> {
       bool? result = await FlutterOverlayWindow.requestPermission();
       if (result == false) {
         XLog.i(LOG_TAG, "FlutterOverlayWindow permission deny");
+        Fluttertoast.showToast(msg: "请开启浮窗权限");
         return;
       }
     }
 
+    iScreenShotManager = ScreenshotFactory.getScreenshotManager(LandlordManager.curLandlordType, ncnnPlugin);
+    bool screenshotPermission = await iScreenShotManager?.requestPermission() ?? false;
+    if (!screenshotPermission) {
+      XLog.i(LOG_TAG, "ScreenShot permission deny");
+      Fluttertoast.showToast(msg: "请开启截屏权限");
+      return;
+    }
     await FlutterOverlayWindow.showOverlay(
       width: 305,
       height: 62,
@@ -224,9 +232,9 @@ class _MyHomePageState extends State<MyHomePage> {
       // enableDrag: true,
       // positionGravity: PositionGravity.left,
     );
-    iScreenShotManager = ScreenshotFactory.getScreenshotManager(LandlordManager.curLandlordType, ncnnPlugin);
-    await iScreenShotManager?.requestPermission();
     XLog.i(LOG_TAG, "start screenshot, LandlordType: ${LandlordManager.curLandlordType}");
+    Fluttertoast.showToast(msg: "去体验${LandlordManager.landlordName[LandlordManager.curLandlordType]}吧");
+
     iScreenShotManager?.startScreenshotRepeat();
   }
 
@@ -253,46 +261,17 @@ class _MyHomePageState extends State<MyHomePage> {
     XLog.flush();
   }
 
-  void zipScreenshotFile() async {
-    DateTime now = DateTime.now();
-    var zipFileName = '${DateFormat('yyyyMMdd-HHmmss-SSS').format(now)}.zip';
-    var zipPath = '${(await getExternalStorageDirectory())?.path}/$zipFileName';
-    Directory cacheDir = await getTemporaryDirectory();
-
-    ZipFileEncoder().zipDirectory(cacheDir, filename: zipPath);
-    cacheDir.delete(recursive: true);
-
-    // List<FileSystemEntity> files = cacheDir.listSync(recursive: true);
-    //
-    // Archive archive = Archive();
-    //
-    // for (var file in files) {
-    //   if (file is File) {
-    //     String filePath = file.path;
-    //     String relativePath = filePath.substring(cacheDir.path.length + 1);
-    //
-    //     archive.addFile(ArchiveFile(relativePath, file.lengthSync(), file.readAsBytesSync()));
-    //   }
-    // }
-    //
-    // List<int>? encodedZip = ZipEncoder().encode(archive);
-    //
-    // File(zipPath).writeAsBytes(encodedZip!);
-  }
-
-  void _zipScreenshot() async {
-    zipScreenshotFile();
-  }
-
-  void _test() async {
+  void _delete() async {
     if (iScreenShotManager?.isGameRunning == true) {
       Fluttertoast.showToast(msg: "牌局进行中");
       return;
     }
+    EasyLoading.show(dismissOnTap: false);
     Directory? cacheDir = await getExternalStorageDirectory();
     deleteCacheScreenshot('${cacheDir?.path}/Pictures');
 
     XLog.i(LOG_TAG, "deleteCacheScreenshot cache");
+    EasyLoading.dismiss();
     Fluttertoast.showToast(msg: '删除成功');
   }
 
@@ -474,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   child: GestureDetector(
-                    onTap: _test,
+                    onTap: _delete,
                     child: Text(
                       '删除截图缓存',
                       style: Theme.of(context).textTheme.headline5,

@@ -119,6 +119,6 @@ abstract class GameStatusManager {
     leftHistoryOutCardCount = 0;
     rightHistoryOutCardCount = 0;
     notSetStatus = false;
-    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatus.gameOver)]);
+    FlutterOverlayWindow.shareData([OverlayUpdateType.gameStatus.index, getGameStatusStr(GameStatus.gamePreparing)]);
   }
 }

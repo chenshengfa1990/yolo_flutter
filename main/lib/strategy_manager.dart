@@ -4,16 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:flutter_xlog/flutter_xlog.dart';
 import 'package:ncnn_plugin/export.dart';
-import 'package:screenshot_plugin/export.dart';
 import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/user_manager.dart';
 
-import 'status/game_status_factory.dart';
-import 'status/sub/game_status_huanle.dart';
 import 'http/httpUtils.dart';
 import 'landlord/landlord_manager.dart';
-import 'landlord_recorder.dart';
 import 'overlay_window_widget.dart';
+import 'status/game_status_factory.dart';
 import 'status/game_status_manager.dart';
 
 ///目前欢乐和途游使用的方式
@@ -137,7 +134,7 @@ class StrategyManager {
   void calculateNextAction(GameStatus status, List<NcnnDetectModel>? outCard) {
     XLog.i(LOG_TAG, 'calculateNextAction status:$status, outCard: ${LandlordManager.getCardsSorted(outCard)}');
     XLog.i(LOG_TAG,
-        'isFirstRound:${StrategyQueue().isFirstRound}, hasMyEvent: ${StrategyQueue().hasMyEvent}, hasRightEvent: ${StrategyQueue().hasRightEvent}, hasLeftEvent: ${StrategyQueue().hasLeftEvent}');
+        'isFirstRound:${StrategyQueue().isFirstRound}, hasMyEvent: ${StrategyQueue().hasMyEvent}, hasRightEvent: ${StrategyQueue().hasRightEvent}, hasLeftEvent: ${StrategyQueue().hasLeftEvent}, myHistoryOutCardCount: ${statusManager.myHistoryOutCardCount}, leftHistoryOutCardCount: ${statusManager.leftHistoryOutCardCount}, rightHistoryOutCardCount: ${statusManager.rightHistoryOutCardCount}');
 
     ///任何一个人的出牌次数大于1，表示第一圈已经完成
     if (statusManager.myHistoryOutCardCount > 1 || statusManager.leftHistoryOutCardCount > 1 || statusManager.rightHistoryOutCardCount > 1) {

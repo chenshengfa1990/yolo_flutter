@@ -16,7 +16,7 @@ class ScreenshotPlugin {
     return await ScreenshotPluginPlatform.instance.stopScreenshot();
   }
 
-  Future<bool?> requestPermission() async {
+  Future<bool> requestPermission() async {
     return await ScreenshotPluginPlatform.instance.requestPermission();
   }
 }

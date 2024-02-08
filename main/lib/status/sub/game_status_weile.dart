@@ -185,7 +185,7 @@ class GameStatusWeile extends GameStatusManager {
     XLog.i(LOG_TAG, 'myOutCardBuffLength: $myOutCardBuffLength, cache myOutCards ${LandlordManager.getCardsSorted(myOutCard)}');
     if (lastMyOutCard != null) {
       if (compareList(myOutCard, lastMyOutCard) == true) {
-        XLog.i(LOG_TAG, 'same as lastMyOutCard');
+        XLog.i(LOG_TAG, 'same as lastMyOutCard, return');
         myOutCardBuff = null;
         myOutCardBuffLength = 0;
         return;
@@ -221,7 +221,7 @@ class GameStatusWeile extends GameStatusManager {
     XLog.i(LOG_TAG, 'rightOutCardBuffLength: $rightOutCardBuffLength, cache rightOutCards ${LandlordManager.getCardsSorted(rightOutCard)}');
     if (lastRightOutCard != null) {
       if (compareList(rightOutCard, lastRightOutCard) == true) {
-        XLog.i(LOG_TAG, 'same as lastRightOutCard');
+        XLog.i(LOG_TAG, 'same as lastRightOutCard, return');
         rightOutCardBuff = null;
         rightOutCardBuffLength = 0;
         return;
@@ -257,7 +257,7 @@ class GameStatusWeile extends GameStatusManager {
     XLog.i(LOG_TAG, 'leftOutCardBuffLength: $leftOutCardBuffLength, cache leftOutCards ${LandlordManager.getCardsSorted(leftOutCard)}');
     if (lastLeftOutCard != null) {
       if (compareList(leftOutCard, lastLeftOutCard) == true) {
-        XLog.i(LOG_TAG, 'same as lastLeftOutCard');
+        XLog.i(LOG_TAG, 'same as lastLeftOutCard, return');
         leftOutCardBuff = null;
         leftOutCardBuffLength = 0;
         return;

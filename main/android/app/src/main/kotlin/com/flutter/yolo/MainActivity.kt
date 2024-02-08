@@ -24,9 +24,14 @@ class MainActivity: FlutterActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 //        CrashReport.testJavaCrash();
-        if (requestCode == ScreenshotPlugin.REQUEST_CODE_CAPTURE_SCREEN && resultCode == RESULT_OK) {
-            ScreenshotPlugin.screenShotIntent = data
-            ScreenshotPlugin.screenshotPermissionResultCode = resultCode
+        if (requestCode == ScreenshotPlugin.REQUEST_CODE_CAPTURE_SCREEN) {
+            if (resultCode == RESULT_OK) {
+                ScreenshotPlugin.screenShotIntent = data
+                ScreenshotPlugin.screenshotPermissionResultCode = resultCode
+                ScreenshotPlugin.setRequestPermissionResult(true)
+            } else {
+                ScreenshotPlugin.setRequestPermissionResult(false)
+            }
         }
     }
 }

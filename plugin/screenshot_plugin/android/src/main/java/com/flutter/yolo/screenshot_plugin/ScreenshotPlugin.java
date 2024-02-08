@@ -56,6 +56,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     private Activity mActivity;
     private Context mContext;
     static public Intent screenShotIntent;
+    static public Result requestPermissionResult;
     static public MediaProjectionManager mediaProjectionManager = null;
     private VirtualDisplay mVirtualDisplay = null;
     ImageReader imageReader = null;
@@ -71,6 +72,10 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
         mContext = flutterPluginBinding.getApplicationContext();
     }
 
+    static public void setRequestPermissionResult(Boolean result) {
+        requestPermissionResult.success(result);
+    }
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("getPlatformVersion")) {
@@ -81,8 +86,8 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
             stopScreenshot();
             result.success(null);
         } else if (call.method.equals("requestPermission")) {
+            requestPermissionResult = result;
             requestPermission();
-            result.success(true);
         } else {
             result.notImplemented();
         }
@@ -92,6 +97,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
         mContext = null;
+        requestPermissionResult = null;
     }
 
     @Override
@@ -115,6 +121,7 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     @Override
     public void onDetachedFromActivity() {
         mActivity = null;
+        requestPermissionResult = null;
     }
 
     private void requestPermission() {

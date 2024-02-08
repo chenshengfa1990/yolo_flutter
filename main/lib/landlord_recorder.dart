@@ -104,6 +104,7 @@ class LandlordRecorder {
       if (leftCardMap.containsKey(model.label)) {
         int leftNum = leftCardMap[model.label]! - 1;
         if (kReleaseMode && leftNum < 0) {
+          XLog.e(LOG_TAG, 'Card recorder label ${model.label} leftNum is $leftNum, less than 0, set to 0');
           leftNum = 0;
         }
         leftCardMap[model.label!] = leftNum;

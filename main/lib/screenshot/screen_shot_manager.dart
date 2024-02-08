@@ -34,7 +34,7 @@ abstract class ScreenShotManager {
     statusManager = GameStatusFactory.getStatusManager();
   }
 
-  Future<bool?> requestPermission() async {
+  Future<bool> requestPermission() async {
     return await screenshotPlugin.requestPermission();
   }
 

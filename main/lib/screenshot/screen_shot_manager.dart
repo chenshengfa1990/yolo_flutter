@@ -57,6 +57,7 @@ abstract class ScreenShotManager {
   }
 
   void destroy() {
+    XLog.i(LOG_TAG, 'ScreenshotManager destroy');
     isGameRunning = false;
     screenshotPlugin.stopScreenshot();
     screenShotCount = 0;

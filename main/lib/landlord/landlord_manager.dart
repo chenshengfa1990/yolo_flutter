@@ -110,6 +110,7 @@ class LandlordManager {
   static String serverSuggestion = '';
 
   static void destroy() {
+    XLog.i(LOG_TAG, 'LandlordManager destroy');
     myIdentify = "";
     leftPlayerIdentify = "";
     rightPlayerIdentify = "";

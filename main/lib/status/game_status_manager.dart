@@ -96,6 +96,7 @@ abstract class GameStatusManager {
   }
 
   void destroy() {
+    XLog.i(LOG_TAG, 'GameStatusManager destroy');
     curGameStatus = GameStatus.gamePreparing;
     lastLeftOutCard = null;
     lastRightOutCard = null;

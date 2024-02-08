@@ -91,6 +91,7 @@ class StrategyQueue {
   }
 
   void destroy() {
+    XLog.i(LOG_TAG, 'StrategyQueue destroy');
     isRequesting = false;
     queue.clear();
     lastEvent = null;

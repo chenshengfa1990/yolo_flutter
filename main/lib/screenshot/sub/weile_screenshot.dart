@@ -8,7 +8,6 @@ import 'package:yolo_flutter/landlord/landlord_manager.dart';
 import 'package:yolo_flutter/landlord_recorder.dart';
 import 'package:yolo_flutter/overlay_window_widget.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
-import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/status/game_status_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
 import 'package:yolo_flutter/strategy_queue.dart';
@@ -17,6 +16,7 @@ import 'package:yolo_flutter/util/FileUtil.dart';
 class WeileScreenshot extends ScreenShotManager {
   static const String LOG_TAG = 'WeileScreenshot';
   int emptyHandCardCount = 0;
+  int emptyDetectCount = 0;
 
   WeileScreenshot(super.ncnnPlugin);
 
@@ -37,28 +37,36 @@ class WeileScreenshot extends ScreenShotManager {
           'detectFile $screenShotCount ${FileUtil.getFileName(screenshotModel?.filePath)} detect ${detectList?.length ?? 0} objects, useGPU: ${ncnnPlugin.useGPU}, cost ${after - before}ms');
       FlutterOverlayWindow.shareData([OverlayUpdateType.speed.index, after - before]);
       if (detectList?.isEmpty ?? true) {
-        if (statusManager.curGameStatus != GameStatus.gamePreparing) {
-          XLog.i(LOG_TAG, "GameOver");
-          screenShotCount = 0;
-          statusManager.destroy();
-          LandlordManager.destroy();
-          StrategyManager().destroy();
-          StrategyQueue().destroy();
-          LandlordRecorder.destroy();
-        } else {
-          XLog.i(LOG_TAG, "useless screenshot file, deleted");
-          File((screenshotModel?.filePath)!).delete();
-          FlutterOverlayWindow.shareData(
-              [OverlayUpdateType.gameStatus.index, GameStatusManager.getGameStatusStr(GameStatus.gamePreparing), LandlordManager.getLandlordName()]);
+        emptyDetectCount++;
+        if (emptyDetectCount == 4) {
+          if (statusManager.curGameStatus != GameStatus.gamePreparing) {
+            emptyDetectCount = 0;
+            XLog.i(LOG_TAG, "GameOver");
+            screenShotCount = 0;
+            statusManager.destroy();
+            LandlordManager.destroy();
+            StrategyManager().destroy();
+            StrategyQueue().destroy();
+            LandlordRecorder.destroy();
+          } else {
+            XLog.i(LOG_TAG, "useless screenshot file, deleted");
+            File((screenshotModel?.filePath)!).delete();
+            FlutterOverlayWindow.shareData([
+              OverlayUpdateType.gameStatus.index,
+              GameStatusManager.getGameStatusStr(GameStatus.gamePreparing),
+              LandlordManager.getLandlordName()
+            ]);
+          }
         }
         return;
       }
+      emptyDetectCount = 0;
 
       if (statusManager.curGameStatus == GameStatus.gamePreparing) {
         ///根据地主标记出现判断游戏是否准备好
         NcnnDetectModel? landlord = LandlordManager.getLandlord(detectList, screenshotModel!);
         List<NcnnDetectModel>? handCards = LandlordManager.getMyHandCard(detectList, screenshotModel);
-        if (landlord != null && handCards != null) {
+        if (landlord != null && (handCards?.isNotEmpty ?? false)) {
           GameStatus status = statusManager.initGameStatus(landlord, screenshotModel, detectList: detectList);
           if (status == GameStatus.gamePreparing) {
             return;
@@ -91,6 +99,7 @@ class WeileScreenshot extends ScreenShotManager {
       List<NcnnDetectModel>? myHandCards = LandlordManager.getMyHandCard(detectList, screenshotModel!);
       if (myHandCards?.isEmpty ?? true) {
         emptyHandCardCount++;
+        XLog.i(LOG_TAG, "emptyHandCardCount: $emptyHandCardCount");
         if (emptyHandCardCount == 4) {
           XLog.i(LOG_TAG, "GameOver");
           screenShotCount = 0;

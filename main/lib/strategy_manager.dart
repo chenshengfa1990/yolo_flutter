@@ -62,11 +62,11 @@ class StrategyManager {
   static RequestTurn? currentTurn;
   late GameStatusManager statusManager;
 
-  static final StrategyManager _singleton = StrategyManager._internal();
+  static StrategyManager? _singleton;
 
   factory StrategyManager() {
-    StrategyManager._internal();
-    return _singleton;
+    _singleton ??= StrategyManager._internal();
+    return _singleton!;
   }
 
   StrategyManager._internal() {
@@ -74,8 +74,10 @@ class StrategyManager {
   }
 
   void destroy() {
+    XLog.i(LOG_TAG, 'StrategyManager destroy');
     round = 0;
     currentTurn = null;
+    _singleton = null;
   }
 
   Future<void> triggerNext() async {

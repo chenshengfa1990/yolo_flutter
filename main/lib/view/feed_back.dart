@@ -90,7 +90,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         contentPadding: const EdgeInsets.all(0),
                         border: InputBorder.none,
                         hintStyle: TextStyle(color: const Color(0xFFFFFFFF).withOpacity(0.36), fontSize: 12, fontWeight: FontWeight.normal),
-                        hintText: "简单描述您的问题……",
+                        hintText: "描述一下您遇到的问题，最好提供游戏录屏给管理员哦~",
                       ),
                       // buildCounter: (
                       //     BuildContext context, {

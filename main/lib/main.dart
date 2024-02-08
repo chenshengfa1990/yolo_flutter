@@ -140,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void updateOutDate() async {
+    XLog.i(LOG_TAG, 'updateOutDate');
     if (editTextController.text.isNotEmpty) {
       leftSecond = await UserManager.requestUserOutDate(editTextController.text);
       setState(() {});
@@ -248,7 +249,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _endGame() async {
-    XLog.i(LOG_TAG, "_endGame");
     updateOutDate();
     focusNode.unfocus();
     iScreenShotManager?.destroy();
@@ -258,6 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
     StrategyQueue().destroy();
     LandlordRecorder.destroy();
     FlutterOverlayWindow.closeOverlay();
+    XLog.i(LOG_TAG, "_endGame");
     XLog.flush();
   }
 

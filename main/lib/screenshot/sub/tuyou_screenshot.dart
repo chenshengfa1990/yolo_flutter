@@ -10,6 +10,7 @@ import 'package:yolo_flutter/overlay_window_widget.dart';
 import 'package:yolo_flutter/screenshot/screen_shot_manager.dart';
 import 'package:yolo_flutter/status/game_status_manager.dart';
 import 'package:yolo_flutter/strategy_manager.dart';
+import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/util/FileUtil.dart';
 
 class TuyouScreenshot extends ScreenShotManager {
@@ -46,6 +47,7 @@ class TuyouScreenshot extends ScreenShotManager {
             LandlordManager.destroy();
             StrategyManager().destroy();
             LandlordRecorder.destroy();
+            StrategyQueue().destroy();
           } else {
             XLog.i(LOG_TAG, "useless screenshot file, deleted");
             File((screenshotModel?.filePath)!).delete();
@@ -110,6 +112,7 @@ class TuyouScreenshot extends ScreenShotManager {
           LandlordManager.destroy();
           StrategyManager().destroy();
           LandlordRecorder.destroy();
+          StrategyQueue().destroy();
           return;
         }
       } else {
@@ -120,7 +123,15 @@ class TuyouScreenshot extends ScreenShotManager {
 
       ///计算下一个状态
       var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
-      XLog.i(LOG_TAG, 'nextGameStatus is $nextStatus');
+      XLog.i(LOG_TAG, 'calculateNextGameStatus result is $nextStatus');
+
+      if (statusManager.notSetStatus) {
+        XLog.i(LOG_TAG, 'notSetStatus is ${statusManager.notSetStatus}');
+        statusManager.notSetStatus = false;
+      } else {
+        statusManager.curGameStatus = nextStatus;
+      }
+      XLog.i(LOG_TAG, 'nextStatus is ${statusManager.curGameStatus}');
 
       if (nextStatus == GameStatus.myTurn) {
         notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "");
@@ -132,8 +143,6 @@ class TuyouScreenshot extends ScreenShotManager {
 
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
-
-      statusManager.curGameStatus = nextStatus;
     }
   }
 }

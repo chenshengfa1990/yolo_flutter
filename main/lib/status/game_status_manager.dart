@@ -95,6 +95,24 @@ abstract class GameStatusManager {
     FlutterOverlayWindow.shareData([updateType.index, showStr]);
   }
 
+  static bool compareList(List<NcnnDetectModel>? list1, List<NcnnDetectModel>? list2) {
+    if (list1?.length != list2?.length) {
+      return false;
+    }
+    if (list1 == null && list2 == null) {
+      return true;
+    }
+    var temp1 = List.from(list1!);
+    var temp2 = List.from(list2!);
+    for (var model in temp1) {
+      temp2.removeWhere((element) => element.label == model.label);
+    }
+    if (temp2.isNotEmpty) {
+      return false;
+    }
+    return true;
+  }
+
   void destroy() {
     XLog.i(LOG_TAG, 'GameStatusManager destroy');
     curGameStatus = GameStatus.gamePreparing;

@@ -5,6 +5,7 @@ import 'package:ncnn_plugin/ncnn_detect_model.dart';
 import 'package:screenshot_plugin/screenshot_model.dart';
 import 'package:yolo_flutter/status/game_status_factory.dart';
 import 'package:yolo_flutter/status/game_status_manager.dart';
+import 'package:yolo_flutter/strategy_queue.dart';
 
 import '../../landlord/landlord_manager.dart';
 import '../../landlord_recorder.dart';
@@ -42,6 +43,7 @@ class HuanleScreenshot extends ScreenShotManager {
           LandlordManager.destroy();
           StrategyManager().destroy();
           LandlordRecorder.destroy();
+          StrategyQueue().destroy();
         } else {
           XLog.i(LOG_TAG, "useless screenshot file, deleted");
           File((screenshotModel?.filePath)!).delete();

@@ -168,6 +168,7 @@ class StrategyManager {
     } else if (status == GameStatus.iSkip) {
       StrategyQueue().enqueue(RequestEvent(RequestType.iSkip));
       GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
+      GameStatusManager.notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "不出");
       StrategyQueue().hasRightEvent = false;
     } else if (status == GameStatus.rightDone) {
       if (!StrategyQueue().hasLeftEvent && !StrategyQueue().isFirstRound) {

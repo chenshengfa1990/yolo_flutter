@@ -107,6 +107,7 @@ class WeileScreenshot extends ScreenShotManager {
           LandlordManager.destroy();
           StrategyManager().destroy();
           LandlordRecorder.destroy();
+          StrategyQueue().destroy();
           return;
         }
       } else {
@@ -117,14 +118,23 @@ class WeileScreenshot extends ScreenShotManager {
 
       ///计算下一个状态
       var nextStatus = statusManager.calculateNextGameStatus(detectList, screenshotModel);
+      XLog.i(LOG_TAG, 'calculateNextGameStatus result is $nextStatus');
 
-      XLog.i(LOG_TAG, 'notSetStatus is ${statusManager.notSetStatus}');
       if (statusManager.notSetStatus) {
+        XLog.i(LOG_TAG, 'notSetStatus is ${statusManager.notSetStatus}');
         statusManager.notSetStatus = false;
       } else {
         statusManager.curGameStatus = nextStatus;
       }
       XLog.i(LOG_TAG, 'nextStatus is ${statusManager.curGameStatus}');
+
+      if (nextStatus == GameStatus.myTurn) {
+        notifyOverlayWindow(OverlayUpdateType.myOutCard, showString: "");
+      } else if (nextStatus == GameStatus.leftTurn) {
+        notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "");
+      } else if (nextStatus == GameStatus.rightTurn) {
+        notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "");
+      }
 
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(statusManager.curGameStatus));

@@ -138,6 +138,7 @@ class WeileScreenshot extends ScreenShotManager {
 
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(statusManager.curGameStatus));
+      XLog.i(LOG_TAG, '--------------------------------------');
     }
   }
 }

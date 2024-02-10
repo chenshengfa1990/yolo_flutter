@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // positionGravity: PositionGravity.left,
     );
     XLog.i(LOG_TAG, "start screenshot, LandlordType: ${LandlordManager.curLandlordType}");
-    Fluttertoast.showToast(msg: "去体验${LandlordManager.landlordName[LandlordManager.curLandlordType]}吧");
+    // Fluttertoast.showToast(msg: "去体验${LandlordManager.landlordName[LandlordManager.curLandlordType]}吧");
 
     iScreenShotManager?.startScreenshotRepeat();
   }

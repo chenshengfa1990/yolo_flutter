@@ -131,6 +131,7 @@ class HuanleScreenshot extends ScreenShotManager {
           nextStatus == GameStatus.rightDone) {
         firstCheck = true;
       }
+      XLog.i(LOG_TAG, '--------------------------------------');
     }
   }
 }

@@ -143,6 +143,7 @@ class TuyouScreenshot extends ScreenShotManager {
 
       ///刷新游戏状态
       notifyOverlayWindow(OverlayUpdateType.gameStatus, showString: GameStatusManager.getGameStatusStr(nextStatus));
+      XLog.i(LOG_TAG, '--------------------------------------');
     }
   }
 }

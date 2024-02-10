@@ -158,8 +158,8 @@ class StrategyManager {
       if (!StrategyQueue().hasLeftEvent && !StrategyQueue().isFirstRound) {
         StrategyQueue().enqueue(RequestEvent(RequestType.leftSkip));
         if (statusManager.curGameStatus == GameStatus.rightSkip || statusManager.curGameStatus == GameStatus.leftTurn) {
-          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.leftSkip');
-          statusManager.curGameStatus = GameStatus.leftSkip;
+          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.iDone');
+          statusManager.curGameStatus = GameStatus.iDone;
           statusManager.notSetStatus = true;
         }
       }
@@ -184,15 +184,17 @@ class StrategyManager {
         StrategyQueue().enqueue(RequestEvent(RequestType.iSkip));
         GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
         if (statusManager.curGameStatus == GameStatus.leftSkip || statusManager.curGameStatus == GameStatus.myTurn) {
-          statusManager.curGameStatus = GameStatus.iSkip;
+          statusManager.curGameStatus = GameStatus.rightDone;
           statusManager.notSetStatus = true;
-          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.iSkip');
+          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.rightDone');
         }
       }
       StrategyQueue().enqueue(RequestEvent(RequestType.rightDone, data: outCard));
+      GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       StrategyQueue().hasLeftEvent = false;
     } else if (status == GameStatus.rightSkip) {
       StrategyQueue().enqueue(RequestEvent(RequestType.rightSkip));
+      GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       StrategyQueue().hasLeftEvent = false;
     } else if (status == GameStatus.leftDone) {
       if (!StrategyQueue().hasMyEvent && !StrategyQueue().isFirstRound) {
@@ -208,16 +210,18 @@ class StrategyManager {
       if (!StrategyQueue().hasRightEvent && !StrategyQueue().isFirstRound) {
         StrategyQueue().enqueue(RequestEvent(RequestType.rightSkip));
         if (statusManager.curGameStatus == GameStatus.iSkip || statusManager.curGameStatus == GameStatus.rightTurn) {
-          statusManager.curGameStatus = GameStatus.rightSkip;
+          statusManager.curGameStatus = GameStatus.leftDone;
           statusManager.notSetStatus = true;
-          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.rightSkip');
+          XLog.i(LOG_TAG, 'set curGameStatus to GameStatus.leftDone');
         }
       }
       StrategyQueue().enqueue(RequestEvent(RequestType.leftDone, data: outCard));
+      GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       StrategyQueue().enqueue(RequestEvent(RequestType.suggestion));
       StrategyQueue().hasMyEvent = false;
     } else if (status == GameStatus.leftSkip) {
       StrategyQueue().enqueue(RequestEvent(RequestType.leftSkip));
+      GameStatusManager.notifyOverlayWindow(OverlayUpdateType.suggestion, showString: '');
       StrategyQueue().enqueue(RequestEvent(RequestType.suggestion));
       StrategyQueue().hasMyEvent = false;
     }

@@ -89,22 +89,26 @@ class GameStatusTuyou extends GameStatusManager {
     var rightOutCard = LandlordManager.getRightPlayerOutCard(detectList, screenshotModel);
     if ((rightOutCard?.isNotEmpty ?? false)) {
       rightEmptyBuffLength = 0;
-      cacheRightOutCard(rightOutCard!);
-      if (nextStatus == GameStatus.rightTurn) {
+      bool res = cacheRightOutCard(rightOutCard!);
+      if (res && nextStatus == GameStatus.rightTurn) {
         nextStatus = GameStatus.rightDone;
+        leftEmptyBuffLength = 0;
       }
     } else {
+      rightEmptyBuffLength++;
       if (nextStatus == GameStatus.rightTurn) {
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inRightBuchuRegion(buchu, screenshotModel)) {
-          rightBuChu = true;
-          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
-          XLog.i(LOG_TAG, 'rightSkip');
-          StrategyManager().calculateNextAction(GameStatus.rightSkip, null);
-          nextStatus = GameStatus.rightSkip;
+          if (rightEmptyBuffLength == 3) {
+            rightBuChu = true;
+            GameStatusManager.notifyOverlayWindow(OverlayUpdateType.rightOutCard, showString: "不出");
+            XLog.i(LOG_TAG, 'rightSkip');
+            StrategyManager().calculateNextAction(GameStatus.rightSkip, null);
+            nextStatus = GameStatus.rightSkip;
+          }
         }
       }
-      rightEmptyBuffLength++;
+
       XLog.i(LOG_TAG, 'rightEmptyBuffLength: $rightEmptyBuffLength');
       if (rightEmptyBuffLength == 3) {
         lastRightOutCard = null;
@@ -117,22 +121,26 @@ class GameStatusTuyou extends GameStatusManager {
     var leftOutCard = LandlordManager.getLeftPlayerOutCard(detectList, screenshotModel);
     if ((leftOutCard?.isNotEmpty ?? false)) {
       leftEmptyBuffLength = 0;
-      cacheLeftOutCard(leftOutCard!);
-      if (nextStatus == GameStatus.leftTurn) {
+      bool res = cacheLeftOutCard(leftOutCard!);
+      if (res && nextStatus == GameStatus.leftTurn) {
         nextStatus = GameStatus.leftDone;
+        myEmptyBuffLength = 0;
       }
     } else {
       if (nextStatus == GameStatus.leftTurn) {
+        leftEmptyBuffLength++;
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inLeftBuchuRegion(buchu, screenshotModel)) {
-          leftBuChu = true;
-          GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
-          XLog.i(LOG_TAG, 'leftSkip');
-          StrategyManager().calculateNextAction(GameStatus.leftSkip, null);
-          nextStatus = GameStatus.leftSkip;
+          if (leftEmptyBuffLength == 3) {
+            leftBuChu = true;
+            GameStatusManager.notifyOverlayWindow(OverlayUpdateType.leftOutCard, showString: "不出");
+            XLog.i(LOG_TAG, 'leftSkip');
+            StrategyManager().calculateNextAction(GameStatus.leftSkip, null);
+            nextStatus = GameStatus.leftSkip;
+          }
         }
       }
-      leftEmptyBuffLength++;
+
       XLog.i(LOG_TAG, 'leftEmptyBuffLength: $leftEmptyBuffLength');
       if (leftEmptyBuffLength == 3) {
         lastLeftOutCard = null;
@@ -145,21 +153,25 @@ class GameStatusTuyou extends GameStatusManager {
     var myOutCard = LandlordManager.getMyOutCard(detectList, screenshotModel);
     if ((myOutCard?.isNotEmpty ?? false)) {
       myEmptyBuffLength = 0;
-      cacheMyOutCard(myOutCard!);
-      if (nextStatus == GameStatus.myTurn) {
+      bool res = cacheMyOutCard(myOutCard!);
+      if (res && nextStatus == GameStatus.myTurn) {
         nextStatus = GameStatus.iDone;
+        rightEmptyBuffLength = 0;
       }
     } else {
+      myEmptyBuffLength++;
       if (nextStatus == GameStatus.myTurn) {
         var buchu = LandlordManager.getBuChu(detectList, screenshotModel);
         if (RegionManager.inMyBuchuRegion(buchu, screenshotModel)) {
-          myBuChu = true;
-          XLog.i(LOG_TAG, 'iSkip');
-          StrategyManager().calculateNextAction(GameStatus.iSkip, null);
-          nextStatus = GameStatus.iSkip;
+          if (myEmptyBuffLength == 3) {
+            myBuChu = true;
+            XLog.i(LOG_TAG, 'iSkip');
+            StrategyManager().calculateNextAction(GameStatus.iSkip, null);
+            nextStatus = GameStatus.iSkip;
+          }
         }
       }
-      myEmptyBuffLength++;
+
       XLog.i(LOG_TAG, 'myEmptyBuffLength: $myEmptyBuffLength');
       if (myEmptyBuffLength == 3) {
         lastMyOutCard = null;
@@ -172,7 +184,7 @@ class GameStatusTuyou extends GameStatusManager {
     return nextStatus;
   }
 
-  void cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
+  bool cacheMyOutCard(List<NcnnDetectModel>? myOutCard) {
     XLog.i(LOG_TAG, 'lastMyOutCard: ${LandlordManager.getCardsSorted(lastMyOutCard)}');
     XLog.i(LOG_TAG, 'myOutCardBuff: ${LandlordManager.getCardsSorted(myOutCardBuff)}');
     XLog.i(LOG_TAG, 'myOutCardBuffLength: $myOutCardBuffLength, cache myOutCards ${LandlordManager.getCardsSorted(myOutCard)}');
@@ -181,7 +193,7 @@ class GameStatusTuyou extends GameStatusManager {
         XLog.i(LOG_TAG, 'same as lastMyOutCard, return');
         myOutCardBuff = null;
         myOutCardBuffLength = 0;
-        return;
+        return false;
       }
     }
     if (myOutCardBuff == null) {
@@ -207,9 +219,10 @@ class GameStatusTuyou extends GameStatusManager {
         }
       }
     }
+    return true;
   }
 
-  void cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
+  bool cacheRightOutCard(List<NcnnDetectModel> rightOutCard) {
     XLog.i(LOG_TAG, 'lastRightOutCard: ${LandlordManager.getCardsSorted(lastRightOutCard)}');
     XLog.i(LOG_TAG, 'rightOutCardBuff: ${LandlordManager.getCardsSorted(rightOutCardBuff)}');
     XLog.i(LOG_TAG, 'rightOutCardBuffLength: $rightOutCardBuffLength, cache rightOutCards ${LandlordManager.getCardsSorted(rightOutCard)}');
@@ -218,6 +231,7 @@ class GameStatusTuyou extends GameStatusManager {
         XLog.i(LOG_TAG, 'same as lastRightOutCard, return');
         rightOutCardBuff = null;
         rightOutCardBuffLength = 0;
+        return false;
       }
     }
     if (rightOutCardBuff == null) {
@@ -243,9 +257,10 @@ class GameStatusTuyou extends GameStatusManager {
         }
       }
     }
+    return true;
   }
 
-  void cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
+  bool cacheLeftOutCard(List<NcnnDetectModel>? leftOutCard) {
     XLog.i(LOG_TAG, 'lastLeftOutCard: ${LandlordManager.getCardsSorted(lastLeftOutCard)}');
     XLog.i(LOG_TAG, 'leftOutCardBuff: ${LandlordManager.getCardsSorted(leftOutCardBuff)}');
     XLog.i(LOG_TAG, 'leftOutCardBuffLength: $leftOutCardBuffLength, cache leftOutCards ${LandlordManager.getCardsSorted(leftOutCard)}');
@@ -254,6 +269,7 @@ class GameStatusTuyou extends GameStatusManager {
         XLog.i(LOG_TAG, 'same as lastLeftOutCard, return');
         leftOutCardBuff = null;
         leftOutCardBuffLength = 0;
+        return false;
       }
     }
     if (leftOutCardBuff == null) {
@@ -279,5 +295,6 @@ class GameStatusTuyou extends GameStatusManager {
         }
       }
     }
+    return true;
   }
 }

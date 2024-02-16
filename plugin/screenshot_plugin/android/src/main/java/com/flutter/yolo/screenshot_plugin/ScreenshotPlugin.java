@@ -73,7 +73,10 @@ public class ScreenshotPlugin implements FlutterPlugin, MethodCallHandler, Activ
     }
 
     static public void setRequestPermissionResult(Boolean result) {
-        requestPermissionResult.success(result);
+        if (requestPermissionResult != null) {
+            requestPermissionResult.success(result);
+            requestPermissionResult = null;
+        }
     }
 
     @Override

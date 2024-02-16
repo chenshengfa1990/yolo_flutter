@@ -27,6 +27,7 @@ import 'package:yolo_flutter/strategy_queue.dart';
 import 'package:yolo_flutter/user_manager.dart';
 import 'package:yolo_flutter/util/common_util.dart';
 import 'package:yolo_flutter/util/dialog_util.dart';
+import 'package:yolo_flutter/util/throttle.dart';
 import 'package:yolo_flutter/view/feed_back.dart';
 
 import 'landlord/landlord_manager.dart';
@@ -524,7 +525,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 20,
                 ),
                 GestureDetector(
-                  onTap: _startGame,
+                  onTap: funcThrottle(() {
+                    _startGame();
+                  }, delay: const Duration(milliseconds: 1000)),
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     decoration: BoxDecoration(
